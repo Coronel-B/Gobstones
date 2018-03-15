@@ -1,0 +1,27 @@
+program {
+	DrawColumns(5, 3, 2, Negro)
+}
+
+procedure DrawColumn(altura, color) {
+	repeat (altura-1) {
+		Poner(color)
+		Mover(Norte)
+	}
+	Poner(color)
+	repeat (altura-1) {
+		Mover(Sur)
+	}
+}
+
+procedure DrawColumns(alturaColumns, cantColumns, separacion, color) {
+	repeat (cantColumns) {
+		DrawColumn(alturaColumns, color)
+		Separate(separacion)
+	} 
+}
+
+procedure Separate(separacion) {
+		repeat (separacion) {
+			Mover(Este)
+		}
+}

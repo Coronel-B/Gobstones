@@ -1,0 +1,74 @@
+-- Biblioteca
+
+/*DESPLAZAMIENTOS*/
+
+//Mueve el cabezal tantas posiciones a @param dir como lo indique @param n
+procedure MoverN(d, n) {
+	repeat (n) {
+		Mover(d)	
+	}
+}
+
+procedure PonerYMover(c, dir) {
+	Poner(c)
+	Mover(dir)
+}
+
+//Recibe 4 numeros y se mueve en cualquier direccion. Lo hardcodeé porque no me deja anidar repeticiones.
+procedure Move(nro_N, nro_E, nro_S, nro_O) {
+		repeat (nro_N) {
+			Mover(Norte)
+		}
+		repeat (nro_E) {
+			Mover(Este)
+		}
+		repeat (nro_S) {
+			Mover(Sur)
+		}
+		repeat (nro_O) {
+			Mover(Oeste)
+		}
+}
+
+//______________________________________
+
+/*COLORES*/
+
+//Devuelve la cantidad de bolitas de todos los colores de la celda actual
+function cantBolitas() {
+	cant := 0
+	foreach col in [minColor() .. maxColor()] {		
+		cant := cant + nroBolitas(col)
+	}
+	return (cant) 
+}
+
+
+//Pone @param n bolitas de color @param c
+procedure PonerN(n, c) {
+	repeat (n) {
+		Poner(c)	
+	}
+}
+
+//______________________________________
+
+/*DRAWS*/
+
+/*
+PROPOSITO: Dibuja una linea de longitud @param n en direccion @param dir, dejando 
+el cabezal en la posicion inicial
+PRECONDICION: La celda actual esta vacia y debe haber al menos "n" celdas en direccion "dir"
+*/
+procedure DibujarLineaHacia(n, dir, c) {
+	repeat (n-1) {
+		PonerYMover(c, dir)
+	}
+	Poner(c)
+	repeat (n-1) {
+		Mover(opuesto(dir))
+	}
+}
+
+//______________________________________
+

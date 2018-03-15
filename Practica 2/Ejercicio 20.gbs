@@ -1,0 +1,70 @@
+/*
+PROPOSITO: Escribe mi nombre en el tablero utilizando la primitiva de dibujo DibujarLineaHacia()
+*/
+program {
+	DrawBraian(Verde)
+}
+
+procedure DrawBraian(c) {
+	DrawB(c)
+	DrawR(c)
+	DrawA(c)
+	DrawI(c)
+	DrawA(c)
+	DrawN(c)
+}
+
+procedure DrawB(c) {
+	DibujarLineaHacia(5, Norte, c)
+	Mover(Este)
+	DibujarLineaHacia(3, Este, c)
+	Move(1, 2, 0, 0)
+	DibujarLineaHacia(2, Norte, c)
+	Move(1,0,0,1)
+	DibujarLineaHacia(2, Oeste, c)
+	Move(2,0,0,1)
+	DibujarLineaHacia(2, Este, c)
+	Move(0,1,1,0)
+	Poner(c)
+	Move(0,3,3,0)
+}
+
+procedure DrawR(c) {
+	DibujarLineaHacia(5, Norte, c)
+	Move(0, 3, 0, 0)
+	DibujarLineaHacia(3, Norte, c)
+	Move(2,0,0,1)
+	DibujarLineaHacia(2, Oeste, c)
+	Move(2,0,0,1)
+	DibujarLineaHacia(2, Este, c)
+	Move(0,1,1,0)
+	Poner(c)
+	Move(0,3,3,0)
+}
+
+procedure DrawA(c) {
+	DibujarLineaHacia(4, Norte, c)
+	Move(4, 1, 0, 0)
+	DibujarLineaHacia(2, Este, c)
+	Move(0,2,1,0)
+	DibujarLineaHacia(4, Sur, c)
+	Move(0,0,1,2)
+	DibujarLineaHacia(2, Este, c)
+	Move(0,4,2,0)
+}
+
+procedure DrawI(c) {
+	DibujarLineaHacia(5, Norte, c)
+	Move(0,2,0,0)
+}
+
+procedure DrawN(c) {
+	DibujarLineaHacia(5, Norte, c)
+	Move(3,1,0,0)
+	DibujarLineaHacia(2, Norte, c)
+	Move(0,1,2,0)
+	DibujarLineaHacia(2, Norte, c)
+	Move(0,1,1,0)
+	DibujarLineaHacia(5, Norte, c)
+	Move(0,2,0,0)
+}

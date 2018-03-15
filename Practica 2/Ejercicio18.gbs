@@ -1,0 +1,58 @@
+program {
+	DrawPared(5, 9, Rojo, Negro)
+}
+
+
+procedure DrawPared(filas, columnas, colorLadrillo, colorCemento) {
+	repeat (filas-1) {
+		PonerFilaCemento(columnas, colorCemento)
+		PonerFilaLadrillos(columnas, colorLadrillo)
+		Mover(Norte)
+	}
+	PonerFilaCemento(columnas, colorCemento)
+	PonerFilaLadrillos(columnas, colorLadrillo)	
+	repeat (filas-1) {
+		Mover(Sur)
+	}
+	
+}
+
+procedure PonerFilaLadrillos(cantLadrillos, colorLadrillo) {
+	repeat (cantLadrillos-1) {
+		PonerLadrillo(colorLadrillo)
+	}
+	Poner(colorLadrillo)
+	repeat (cantLadrillos-1) {
+		Mover(Oeste)
+	}
+}
+
+procedure PonerFilaCemento(cantCemento, colorCemento) {
+	repeat (cantCemento-1) {
+		PonerCemento(colorCemento)
+	}
+	Poner(colorCemento)
+	repeat (cantCemento-1) {
+		Mover(Oeste)
+	}
+}
+
+/*
+PROPOSITO: Pone un ladrillo en la hilera de ladrillos
+PRECONDICION: Debe haber cemento en la celda
+*/
+procedure PonerCemento(colorCemento) {
+	Poner(colorCemento)
+	Mover(Este)
+}
+
+/*
+PROPOSITO: Pone cemento en una celda
+PRECONDICION: La celda en la que se pone cemento debe estar vacia
+*/
+procedure PonerLadrillo(colorLadrillo) {
+	Poner(colorLadrillo)
+	Mover(Este)
+}
+
+

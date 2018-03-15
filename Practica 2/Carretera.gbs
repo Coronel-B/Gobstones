@@ -1,0 +1,72 @@
+program {
+	DrawCircuitoBasico(Negro)
+}
+
+/*
+PROPOSITO: Dibujar carretera
+PRECONDICION: El tablero tiene que ser de 10 x 10
+*/
+procedure DrawCircuitoBasico(color) {
+	repeat (2) {
+		Mover(Norte)
+	}
+	DrawMeta(Norte)
+	DrawTramoLargo(Norte, 4, color)
+	DrawCurva(Norte, Este, color)
+	DrawCurva(Este, Sur, color)
+	DrawTramoMedio(Sur, color)
+	DrawCurva(Sur, Este, color)
+	DrawCurva(Este, Sur, color)
+	DrawCurva(Sur, Oeste, color)
+	DrawTramoLargo(Oeste, 3, color)
+ DrawCurva(Oeste, Norte, color)
+	
+}
+
+
+/*
+PROPOSITO: Pongo una celda de asfalto y me muevo en @dir
+PRECONDICION:
+*/
+procedure DrawTramoCorto(dir, color) {
+	Poner(color)
+	Mover(dir)
+}
+
+/*
+PROPOSITO: Pongo dos celdas de asfalto y me muevo en @dir. Dejo el cabezal a 2 celdas de la inicial
+PRECONDICION:
+*/
+procedure DrawTramoMedio(dir, color) {
+	repeat(2) {
+		DrawTramoCorto(dir, color)
+	}
+}
+
+/*
+PROPOSITO:
+PRECONDICION:
+*/
+procedure DrawTramoLargo(dir, n, color) {
+	repeat(n) {
+		DrawTramoCorto(dir, color)
+	}
+}
+
+/*
+PROPOSITO: Dibuja en curva viniendo y yendo hacia cualquier direccion
+PRECONDICION: dir1 es hacia donde esta yendo la carretera, dir2 es hacia donde va a doblar
+*/
+procedure DrawCurva(dir1, dir2, color) {
+		DrawTramoCorto(dir1, color)
+		DrawTramoMedio(dir2, color)
+}
+
+
+procedure DrawMeta(dir) {
+	repeat (3) {
+		Poner(Azul)
+	}
+	Mover(dir)
+}
+

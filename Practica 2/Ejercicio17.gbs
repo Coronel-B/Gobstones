@@ -1,0 +1,76 @@
+/*
+PROPOSITO: 
+PRECONDICION: 
+*/
+
+/*
+PROPOSITO: 
+PRECONDICION: 
+*/
+program {
+	ArcoIris()
+}
+
+/*
+PROPOSITO: 
+PRECONDICION: 
+*/
+procedure ArcoIris() {
+	PonerPuntos3(Azul)	//PonerPuntosAzul3()
+	Mover(Este)
+	PonerPuntos3(Negro)
+	Mover(Norte)
+	PonerPuntos3(Rojo)
+	Mover(Este)
+	Mover(Sur)
+	PonerPuntos3(Verde)	
+
+}
+
+/*
+PROPOSITO: Desplaza el cabezal tres celdas al oeste
+PRECONDICION: que haya al menos tres celdas disponibles al oeste
+*/
+procedure PonerPuntos3(color) {
+	Poner(color)
+	PonerADistancia3(color, Este)
+	PonerADistancia3(color, Este)
+	Mover3(Oeste); Mover3(Oeste)
+}
+
+/*
+PROPOSITO: 
+PRECONDICION: 
+*/
+procedure PonerPuntosAzul3() {
+	Poner(Azul)
+	PonerADistancia3(Azul, Este)
+	PonerADistancia3(Azul, Este)
+	Mover3(Oeste); Mover3(Oeste)
+}
+
+/*
+PROPOSITO: Se mueve tres posiciones en @param direccion y luego pone un @param color.
+El cabezal queda a tres posiciones de la celda inicial en @param direccion
+PRECONDICION: 
+*/
+procedure PonerADistancia3(color, direccion) {
+	Mover3(direccion)
+	Poner(color)
+}
+
+/*
+PROPOSITO: Mueve el cabezal tres posiciones en direccion @param direccion
+PRECONDICION: Tiene que haber tres posiciones en direccion @param direccion
+*/
+procedure Mover3(direccion) {
+	repeat (3) {
+		Mover(direccion)
+	}
+}
+
+procedure MoverOeste3() {
+	repeat (3) {
+		Mover(Oeste)
+	}
+}

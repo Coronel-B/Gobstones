@@ -1,0 +1,87 @@
+/*
+PROPOSITO:
+PRECONDICION:
+*/
+program {
+	DrawPiramide(5	, Azul)
+	DrawPiramideInvertida(6, Rojo)
+}
+
+/*
+PRECONDICION: La base tiene que tener @param base celdas hacia la derecha como minimo
+*/
+procedure DrawPiramide(base, color) {
+	DibujarBase(base, color)
+	SubirNivel(Norte, Este)
+	DibujarMedio(base, color)
+	SubirNivel(Norte, Este)
+	DibujarPunta(base, color)
+}
+
+procedure DrawPiramideInvertida(techo, color) {
+
+	Mover(Este); Mover(Este)
+	DibujarPunta(techo, color)
+	SubirNivel(Norte, Oeste)
+	DibujarMedio(techo, color)
+	SubirNivel(Norte, Oeste)
+	DibujarBase(techo, color)
+}
+
+/*
+Duplicando cada uno de los segmentos
+*/
+procedure DrawPiramideAlta(base, color) {
+	DrawPiramide(base, color)
+}
+
+/*
+PROPOSITO: Dibuja la base de la piramide
+PRECONDICION: Tiene que haber n celdas vacias al este del cabezal
+*/
+procedure DibujarBase(n, color) {
+	repeat (n-1) {
+		Poner(color)
+		Mover(Este)
+	}
+	Poner(color)
+	repeat (n-1) {
+		Mover(Oeste)
+	}
+}
+
+/*
+PROPOSITO: Dibuja el medio de la piramide
+PRECONDICION: Tiene que haber n-1 celdas vacias al este del cabezal
+*/
+procedure DibujarMedio(n, color) {
+	repeat (n-2) {
+		Poner(color)
+		Mover(Este)
+	}
+	repeat (n-2) {
+		Mover(Oeste)
+	}
+	
+}
+
+/*
+PROPOSITO: Dibuja la punta de la piramide
+PRECONDICION: Tiene que haber n-2 celdas vacias al este del cabezal
+*/
+procedure DibujarPunta(n, color) {
+	repeat (n-4) {
+		Poner(color)
+		Mover(Este)
+	}
+	repeat (n-4) {
+		Mover(Oeste)
+	}
+}
+
+procedure SubirNivel(dir_1, dir_2) {
+	Mover(dir_1)
+	Mover(dir_2)
+}
+
+
