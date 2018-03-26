@@ -1,20 +1,18 @@
-/*
-PROPOSITO:
-PRECONDICION:
-*/
 program {
-	DrawPiramide(5	, Azul)
-	DrawPiramideInvertida(6, Rojo)
+	//DrawPiramide(5	, Azul)
+	//DrawPiramideInvertida(6, Rojo)
+	DrawPiramideAlta(5, Negro)
 }
 
 /*
+PRO: Dibuja una piramide de tres niveles con @param base celdas de base y de color @param color
 PRECONDICION: La base tiene que tener @param base celdas hacia la derecha como minimo
 */
 procedure DrawPiramide(base, color) {
 	DibujarBase(base, color)
-	SubirNivel(Norte, Este)
+	MueveNivel(Norte, Este)
 	DibujarMedio(base, color)
-	SubirNivel(Norte, Este)
+	MueveNivel(Norte, Este)
 	DibujarPunta(base, color)
 }
 
@@ -22,9 +20,9 @@ procedure DrawPiramideInvertida(techo, color) {
 
 	Mover(Este); Mover(Este)
 	DibujarPunta(techo, color)
-	SubirNivel(Norte, Oeste)
+	MueveNivel(Norte, Oeste)
 	DibujarMedio(techo, color)
-	SubirNivel(Norte, Oeste)
+	MueveNivel(Norte, Oeste)
 	DibujarBase(techo, color)
 }
 
@@ -32,12 +30,24 @@ procedure DrawPiramideInvertida(techo, color) {
 Duplicando cada uno de los segmentos
 */
 procedure DrawPiramideAlta(base, color) {
-	DrawPiramide(base, color)
+	DibujarBase(base, color)
+	Mover(Norte)
+	DibujarBase(base, color)
+	MueveNivel(Norte, Este)
+
+	DibujarMedio(base, color)
+	Mover(Norte)
+	DibujarMedio(base, color)
+	MueveNivel(Norte, Este)
+
+	DibujarPunta(base, color)
+	Mover(Norte)
+	DibujarPunta(base, color)
 }
 
 /*
-PROPOSITO: Dibuja la base de la piramide
-PRECONDICION: Tiene que haber n celdas vacias al este del cabezal
+PROPOSITO: Dibuja la base de la piramide con n celdas
+PRECONDICION: Tiene que haber (n-1) celdas vacias al este del cabezal
 */
 procedure DibujarBase(n, color) {
 	repeat (n-1) {
@@ -51,35 +61,37 @@ procedure DibujarBase(n, color) {
 }
 
 /*
-PROPOSITO: Dibuja el medio de la piramide
-PRECONDICION: Tiene que haber n-1 celdas vacias al este del cabezal
+PROPOSITO: Dibuja el medio de la piramide con n-2 celdas
+PRECONDICION: Tiene que haber (n-3) celdas vacias al este del cabezal
 */
 procedure DibujarMedio(n, color) {
-	repeat (n-2) {
+	repeat (n-3) {
 		Poner(color)
 		Mover(Este)
 	}
-	repeat (n-2) {
+	Poner(color)
+	repeat (n-3) {
 		Mover(Oeste)
 	}
 	
 }
 
 /*
-PROPOSITO: Dibuja la punta de la piramide
+PROPOSITO: Dibuja la punta de la piramide con n-3 celdas
 PRECONDICION: Tiene que haber n-2 celdas vacias al este del cabezal
 */
 procedure DibujarPunta(n, color) {
-	repeat (n-4) {
+	repeat (n-5) {
 		Poner(color)
 		Mover(Este)
 	}
-	repeat (n-4) {
+	Poner(color)
+	repeat (n-5) {
 		Mover(Oeste)
 	}
 }
 
-procedure SubirNivel(dir_1, dir_2) {
+procedure MueveNivel(dir_1, dir_2) {
 	Mover(dir_1)
 	Mover(dir_2)
 }
