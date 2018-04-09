@@ -1,0 +1,38 @@
+program {
+	DejarColorMinimo()
+}
+
+
+/*
+PRO: Para c/color sacar todas las bolitas de ese color si la actual tiene bolitas de un color mas chico 
+Por ejemplo: Sino hay azules y hay negras, sacar todas las rojas y verdes.
+El procedimiento funciona independientemente de la cantidad de colores que tenga Gobstones
+*/
+procedure DejarColorMinimo() {
+	foreach c in [minColor() .. maxColor()] {
+		SacarColoresSiHay(c)
+	}
+}
+
+/*
+PRO: Saca todos los colores menores a un color
+*/
+procedure SacarColoresSiHay(c) {
+	if (nroBolitas(c) > 0) {
+		SacaColoresMinimo(c)
+	}
+}
+
+/*Saca colores desde un minimo parametrizado*/
+procedure SacaColoresMinimo(colorMinimo) {
+	foreach c in [colorMinimo .. maxColor()] {
+		SacarSiHay(c)
+	}
+}
+
+//Si hay al menos una bolita de color @param c, saca una
+procedure SacarSiHay(c) {
+	if (not nroBolitas(c) == 0) {
+		Sacar(c)
+	}
+}
