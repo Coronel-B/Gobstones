@@ -1,0 +1,63 @@
+/*
+ . Unica piezas posibles: Bastones de longitud 3
+ . C/celda que compone una pieza se llama seccion
+ . Las secciones se representan con bolitas rojas
+ . Las secciones de piezas que ya tocaron el piso se representan con 1 roja
+ . Las secciones de estas piezas se consideran parte del piso
+ . Las secciones de las piezas que aun flotan se representan con al menos 2 rojas
+ . Las 3 secciones de 1 pieza tienen la misma cant de bolitas rojas
+ . Dicha cantidad es el numero de la pieza
+ . No puede haber dos piezas flotando con el mismo numero
+*/
+program {
+
+}
+
+function colorPieza() {
+	return (Rojo)
+}
+
+function numeroPiso() {
+	return (1)
+}
+
+/*
+PRO: Retorna el numero de dicha seccion
+PRE: El cabezal se encuentra sobre una seccion
+*/
+function numeroSeccion() {
+	return(nroBolitas(colorPieza()))
+}
+
+/*
+PRO: Denoto True si la seccion corresponde a una pieza flotante
+PRE: El cabezal se encuentra sobre una seccion
+*/
+function estaFlotando() {
+	return (numeroSeccion() >= 2)
+}
+
+/*
+PRO: Indica si hay o no una seccion en la celda lindante en direccion d
+PARAM: d es una direccion
+*/
+function haySeccionAl(d) {
+	return (puedeMover(d) && haySeccionAlParcial(d))
+}
+
+/*
+funcion cortocircuito (funciona con disyuncion y conjuncion, evita usar variables para el return)
+PRE: Tiene que haber una celda en direccion d
+*/
+function haySeccionAlParcial(d) {
+	Mover(d)
+	return(estaFlotando())
+}
+
+/*
+PRE: haySeccionAl(d) tiene que denotar True
+*/
+function numeroSeccionAl(d) {
+	Mover(d)
+	return(numeroSeccion())
+}
