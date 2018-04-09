@@ -1,0 +1,15 @@
+program {
+
+}
+
+/*
+PRO: P/c/celda del tablero: 
+ . Si hay mas de deg bolitas de color c, el procedimiento saca deg bolitas
+ . Y sino saca todas las bolitas de color c
+El cabezal tiene que quedar en la celda inicial (inf izq)
+PRE:
+PARAM: n y deg son numeros, y c es un color
+*/
+procedure DegradarCuadrado(n, deg, c) {
+
+}
