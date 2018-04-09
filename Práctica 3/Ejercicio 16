@@ -1,0 +1,20 @@
+program {
+	AlMenosUnaDeCada()
+}
+
+/*
+PRO: Cuando no haya bolitas de algun color, deja al menos una bolita de ese color en la celda actual.
+PRE: Evitar anidar una alternativa condicional (if) dentro de la repeticion indexada (foreach) usando procedimientos
+*/
+procedure AlMenosUnaDeCada() {
+	foreach c in [minColor() .. maxColor()] {
+		PoneSinoHay(c)
+	}
+}
+
+/*PRO: Pone una bolita de color @param c, si en la actual no hay ninguna de ese color*/
+procedure PoneSinoHay(color) {
+	if (nroBolitas(color) == 0) {
+		Poner(color)
+	}
+}
