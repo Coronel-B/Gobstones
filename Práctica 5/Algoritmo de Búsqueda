@@ -1,0 +1,8 @@
+procedimiento o funcion {
+	Me posiciono en el inicio de recorrido 
+	while () {		pregunto si me puedo mover en el rectangulo
+		procesamiento de celda
+		me muevo en el rectangulo
+	}
+	procesamiento de celda
+}
