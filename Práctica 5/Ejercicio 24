@@ -5,7 +5,7 @@ program {
 //24
 procedure Rellenar(unColor, otroColor) {
 	IrAlInicioRect(unColor)
-	while(puedoMoverRect(unColor)) {
+	while(puedeMoverRect(unColor)) {
 		Poner(otroColor)
 		MoverRect(unColor)
 	}
@@ -31,8 +31,8 @@ procedure IrAlBordeSurRect(unColor) {
 	Mover(Norte)
 }
 
-function puedoMoverRect(unColor) {
-	return (puedeMoverRectEste(unColor) && puedeMoverRectNorte(unColor))
+function puedeMoverRect(unColor) {
+	return (puedeMoverRectEste(unColor) || puedeMoverRectNorte(unColor))
 }
 
 function puedeMoverRectEste(unColor) {
@@ -49,9 +49,6 @@ function puedeMoverRectNorte(unColor) {
 	return (not hayBolitas(unColor))
 }
 
-function puedeMoverRect(unColor) {
-	return (puedeMoverRectEste(unColor) || puedeMoverRectNorte(unColor))
-}
 
 procedure MoverRect(unColor) {
 	if (puedeMoverRectEste(unColor)) {
@@ -61,4 +58,3 @@ procedure MoverRect(unColor) {
 		Mover(Norte)
 	}
 }
-
