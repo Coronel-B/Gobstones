@@ -6,3 +6,8 @@ procedimiento o funcion {
 	}
 	procesamiento de celda
 }
+
+while {
+	1. Que la condicion de freno c/vez nos acerque al final (En algun momento tiene que dar falso)
+	2. Analizar las condiciones de borde
+}
