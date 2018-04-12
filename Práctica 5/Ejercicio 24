@@ -1,0 +1,64 @@
+program {
+	Rellenar(Verde, Azul)
+}
+
+//24
+procedure Rellenar(unColor, otroColor) {
+	IrAlInicioRect(unColor)
+	while(puedoMoverRect(unColor)) {
+		Poner(otroColor)
+		MoverRect(unColor)
+	}
+	Poner(otroColor)
+}
+
+procedure IrAlInicioRect(unColor) {
+	IrAlBordeSurRect(unColor)
+	IrAlBordeOesteRect(unColor)
+}
+
+procedure IrAlBordeOesteRect(unColor) {
+	while (puedeMover(Oeste) && not hayBolitas(unColor)) {
+		Mover(Oeste)
+	}
+	Mover(Este)
+}
+
+procedure IrAlBordeSurRect(unColor) {
+	while (puedeMover(Sur) && not hayBolitas(unColor)) {
+		Mover(Sur)
+	}
+	Mover(Norte)
+}
+
+function puedoMoverRect(unColor) {
+	return (puedeMoverRectEste(unColor) && puedeMoverRectNorte(unColor))
+}
+
+function puedeMoverRectEste(unColor) {
+	if (puedeMover(Este)) {
+		Mover(Este)
+	}
+	return (not hayBolitas(unColor))
+}
+
+function puedeMoverRectNorte(unColor) {
+	if (puedeMover(Norte)) {
+		Mover(Norte)
+	}
+	return (not hayBolitas(unColor))
+}
+
+function puedeMoverRect(unColor) {
+	return (puedeMoverRectEste(unColor) || puedeMoverRectNorte(unColor))
+}
+
+procedure MoverRect(unColor) {
+	if (puedeMoverRectEste(unColor)) {
+		Mover(Este)
+	} else {
+		IrAlBordeOesteRect(unColor)
+		Mover(Norte)
+	}
+}
+
