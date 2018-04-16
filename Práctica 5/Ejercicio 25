@@ -1,0 +1,66 @@
+program{
+	RecorridoPorAzul()
+}
+
+procedure MoverPorAzul(){
+	if (nroBolitas(Azul) == 1){
+		MoverN(nroBolitas(Verde),Norte)
+	}
+	if (nroBolitas(Azul) == 2){
+		MoverN(nroBolitas(Verde),Este)
+	}
+	if (nroBolitas(Azul) == 3){
+		MoverN(nroBolitas(Verde),Sur)
+	}
+	if (nroBolitas(Azul) == 4){
+		MoverN(nroBolitas(Verde),Oeste)
+	}
+}
+
+procedure MoverN(distancia,dir){
+	repeat(distancia){
+		Mover(dir)
+	}
+}
+--------------------------------------------
+
+procedure RecorridoPorAzul(){
+	while (not hayBolitas(Rojo)){
+		Poner(Negro)
+		MoverPorAzul()	
+	}
+	Poner(Negro)
+}
+-------------------------------------------
+function puedeMoverAzul(){
+	return (esPorAzulHacia(Norte) && puedeMoverN(Verde,Norte) ||
+					esPorAzulHacia(Este) && puedeMoverN(Verde,Este) ||
+					esPorAzulHacia(Sur) && puedeMoverN(Verde,Sur) ||
+					esPorAzulHacia(Oeste) && puedeMoverN(Verde,Oeste))
+}
+
+function esPorAzulHacia(dir){
+	return (dir == Norte && nroBolitas(Azul) == 1 || 
+					dir == Este && nroBolitas(Azul) == 2 || 
+					dir == Sur && nroBolitas(Azul) == 3 ||
+					dir == Oeste && nroBolitas(Azul) == 4)
+}
+
+
+
+function recorridoeAzulValido(){
+	CompletarAzul()
+		return (not (nroBolitas(Azul)<5 || hayBolitas(Rojo)))
+}
+procedure CompletarAzul(){
+	repeat(nroBolitas(Azul)){
+		Sacar(Azul)
+}
+	repeat(5){
+		Poner(Azul)
+	}
+}
+	
+function puedeMoverN(col,dir){
+	return (puedeMover(dir))
+}
