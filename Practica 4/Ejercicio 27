@@ -1,3 +1,5 @@
+//TETRIS
+
 /*
  . Unica piezas posibles: Bastones de longitud 3
  . C/celda que compone una pieza se llama seccion
@@ -8,6 +10,24 @@
  . Las 3 secciones de 1 pieza tienen la misma cant de bolitas rojas
  . Dicha cantidad es el numero de la pieza
  . No puede haber dos piezas flotando con el mismo numero
+*/
+
+/*
+Funciones y procedimientos desarrollados: 
+
+colorPieza()
+numeroPiso()
+numeroSeccion()
+estaFlotando()
+haySeccionAl(d)
+numeroSeccionAl(d)
+continuaPiezaHacia(d)
+centradoEnPieza()
+CentrarEnPieza()
+esHorizontal()
+BorrarPieza()
+puedeBajarPieza()
+
 */
 program {
 
@@ -34,7 +54,7 @@ PRO: Denoto True si la seccion corresponde a una pieza flotante
 PRE: El cabezal se encuentra sobre una seccion
 */
 function estaFlotando() {
-	return (numeroSeccion() >= 2)
+	return (numeroSeccion() > numeroPiso())
 }
 
 /*
@@ -51,13 +71,118 @@ PRE: Tiene que haber una celda en direccion d
 */
 function haySeccionAlParcial(d) {
 	Mover(d)
-	return(estaFlotando())
+	//return(estaFlotando())	//aca no considera cuando hay 1 roja, y cuando hay 1 roja es seccion
+	return(hayBolitas(colorPieza())) 
 }
 
 /*
+PRO: Denota el numero de seccion en direccion @param d
 PRE: haySeccionAl(d) tiene que denotar True
 */
 function numeroSeccionAl(d) {
 	Mover(d)
 	return(numeroSeccion())
+}
+
+/*
+PRO: Retorna True si la pieza continua hacia @param d. Es una funcion total
+PRE: El cabezal se tiene que encontrar sobre una pieza flotante: estaFlotando() == True
+*/
+function continuaPiezaHacia(d) {
+	//return (haySeccionAl(d) && numeroSeccion() == numeroSeccionAl(d))
+	return (numeroSeccion() == numeroSeccionAl(d))
+}
+
+/*
+RETURN: True cuando el cabezal se encuentra en la celda central de una pieza
+*/
+function centradoEnPieza() {
+	return ((continuaPiezaHacia(Norte) && continuaPiezaHacia(Sur)) || 
+			(continuaPiezaHacia(Este) && continuaPiezaHacia(Oeste))
+			)
+}
+
+/*
+PRO: Muevo el cabezal p/centrarlo en dicha pieza. No hace nada si el cabezal ya está centrado.
+PRE: El cabezal se encuentra sobre una pieza flotante
+
+Para los sig. ejercicios utilizo este procedimiento para reducir la cantidad de casos a considerar
+*/
+procedure CentrarEnPieza() {
+	foreach d in [minDir().. maxDir()] {
+		CentrarEnPiezaParcial(d)
+	}
+}
+
+//PRO: Mueve el cabezal al centro de la pieza
+procedure CentrarEnPiezaParcial(d) {
+	if (not centradoEnPieza() && not continuaPiezaHacia(d)) {
+		Mover(opuesto(d))
+	}
+}
+
+/*
+PRE: El cabezal se encuentra sobre una pieza flotante
+RETURN: Denota True si la pieza esta en posicion horizontal
+*/
+function esHorizontal() {
+	CentrarEnPieza()
+	return (continuaPiezaHacia(Este) )
+}
+
+/*
+PRO: Elimina dicha pieza del tablero y el cabezal queda en la posicion central de la pieza
+PRE: El cabezal se encuentra en una pieza flotante
+*/
+procedure BorrarPieza() {
+	CentrarEnPieza()
+	if (esHorizontal()) {
+		BorrarPiezaParcial(Oeste, Este)
+	} else {
+		BorrarPiezaParcial(Norte, Sur)
+	}
+}
+
+procedure BorrarPiezaParcial(d1,d2) {
+	SacarNAl(colorPieza(), d1, numeroSeccion())
+	SacarN(colorPieza(), numeroSeccion())
+	SacarNAl(colorPieza(), d2, numeroSeccion())
+}
+
+//PRE: Tiene que haber 1 direccion en @param d
+procedure SacarNAl(c, d, n) {
+	repeat (n) {
+		Mover(d)
+		Sacar(c)	
+	}
+	Mover(opuesto(d))
+}
+
+procedure SacarN(c, n) {
+	repeat (n) {
+		Sacar(c)	
+	}
+}
+
+/*
+PRE: El cabezal se encuentra en una pieza flotante
+RETURN: Denota True si la pieza puede descender una posicion manteniendo su orientacion
+
+No pueden haber secciones de otras piezas en las celdas lindantes al sur de las secciones de la pieza
+en donde esta el cabezal
+*/
+function puedeBajarPieza() {
+	CentrarEnPieza()
+	Mover(Sur)
+	return (calzaPiezaHorizontal() || calzaPiezaVertical())
+}
+
+//RETURN: True si calza una pieza horizontal
+function calzaPiezaHorizontal() {
+	return (not haySeccionAl(Oeste) && not hayBolitas(colorPieza) && not haySeccionAl(Este))
+}
+
+//RETURN: True si calza una pieza vertical una posicion abajo de la actual
+function calzaPiezaVertical() {
+	return (notHaySeccionAl(Sur))
 }
