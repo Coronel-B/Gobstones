@@ -1,0 +1,38 @@
+program {
+	PonerEnVacias(Rojo)
+}
+
+/*
+PRO: Pone una bolita de un color en todas las celdas vacias del tablero
+
+Tengo que utilizar un esquema de recorrido que recorra todas las celdas del tablero
+*/
+procedure PonerEnVacias(unColor) {
+	IrAlOrigen()
+	while (puedeMover(Norte)) {
+		PonerEnVaciasHorizontal(unColor)
+		Mover(Norte)
+	}
+	PonerEnVaciasHorizontal(unColor)
+}
+
+//PRO: Pone una bolita de @param unColor en todas las vacias de la fila
+procedure PonerEnVaciasHorizontal(unColor) {
+	while (puedeMover(Este)) {
+		PonerEnVacia(unColor)
+		Mover(Este)
+	}
+	PonerEnVacia(unColor)
+	IrAlExtremo(Oeste)
+}
+
+//PRO: Pone una bolita de @param unColor si la celda esta vacia
+procedure PonerEnVacia(unColor) {
+	x := 0
+	foreach c in [minColor() .. maxColor()] {
+		x := x + nroBolitas(c)
+	}
+	if (x == 0) {
+		Poner(unColor)
+	}
+}
