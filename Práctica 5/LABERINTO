@@ -1,0 +1,163 @@
+/*
+Recorrido de busqueda
+
+Inicializo el recorrido y mientras no llegue al final del recorrido, avanzo
+¿que significa inicializar, final y avanzar?
+*/
+
+function puedeResolverLaberinto() {
+	/*
+	PROPOSITO: Denota <True> cuando es posible ir desde la
+			celda de INICIO a la celda de FIN
+	PRECONDICION: En el tablero existe una unica celda de
+			INICIO y una unica celda de FIN. En cada giro solo
+			hay un posible camino a tomar
+	*/
+
+
+	IrALaCeldaInicio()
+	while (hayCaminoASeguir() && not hayFin()) {
+		AcanzarUnPasoEnCamino()
+	}
+	return(hayFin()) 
+}
+
+program {
+	Mover(Norte)
+	//puedeResolverLaberinto()
+}
+
+//RETURN: Devuelve el color de inicio
+function colorInicio() {
+	return (Azul)
+}
+
+//RETURN: Devuelve el color de fin
+function colorFin() {
+	return (Verde)
+}
+
+//RETURN: Devuelve el color de la pared
+function colorPared() {
+	return (Negro)
+}
+
+//RETURN: Devuelve el color de una marca
+function colorMarca() {
+	return (Rojo)
+}
+
+//True si la celda representa al inicio
+function hayInicio() {
+	return (hayBolitas(colorInicio()))
+}
+
+//True si la celda representa el fin
+function hayFin() {
+	return (hayBolitas(colorFin()))
+}
+
+//True si la celda representa una seccion de la pared
+function hayPared() {
+	return (hayBolitas(colorPared()))
+}
+
+//True si hay una marca luego de haber pasado por un camino
+function hayMarca() {
+	return (hayBolitas(colorMarca()))
+}
+
+//True si hay camino perteneciente al laberinto
+function hayCamino() {
+	return (esVacia() || hayFin())
+}
+
+//True si no hay bolitas de ningun color
+function esVacia() {
+	return (not hayBolitas(Rojo) ||
+					not hayBolitas(Azul) ||
+					not hayBolitas(Verde) ||
+					not hayBolitas(Negro))
+}
+
+/*
+PRO: Indica si hay o no un camino en la celda lindante en @param d
+*/
+function hayCaminoAl(d) {
+	return (puedeMover(d) && hayCaminoAlParcial(d))
+}
+
+/*
+PRE: Tiene que haber una celda en @param d
+*/
+function hayCaminoAlParcial(d) {
+	Mover(d)
+	return (hayCamino())
+}
+
+//PRO: Pone una marca luego de pasar por un camino
+procedure PonerMarca() {
+	Poner(colorMarca())
+}
+
+/*
+PRO: Se posiciona en la celda del inicio del laberinto
+PRE: Tiene que haber una celda de inicio del laberinto en el tablero
+*/
+procedure IrALaCeldaDelInicio() {
+	InicializarRecorridoHacia(Norte, Este)
+	while(not hayInicio()) {
+		IrAProximaCelda(Norte,Este)
+	}
+}
+
+/*
+RETURN: True si hay camino a seguir hacia alguna direccion
+*/
+function hayCaminoASeguir() {
+	return (hayCaminoAl(Norte) ||
+					hayCaminoAl(Este) ||
+					hayCaminoAl(Oeste) ||
+					hayCaminoAl(Sur))
+}
+
+/*PRO: Se posiciona al opuesto del extremo de dos direccion para inicializar un recorrido*/
+procedure InicializarRecorridoHacia(d1, d2) {
+	IrAlExtremo(opuesto(d1))
+	IrAlExtremo(opuesto(d2))
+}
+
+/*
+PRO: 	Posiciona el cabezal en la ultima celda en un recorrido en direccion @param d
+*/
+procedure IrAlExtremo(d) {
+	while(puedeMover(d)) {
+		Mover(d)
+	}
+}
+
+/*
+PRO: Voy a la proxima celda del tablero. Como maximo llega a algun vertice.
+*/
+procedure IrAProximaCelda(d1, d2) {
+	if (puedeMover(d1)) {
+		Mover(d1)
+	}  
+	if (puedeMover(d2)) {
+		IrAlExtremo(d1)
+		Mover(d2)
+	}
+}
+
+/*
+PRO: Avanza el cabezal un paso por el laberinto
+PRE: Hay al menos un camino a seguir
+*/
+procedure AvanzarUnPasoEnCamino() {
+	foreach d in [minDir() .. maxDir()] {
+		if (hayCaminoASeguir(d)) {
+			Mover(d)
+			PonerMarca()
+		}
+	}
+}
