@@ -1,0 +1,9 @@
+program {
+    IrAlOrigen()
+}
+
+//PRO: Posiciona el cabezal al origen del tablero
+procedure IrAlOrigen() {
+	IrAlExtremo(Sur)
+	IrAlExtremo(Oeste)
+}
