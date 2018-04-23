@@ -1,0 +1,165 @@
+/*
+1. Toda celula viva con menos de dos vecinas vivas muere (escasez de poblacion).
+2. Toda celula viva con ms de tres vecinas vivas muere (sobrepoblacion).
+3. Toda celula viva con exactamente dos o tres vecinas vivas pasa a la siguiente generacion.
+4. Toda celula muerta con exactamente tres vecinas vivas se convierte en una celula viva
+(reproduccion).
+
+Todas las pautas forman un tick. Cada tick produce un nuevo universo.
+Verde si la celula esta viva
+Celda vacia si la celula esta muerta
+
+*/
+program {
+
+}
+
+//Determina si la celula esta viva o no
+function celulaViva() {
+	return (hayBolitas(Verde))
+}
+
+/*Determina el nro de celulas vivas que son vecinas de la actual
+
+Recorrer direcciones
+Acumular
+Necesito mirar las celulas adyacentes (funcion)
+*/
+function nroVecinas() {
+	nroVecinas := 0
+	foreach d in [minDir() .. maxDir()] {
+		nroVecinas := nroVecinas + 
+										ifElse(celulaVivaAl(d), 1, 0) + 
+										ifElse(celulaVivaAlDiag(d, siguiente(d)), 1, 0)                                                                                                                                                                                                                                                                        
+	}
+}
+
+function celulaVivaAlParcial(dir) {
+	Mover(dir)
+	return(celulaViva())
+}
+
+/*PRO: Denota True si hay una lindante en dir
+PRE: Ninguna
+
+Uso corto circuito cuando hay algo que puede o no existir
+*/
+function celulaVivaAl(dir) {
+	return (puedeMover(dir) && celulaVivaAlParcial(dir))
+}
+
+function celulaVivaAlDiagParcial(dir, dir2) {
+	Mover(dir)
+	Mover(dir2)
+	return(celulaViva())
+}
+
+function celulaVivaAlDiag(dir, dir2) {
+	return (puedeMover(dir) && puedeMover(dir2) && celulaVivaAlDiagParcial(dir, dir2))
+}
+
+function ifElse(condicion) {
+	ret := 0
+	if (condicion) {
+		ret := 1
+	}
+	return (ret)
+}
+
+/*
+MarcarCelulaParaSerEliminada()
+MarcarCelulaParaSerReanimada() 	
+*/
+
+/*Toda celula viva con menos de dos vecinas vivas muere*/
+function hayEscasezDePoblacion() {
+	return (celulaVecina() && nroVecinas() < 2)
+}
+
+/*Toda celula viva con mas de tres vecinas vivas muere*/
+function haySobrepoblacion() {
+	return (celulaViva() && nroVecinas() > 3)
+}
+
+/*Toda celula muerta con exactamente tres vecinas vivas se convierte en una celula viva*/
+function hayReproduccion() {
+	return (not celulaViva() && nroVecinas() == 3)
+}
+
+procedure ProcesarCelula() {
+	if (hayEscasezDePoblacion() || haySobrepoblacion()) {
+		MarcarCelulaParaSerEliminada()
+	} 
+	if (hayReproduccion()) {
+		MarcarCelulaParaSerReanimada()
+	}
+}
+
+procedure ProcesarRecorrido() {
+	InicializarRecorrido(Sur, Oeste)
+	while (hayProximaCelda(Sur, Oeste)) {
+		ProcesarCelula()
+		IrAProximaCelda(Sur, Oeste)
+	}
+	ProcesarCelula()
+}
+
+procedure ActualizarUniverso() {
+	ProcesarUniverso()
+	InicializarRecorrido(Sur, Oeste)
+	while (hayProximaCelda(Sur, Oeste)) {
+		ActualizarCelula()
+		IrAProximaCelda(Sur, Oeste)
+	}
+	ActualizarCelula()
+}
+
+procedure ActualizarCelula() {
+	if (estaMarcadaParaSerEliminada()) {
+		EliminiarCelula()
+	}
+	if (estaMarcadaParaSerReanimada()) {
+		ReanimarCelula()
+	}
+}
+
+procedure EliminarCelula() {
+	Sacar(Verde)
+	Sacar(marcaEliminada())
+}
+
+procedure ReanimarCelula() {
+	Poner(Verde)
+	Sacar(marcaReanimada())
+}
+
+function marcaEliminada() {
+	return (Rojo)
+}
+
+function marcaReanimada() {
+	return (Azul)
+}
+
+function estaMarcadaParaSerEliminada() {
+	return (hayBolitas(marcaEliminada()))
+}
+
+function estaMarcadaParaSerReanimada() {
+	return (hayBolitas(marcaReanimada()))
+}
+
+procedure MarcarCelulaParaSerEliminada() {
+	Poner(marcaEliminada())
+}
+
+procedure MarcarCelulaParaSerReanimada() {
+	Poner(marcaReanimada())
+}
+
+//Ej. 4
+procedure Simular(ticks) {
+	repeat (ticks) {
+		ActualizarUniverso()
+	}
+}
