@@ -15,6 +15,17 @@ procedure IrAlExtremo(d) {
 	}
 }
 
+/*Mueve en una direccion y sino puede mueve hacia la otra direccion*/
+procedure MoverT(d,d2) {
+	if (puedeMover(d)) {
+		Mover(d)
+	} 
+	if (not puedeMover(d) && puedeMover(d2)) {
+		IrAlExtremo(opuesto(d))
+		Mover(d2)
+	}
+}
+
 /*PRO: Se posiciona al opuesto del extremo de dos direccion para inicializar un recorrido*/
 procedure InicializarRecorridoHacia(d1, d2) {
 	IrAlExtremo(opuesto(d1))
