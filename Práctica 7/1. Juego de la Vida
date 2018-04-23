@@ -163,3 +163,35 @@ procedure Simular(ticks) {
 		ActualizarUniverso()
 	}
 }
+
+/*RECORRIDO DE BUSQUEDA*/
+function hayCelulasVivasSinMarcar() {
+	InicializarRecorrido(Sur, Oeste)
+	while (hayProximaCelda(Sur, Oeste) && not (celulaSinMarcar())) {
+		IrAProximaCelda(Sur, Oeste)
+	}
+	return (celulaSinMarcar())
+}
+
+function celulaSinMarcar() {
+	return (celulaViva() && notMarcadaComoIslote())
+}
+
+//Ej. 6 
+function computarNumeroDeIslotes() {
+	cant := 0
+	while (celulaSinMarcar()) {
+		cant := cant + 1 
+		IrACelulaSinMarcar()
+		MarcarIslote(cant)
+	}
+	return (cant)
+}
+
+//RECORRIDO DE POSICIONAMIENTO
+procedure IrACelulaSinMarcar() {
+	InicializarRecorrido(Sur, Oeste)
+	while (not (celulaSinMarcar())) {
+		IrAProximaCelda(Sur, Oeste)
+	}
+}
