@@ -33,3 +33,13 @@ procedure InicializarRecorridoHacia(d1, d2) {
 }
 
 //_____________________________________________________
+
+//FUNCIONES CONDICIONALES
+
+function ifElse(condicion) {
+	ret := 0
+	if (condicion) {
+		ret := 1
+	}
+	return (ret)
+}
