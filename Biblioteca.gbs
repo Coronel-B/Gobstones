@@ -26,11 +26,17 @@ procedure MoverT(d,d2) {
 	}
 }
 
+//True cuando el cabezal no se encuentra en el extremo (d,d2)
+function puedeMoverT(d,d2) {
+	return (puedeMover(d) || puedeMover(d2))
+}
+
 /*PRO: Se posiciona al opuesto del extremo de dos direccion para inicializar un recorrido*/
 procedure InicializarRecorridoHacia(d1, d2) {
 	IrAlExtremo(opuesto(d1))
 	IrAlExtremo(opuesto(d2))
 }
+
 
 //_____________________________________________________
 
