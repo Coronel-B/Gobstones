@@ -1,0 +1,104 @@
+//Primer parcial de intro
+
+//Funciones y Procedimientos Auxiliares
+
+function esMarca() {
+/*Prop: denota si la celda actual es una marca*/
+	return (hayBolitas (Rojo))}
+
+function esSalida(){
+/*Prop: Denota si la celda actual es la salida*/
+	return (hayBolitas (Verde))
+}
+
+function esCeldaVisitada (){
+/*Prop: Denota si la celda actual es una celda visitada*/
+	return (hayBolitas(Negro))}
+
+procedure VisitarCelda (){
+	Poner(Negro)
+}
+
+function energiaEncontrada (){
+	energia:=0
+		if(hayBolitas(Azul)){
+				energia:=8}
+		return (energia)}
+
+
+//Ejercicio 1
+
+function esMarcaSinVisitar () {
+	return ( not esCeldaVisitada () && esMarca ())}
+
+//Ejercicio 2
+
+function cantidadDePasosEntreMarcas (dir){
+	cantidadPasos:= 0
+		while ( not esMarcaSinVisitar ()){
+				Mover(dir)
+			cantidadPasos:= cantidadPasos + 1}
+	return(cantidadPasos)}
+
+//Ejercicio 3
+
+function hayMarcaSinVisitarHacia (cantEnergia,dir){
+	energia:=cantEnergia
+	while (puedeMover (dir) && not esMarcaSinVisitar() && energia > 0 ){
+		Mover (dir)
+		energia:= energia + energiaEncontrada() - 1}
+			return (esMarca())
+}
+
+//Ejercicio 4
+
+function hayMarcaSinVisitarEnEntorno(energia){
+	ret:= False
+	foreach dir in [minDir()..maxDir()]{
+		ret:= ret || hayMarcaSinVisitarHacia(energia, dir)}
+	return(ret)
+}
+
+//Ejercicio 5
+
+procedure AvanzarASiguienteMarca (dirMarca){
+//Alcanza la energia
+	while ( not esMarcaSinVisitar()){
+		Mover (dirMarca)
+		}
+		VisitarCelda()
+}
+
+//Ejercicio 6
+
+function escapeExitoso(energiaDisponible){
+	energiaActual:= energiaDisponible
+	while( not esSalida() && hayMarcaSinVisitarEnEntorno(energiaActual)){
+		energiaActual:= energiaDelCamino(energiaActual, descubrirDirALaMarca(energiaActual))
+											AvanzarASiguienteMarca(descubrirDirALaMarca(energiaActual))
+}
+	return (esSalida())}
+
+function energiaDelCamino(energiaInicial,dir){
+	energiaActual:= energiaInicial + energiaEncontrada()
+	while ( not esMarcaSinVisitar() && energiaActual > 0 && puedeMover (dir)){
+		Mover(dir)
+		energiaActual:= energiaActual - 1 + energiaEncontrada()}
+		return (energiaActual)}
+
+function descubrirDirALaMarca(energiaInicial){
+	dir:= minDir ()
+	while (not hayMarcaSinVisitarHacia(energiaInicial, dir)){
+		dir:= siguiente (dir)}
+	return (dir)
+}
+			
+//Ejercicio 7
+
+procedure CompletarPasturas (){
+	IrAlInicioT(Norte, Este)
+	while (puedeMoverT(Norte, Este)){
+
+program {
+		return (escapeExitoso (18))
+}
