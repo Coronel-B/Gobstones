@@ -1,0 +1,18 @@
+/*
+
+*/
+program {
+
+}
+
+
+/*
+PRO: Enunciado
+PRE: Enunciado
+*/
+procedure BuscarPiedraMarcable {
+	InicializarRecorrido(Norte, Este)
+	while (not esPiedraMarcableParcial()) {
+		IrAProximaCelda(Norte, Este)
+	}
+}
