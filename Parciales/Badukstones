@@ -1,5 +1,10 @@
 /*
-
+- Punto es cada una de las celdas en las que se puede ubicar una piedra
+- Un punto puede estar vacio o contener una piedra. Nunca puede haber dos o mas piedras en un punto.
+- Una vez que un jugador ubica una piedra esta no se puede mover mas.
+- Dos puntos son contiguos cuando son vecinos en alguna de las 4 direcciones lindantes (nunca en diagonal)
+- Dos piedras del mismo color estan conectadas cuando estan ubicadas en puntos contiguos
+- 
 */
 program {
 
