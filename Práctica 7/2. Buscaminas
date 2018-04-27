@@ -1,0 +1,287 @@
+/*
+Cada celda del tablero es una locacion.
+Cada locacion puede estar tapada o destapada, y puede contener minas.
+Las locaciones tapadas no dejan ver si hay una mina en la misma.
+Si se destapa una locacion con una mina, la mina explota y termina el juego.
+Hay que destapar locaciones que no tengan mina.
+
+Una partida consiste en una serie de jugadas.
+Cada jugada indica una locacion a destapar. 
+Las locaciones pueden tener un numero de pista.
+Las pista indica la cantidad de minas que hay en las locaciones vecinas.
+
+
+Negro (1=locacion tapada; 0=locacion destapada)
+Rojo (1=hay mina, 0=no hay mina)
+Azul (pistas - 1 a 8 bolitas)
+*/
+program {
+	//return (cantMinasAdyacentes())() //poner vecinas rojas
+	//PonerPistas()
+	//return (nroDeVecinasTapadas())  //poner vecinas negras
+	//return(nroDeVecinasMarcadasConSTM())  //poner vecinas verdes
+
+
+
+	//Mover(Norte);Mover(Este)
+	//ProcesarLocacionConPista()	//coloco minas, locaciones tapadas y pistas
+	//ProcesarTodasLasLocacionesDelTablero()
+}
+
+//Detona el color de la pista
+function pista() {
+	return (Azul)
+}
+
+//Detona el color de la Locacion Tapada
+function locacionTapada() {
+	return (Negro)
+}
+
+//Denota el color de la mina 
+function mina() {
+	return (Rojo)
+}
+
+function hayPista() {
+	return (hayBolitas(pista()))
+}
+
+function hayLocacionTapada() {
+	return (hayBolitas(locacionTapada()))
+}
+
+function hayMina() {
+	return (hayBolitas(mina()))
+}
+
+function hayLocacionSTM() {
+	return (nroBolitas(Verde) == 1)
+}
+
+function hayLocacionSNTM() {
+	return (nroBolitas(Verde) == 2)
+}
+
+/*
+PRO: Retorna la cantidad de minas vecinas que es igual al numero de pistas
+*/
+function contarMinasVecinas() {
+	return (cantMinasAdyacentes() + cantMinasLindantes())
+}
+
+function cantMinasLindantes() {
+	cantMinas := 0
+	//recorro lindantes
+	foreach dir in [minDir().. maxDir()] {
+		/*if (puedeMover(dir)) {
+			Mover(dir)
+			cantMinas := cantMinas + ifElse(hayMina(), 1, 0)	
+			Mover(opuesto(dir))
+		}*/
+		cantMinas := cantMinas + ifElse(hayMinaAl(dir), 1, 0)
+	}
+	return (cantMinas)
+}
+
+function cantMinasAdyacentes() {
+	cantMinas := 0
+	//recorro adyacentes
+	foreach dir in [minDir() .. maxDir()] {
+		/*if (puedeMover(dir) && puedeMover(siguiente(dir))) {	
+			Mover(dir)
+			Mover(siguiente(dir))
+			cantMinas := cantMinas + ifElse(hayMina(), 1 ,0)
+			Mover(opuesto(dir))
+			Mover(opuesto(siguiente(dir)))
+		}*/
+		cantMinas := cantMinas + ifElse(hayMinaAlDiagonal(dir, siguiente(dir)), 1, 0)
+	}
+	return (cantMinas)
+}
+
+/*
+PRO: True si hay minas en direccion @param d
+*/
+function hayMinaAl(d) {
+	return (puedeMover(d) && hayMinaAlParcial(d))	
+}
+
+//PRE: Tiene que existir una celda en direccion @param d
+function hayMinaAlParcial(d) {
+	Mover(d)
+	return (hayMina())
+}
+
+//PRO: True si hay alguna mina en direccion diagonal 
+function hayMinaAlDiagonal(d, d2) {
+	return (puedeMover(d) && puedeMover(d2) && hayMinaAlDiagonalParcial(d, d2))
+}
+
+//PRE: Tiene que existir una celda en direccion diagonal
+function hayMinaAlDiagonalParcial(d, d2) {
+	Mover(d)
+	Mover(d2)
+	return (hayMina())
+}
+
+/*
+PRO: Pone una pista en la locacion actual  
+PRE: En la locacion actual no hay pista ni mina
+
+El numero de pistas es la cantidad de minas que hay en las locaciones vecinas
+*/
+procedure PonerPista() {
+	PonerN(pista(), contarMinasVecinas())
+}
+
+/*
+PRO: Pone las pistas en todas las locaciones del tablero (salvo las que tienen minas)
+PRE: Hay al menos una locacion con mina  
+*/
+procedure PonerPistas() {
+	IrAlInicioT(Este, Norte)
+	while (puedeMoverT(Este, Norte)) {
+		PonerPistaSi(hayMina() == False)
+		MoverT(Este, Norte)
+	}
+	PonerPistaSi(hayMina() == False)
+	IrAlInicioT(Este, Norte)
+}
+
+//PRO: Pone una pista si el booleano es True
+procedure PonerPistaSi(b) {
+	if (b) {
+		PonerPista()
+	}
+}
+
+/*
+PRO: Revisa las locaciones vecinas y marca aquellas que STM con 1 verde y aquellas que SNTM con 2 verdes
+PRE: El cabezal se encuentra sobre una locacion destapada y con pista.
+Existen las funciones: 
+	nroDeVecinasTapadas()
+	nroDeVecinasMarcadasConSTM()
+
+Si hay n locaciones vecinas tapadas, tienen que ser marcadas como STM (si es que ya no estan marcadas como STM)
+Si hay n locaciones vecinas tapadas y marcadas como STM, las demas vecinas (si existen) se marcan como SNTM
+*/
+procedure ProcesarLocacionConPista() {
+
+	if (nroDeVecinasTapadas() > 0) {
+		MarcarSTM()
+	}
+
+	if (nroDeVecinasTapadas() == nroDeVecinasMarcadasConSTM()) {
+		//MarcarSNTM()
+	}
+
+}
+
+/*
+PRO: Retorna la cantidad de vecinas que estan tapadas
+*/
+function nroDeVecinasTapadas() {
+	return (nroDeVecinasTapadasLindantes() + nroDeVecinasTapadasDiagonales())
+}
+
+//PRO: Retorna la cantidad de vecinas tapadas lindantes
+function nroDeVecinasTapadasLindantes() {
+	vecinasTapadas := 0
+	foreach d in [minDir() .. maxDir()] {
+		vecinasTapadas := vecinasTapadas + ifElse(hayVecinaTapadaAl(d), 1, 0)
+	}
+	return(vecinasTapadas)
+}
+
+//PRO: True si hay una vecina tapada en direccion @param d
+function hayVecinaTapadaAl(d) {
+	return (puedeMover(d) && hayVecinaTapadaAlParcial(d))
+}
+
+//PRE: Tiene que existir una direccion en @param d
+function hayVecinaTapadaAlParcial(d) {
+	Mover(d)
+	return (hayLocacionTapada())
+}
+
+//PRO: Retorna la cantidad de vecinas tapadas lindantes
+function nroDeVecinasTapadasDiagonales() {
+	vecinasTapadas := 0
+	foreach d in [minDir() .. maxDir()] {
+		vecinasTapadas := vecinasTapadas + ifElse(hayVecinaTapadaAlDiagonal(d, siguiente(d)), 1, 0)
+	}
+	return(vecinasTapadas)
+}
+
+//PRO: True si hay una vecina tapada en direccion @param d
+function hayVecinaTapadaAlDiagonal(d, d2) {
+	return (puedeMover(d) && puedeMover(d) && hayVecinaTapadaAlParcialDiagonal(d, d2))
+}
+
+//PRE: Tiene que existir una direccion en @param d
+function hayVecinaTapadaAlParcialDiagonal(d, d2) {
+	Mover(d)
+	Mover(d2)
+	return (hayLocacionTapada())
+}
+
+//PRO: Retorna la cantidad de locaciones vecinas que seguro tienen la marca de STM
+function nroDeVecinasMarcadasConSTM() {
+	return (nroVecinasMarcadasSTMLindantes() + nroVecinasMarcadasSTMDiagonales())
+}
+
+//PRO: Retorna la cantidad de vecinas marcadas con STM lindantes
+function nroVecinasMarcadasSTMLindantes() {
+	vecinasSTM := 0
+	foreach d in [minDir() .. maxDir()] {
+		vecinasSTM := vecinasSTM + ifElse(hayVecinaSTMAl(d), 1, 0)
+	}
+	return (vecinasSTM)
+}
+
+//PRO: True si hay una vecina en direccion @param d que STM
+function hayVecinaSTMAl(d) {
+	return (puedeMover(d) && hayVecinaSTMAlParcial(d))
+}
+
+//PRE: Tiene que existir una locacion en direccion @param d
+function hayVecinaSTMAlParcial(d) {
+	Mover(d)
+	return (hayLocacionSTM())
+}
+
+//PRO: Retorna la cantidad de vecinas marcadas con STM diagonales
+function nroVecinasMarcadasSTMDiagonales() {
+	vecinasSTM := 0
+	foreach d in [minDir() .. maxDir()] {
+		vecinasSTM := vecinasSTM + ifElse(hayVecinaSTMAlDiagonal(d, siguiente(d)), 1, 0)
+	} 
+	return (vecinasSTM)
+}
+
+//PRO: True si hay una vecina que tiene una marca de STM al diagonal
+function hayVecinaSTMAlDiagonal(d, d2) {
+	return (puedeMover(d) && puedeMover(d2) && hayVecinaSTMAlDiagonalParcial(d, d2))
+}
+
+//PRE: Tiene que existir una direccion al @param d y @param d2
+function hayVecinaSTMAlDiagonalParcial(d, d2) {
+	Mover(d)
+	Mover(d2)
+	return (hayLocacionSTM())
+}
+
+/*
+PRO: 
+Si hay n locaciones vecinas tapadas, tienen que ser marcadas como STM (si es que ya no estan marcadas como STM)
+*/
+procedure MarcarSTM() {
+	
+}
+
+/*
+PRO:
+Si hay n locaciones vecinas tapadas y marcadas como STM, las demas vecinas (si existen) se marcan como SNTM
+*/
+procedure MarcarSNTM() {}
