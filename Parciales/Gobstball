@@ -1,0 +1,117 @@
+/*
+Los arcos: 
+	. Pueden ubicarse en cualquier lugar del tablero
+
+Los jugadores: 
+	. Se ubicaran en solamente 1 celda
+	. No se podran mover hasta que no se anote el gol
+	. Podra recibir la pelota
+	. Pasarla 
+	. Lanzar al arco si se encuentra cerca
+	. Puede estar libre o marcado por un rival
+	. Si esta marcado y recibiera un pase, perderia la pelota dando lugar al rival para anotar (no deseable)
+	. C/jugador pertenece a 1 equipo: colorEquipoX()
+	. C/jugador puede tocar la pelota solo una vez en una sucesion de pases que termine en gol: MarcarJugadorComoUsado()
+	. 
+
+Los limites del campo de juego estan dados por los limites del tablero
+
+FIGURAS:
+	equipo local (rayas)
+	equipo visitante (franja horizontal)
+________________________________________
+
+Funciones y procedimientos:
+
+colorEquipoLocal()
+colorEquipoVisitante()
+colorPelota()
+colorEquipoRival(colorEquipo)
+
+hayJugador(colorEquipo)
+estaMarcadoHacia(dir, colorEquipo)
+jugadorEstaUsado()
+marcado()
+
+MarcarJugadorComoUsado()
+____________
+
+
+
+*/
+
+program {
+	//return (estaMarcadoHacia(Norte, colorEquipoVisitante()))
+
+}
+
+function colorEquipoLocal() {return (Rojo)}
+function colorEquipoVisitante() {return (Azul)}
+function colorPelota() {return (Negro)}
+
+//PRE: No puede haber dos jugadores en una misma celda
+function hayJugador(colorEquipo) {
+	return (hayBolitas(colorEquipo))
+}
+
+/*
+PRO: True si el jugador bajo el cabezal en una scs de pases fue usado
+PRE: Que exista un jugador en la celda
+
+Si hay mas de 1 bolita de alguno de algun jugador de un equipo en una celda es porque esta usado
+*/
+function jugadorEstaUsado() {
+	return (nroBolitas(colorEquipoLocal())>0 || nroBolitas(colorEquipoVisitante())>0)
+}
+
+/*
+PRO: Marca al jugador bajo el cabezal como un jugador que ya ha tocado la pelota en un scs de pases
+
+Agregando una bolita mas a la que ya estaba del color de algun equipo
+*/
+procedure MarcarJugadorComoUsado() {
+	if (hayJugador(colorEquipoLocal())) {
+		Poner(colorEquipoLocal())
+	}
+	if (hayJugador(colorEquipoVisitante())) {
+		Poner(colorEquipoVisitante())
+	}
+}
+
+/*
+PRO: True si hay un jugador del equipo contrario en la celda lindante a dir
+PRE: El cabezal se encuentra sobre un jugador del equipo colorEquipo
+*/
+function estaMarcadoHacia(dir, colorEquipo) {
+	return (puedeMover(dir) && estaMarcadoHaciaParcial(dir, colorEquipo))
+}
+
+/*PRE: Tiene que existir una celda en direccion @param dir*/
+function estaMarcadoHaciaParcial(dir, colorEquipo) {
+	Mover(dir)
+	return (hayJugador(colorEquipo))
+}
+
+/*
+PRO: True si el jugador se encuentra marcado en cualquiera de las direcciones
+PRE: El cabezal se encuentra sobre una celda que contiene un jugador de colorEquipo
+*/
+function marcado(colorEquipo) {
+	hayMarca := False
+	foreach d in [minDir() .. maxDir()] {
+		hayMarca := hayMarca || estaMarcadoHacia(dir, colorEquipoRival(colorEquipo)) 
+	}
+	return (hayMarca)
+}
+
+/*
+PRO: Denota el color del equipo rival recibiendo @param colorEquipo
+PRE: Tiene que existir un jugador en la celda y ser de alguno de los 2 equipos
+*/
+function colorEquipoRival(colorEquipo) {
+	colorEquipoRival := colorEquipoLocal()
+	if (colorEquipo == colorEquipoLocal()) {
+		colorEquipoRival := colorEquipoVisitante()
+	}
+	return (colorEquipoRival)
+}
