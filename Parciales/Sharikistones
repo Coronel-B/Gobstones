@@ -1,14 +1,3 @@
-unction auxiliarHayFichaAl(dir,color)
-{
-  Mover(dir)
- }
- return(hayFicha(color))
-}
-function hayFichaAl(dir,color)
-{
- return(puedeMover(dir) && hayFichaAl(dir, color))
-}
-
 
 function fichaEstrella()
 {
@@ -32,6 +21,18 @@ function fichaTriangulo()
 
 
 // ejercicio 1
+
+function auxiliarHayFichaAl(dir,color)
+{
+  Mover(dir)
+ }
+ return(hayFicha(color))
+}
+
+function hayFichaAl(dir,color)
+{
+ return(puedeMover(dir) && auxiliarHayFichaAl(dir, color))
+}
 
 function hayFicha(colorDeFicha)
 {
