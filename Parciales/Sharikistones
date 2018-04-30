@@ -1,0 +1,171 @@
+unction auxiliarHayFichaAl(dir,color)
+{
+  Mover(dir)
+ }
+ return(hayFicha(color))
+}
+function hayFichaAl(dir,color)
+{
+ return(puedeMover(dir) && hayFichaAl(dir, color))
+}
+
+
+function fichaEstrella()
+{
+ return(Verde)
+}
+
+function fichaDiamante()
+{
+ return(Rojo)
+}
+
+function fichaCirculo()
+{
+ return(Azul)
+}
+
+function fichaTriangulo()
+{
+ return(Negro)
+}
+
+
+// ejercicio 1
+
+function hayFicha(colorDeFicha)
+{
+ return(hayBolitas(colorDeFicha))
+}
+
+// ejercicio 2
+
+function continuaFichaAl(dir,color)
+{
+ if(puedeMover(dir))
+ {
+  Mover(dir)
+ }
+return(hayFichaAl(dir,color))
+}
+
+// ejercicio 3
+
+function colorFicha()
+{
+ colordeficha := fichaCirculo()
+ if ( not hayFicha(fichaCirculo()))
+ {
+  colordeficha := preguntarSiTriangulo()
+ }
+ return(colordeficha)
+}
+
+function preguntarSiTriangulo()
+{
+ colordeficha := fichaTriangulo()
+ if ( not hayFicha(fichaTriangulo()))
+ {
+  colordeficha := preguntarSiDiamante()
+ }
+ return(colordeficha)
+}
+
+function preguntarSiDiamante()
+{
+ colordeficha := fichaDiamante()
+ if (not hayFicha(fichaDiamante()))
+ {
+  colordeficha := fichaEstrella()
+ }
+ return(colordeficha)
+}
+
+function fichaEnDir(dir)
+{
+ Mover(dir)
+ return(colorFicha())
+}
+
+procedure SwapFichaNorte()
+{
+ fichaActual := colorFicha()
+ fichaNorte := fichaEnDir(Norte)
+ Sacar(fichaActual)
+ Poner(fichaNorte)
+ Mover(Norte)
+ Sacar(fichaNorte)
+ Poner(fichaActual)
+}
+
+procedure SwapFichaSur()
+{
+ fichaActual := colorFicha()
+ fichaSur := fichaEnDir(Sur)
+ Sacar(fichaActual)
+ Poner(fichaSur)
+ Mover(Sur)
+ Sacar(fichaSur)
+ Poner(fichaActual)
+}
+
+procedure BajarFichas()
+{
+ InicializarRecorridoHacia(Norte,Este)
+ while(hayProximaCelda(Norte, Este))
+ {
+  BajarFicha()
+  IrAProximaCelda(Norte, Este)
+ }
+ BajarFicha()
+}
+
+procedure BajarFicha()
+{
+ if(not vacia())
+ {
+  BajarF(colorFicha())
+ }
+}
+
+procedure BajarF(color)
+{
+ while(puedeMover(Sur) && hayVaciaAl(Sur))
+ {
+  Sacar(color)
+  Mover(Sur) 
+  Poner(color)
+ }
+}
+
+function hayVaciaAL(dir)
+{
+ Mover(dir)
+return(vacia())
+}
+
+// ejercicio 6
+
+function hayFichaAQuemar()
+{
+ BajarFichas()
+ inicializarRecorridoHacia(Norte, Este)
+ while(hayProximaCelda(Norte, Este))
+ {
+  IraProximaCelda(Norte, Este)
+ }
+ return(fichaQuemable())
+}
+
+function fichaQuemable()
+{
+ fichaActual := colorFicha()
+ dir := Norte
+ while( not hayFichaAl(dir,fichaActual) && dir /= Oeste)
+ {
+  dir := siguiente(dir)
+ }
+return(hayFichaAL(dir, fichaActual))
+}
+
+// falta el ultimo ejercicio 
