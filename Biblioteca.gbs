@@ -42,10 +42,10 @@ procedure InicializarRecorridoHacia(d1, d2) {
 
 //FUNCIONES CONDICIONALES
 
-function ifElse(condicion) {
-	ret := 0
+function ifElse(condicion, a, b) {
+	ret := a
 	if (condicion) {
-		ret := 1
+		ret := b
 	}
 	return (ret)
 }
