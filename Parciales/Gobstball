@@ -46,8 +46,9 @@ program {
 	//return (hayPase(Sur, colorEquipoLocal()))
 
 	//return (marcado(Rojo))
-	return(esPaseBueno(Rojo))
-	//return (queTanBuenoEsPaseA(Norte, Rojo))
+	//return(esPaseBueno(Rojo))
+	//return (queTanBuenoEsPaseA(Norte, Rojo)) 
+	return (mejorDirParaPase(Rojo))
 }
 
 function colorEquipoLocal() {return (Rojo)}
@@ -151,27 +152,48 @@ RETURN: Direccion hacia la cual se puede realizar el mejor pase.
 Un pase es mejor cuando el jugador al que se le va a pasar no esta marcado, ni ha sido usado y se encuentra
 a distancia maxima.
 */
-//function mejorDirParaPase(colorEquipo) {}
+function mejorDirParaPase(colorEquipo) {
+	mejorDistancia := 0
+	mejorDir := Norte
+	foreach d in [minDir() .. maxDir()] {
+		if (queTanBuenoEsPaseA(d, colorEquipo) > mejorDistancia) {
+			mejorDistancia := queTanBuenoEsPaseA(d, colorEquipo)
+			mejorDir := d
+		}
+	}
+	return (mejorDir)
+}
 
 /*
-PRO: Retorna la distancia hacia la cual se encuentra el jugador al cual se la pasara la pelota en dicha direccion.
+PRO: Retorna la distancia hacia la cual se encuentra el jugador MAS LEJOS al cual se la pasara la pelota en dicha direccion.
 Retorno 0 en caso de que el jugador a recibir este marcado o ya haya tocado la pelota
 PRE: hayPase(dir, colorEquipo) es True
 */
 function queTanBuenoEsPaseA(dir, colorEquipo) {
-	distancia := 1
-	distanciaBuena := 1
 	Mover(dir)
-	while (not hayJugador(colorEquipo)) {
-		if (hayJugador(colorEquipo) && esPaseBueno(colorEquipo)) {
-			Mover(dir)
-			distancia := distancia + 1
-		}
+	distancia := 1	
+
+	distanciaBuena := ifElse(esPaseBuenoAl(dir, colorEquipo), 1, 0)	//sino hay jugador con buen pase devuelvo 0
+	
+	while (puedeMover(dir)) {
 		Mover(dir)
 		distancia := distancia + 1
+		if (hayJugador(colorEquipo) && esPaseBueno(colorEquipo)) {
+			distanciaBuena := distancia
+		}
 	}
-	
-	return (distancia)
+	return (distanciaBuena)
+}
+
+//PRO: Devuelve True si hay un pase bueno en direccion @param dir
+function esPaseBuenoAl(dir, colorEquipo) {
+	return (puedeMover(dir) && esPaseBuenoAlParcial(dir, colorEquipo))
+}
+
+//PRE: Tiene que existir una celda en direccion @param dir
+function esPaseBuenoAlParcial(dir, colorEquipo) {
+	Mover(dir)
+	return (hayJugador(colorEquipo) && esPaseBueno(colorEquipo))
 }
 
 /*
@@ -180,4 +202,12 @@ PRE: Que haya un jugador en la celda actual
 */
 function esPaseBueno(colorEquipo) {
 	return (not marcado(colorEquipo) && not jugadorEstaUsado())
+}
+
+function ifElse(condicion, a, b) {
+	ret := a
+	if (condicion) {
+		ret := b
+	}
+	return (ret)
 }
