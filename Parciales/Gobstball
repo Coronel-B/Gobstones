@@ -31,7 +31,8 @@ colorEquipoRival(colorEquipo)
 hayJugador(colorEquipo)
 estaMarcadoHacia(dir, colorEquipo)
 jugadorEstaUsado()
-marcado()
+marcado(colorEquipo)
+hayPase(dir, colorEquipo)
 
 MarcarJugadorComoUsado()
 ____________
@@ -42,7 +43,11 @@ ____________
 
 program {
 	//return (estaMarcadoHacia(Norte, colorEquipoVisitante()))
+	//return (hayPase(Sur, colorEquipoLocal()))
 
+	//return (marcado(Rojo))
+	return(esPaseBueno(Rojo))
+	//return (queTanBuenoEsPaseA(Norte, Rojo))
 }
 
 function colorEquipoLocal() {return (Rojo)}
@@ -61,7 +66,7 @@ PRE: Que exista un jugador en la celda
 Si hay mas de 1 bolita de alguno de algun jugador de un equipo en una celda es porque esta usado
 */
 function jugadorEstaUsado() {
-	return (nroBolitas(colorEquipoLocal())>0 || nroBolitas(colorEquipoVisitante())>0)
+	return (nroBolitas(colorEquipoLocal())>1 || nroBolitas(colorEquipoVisitante())>1)
 }
 
 /*
@@ -80,16 +85,16 @@ procedure MarcarJugadorComoUsado() {
 
 /*
 PRO: True si hay un jugador del equipo contrario en la celda lindante a dir
-PRE: El cabezal se encuentra sobre un jugador del equipo colorEquipo
+PRE: El cabezal se encuentra sobre un jugador del equipo colorEquipo 
 */
 function estaMarcadoHacia(dir, colorEquipo) {
-	return (puedeMover(dir) && estaMarcadoHaciaParcial(dir, colorEquipo))
+	return (puedeMover(dir) && estaMarcadoHaciaParcial(dir, colorEquipoRival(colorEquipo)))
 }
 
 /*PRE: Tiene que existir una celda en direccion @param dir*/
-function estaMarcadoHaciaParcial(dir, colorEquipo) {
+function estaMarcadoHaciaParcial(dir, colorEquipoRival) {
 	Mover(dir)
-	return (hayJugador(colorEquipo))
+	return (hayJugador(colorEquipoRival))
 }
 
 /*
@@ -99,7 +104,8 @@ PRE: El cabezal se encuentra sobre una celda que contiene un jugador de colorEqu
 function marcado(colorEquipo) {
 	hayMarca := False
 	foreach d in [minDir() .. maxDir()] {
-		hayMarca := hayMarca || estaMarcadoHacia(dir, colorEquipoRival(colorEquipo)) 
+		//hayMarca := hayMarca || estaMarcadoHacia(d, colorEquipoRival(colorEquipo)) //estaba invierto el equipo dos veces
+		hayMarca := hayMarca || estaMarcadoHacia(d, colorEquipo)
 	}
 	return (hayMarca)
 }
@@ -114,4 +120,64 @@ function colorEquipoRival(colorEquipo) {
 		colorEquipoRival := colorEquipoVisitante()
 	}
 	return (colorEquipoRival)
+}
+
+/*
+PRO: Retorta True si hay un jugador del mismo equipo que no ha sido usado en la scs de pases y se encuentra
+en linea recta en direccion @param dir sin que haya ningun jugador del equipo contrario en el camino.
+PRE: El cabezal se encuentra sobre una celda que contiene un jugador de colorEquipo que tiene la pelota
+
+hayJugador(colorEquipo)
+jugadorEstaUsado()
+marcado()
+*/
+function hayPase(dir, colorEquipo) {
+	if (not estaMarcadoHacia(dir, colorEquipo)) {
+		Mover(dir)
+	}
+	while (puedeMover(dir) 
+			&& not hayJugador(colorEquipo) 
+			&& not hayJugador(colorEquipoRival(colorEquipo))) {
+		Mover(dir)
+	}
+	return (hayJugador(colorEquipo) && not jugadorEstaUsado())
+}
+
+/*
+PRE: El cabezal se encuentra sobre una celda que contiene un jugador de colorEquipo que tiene la pelota.
+Hay al menos una direccion hacia la cual hay un pase posible y dicho jugador no esta marcado ni ha sido usado aun.
+RETURN: Direccion hacia la cual se puede realizar el mejor pase.
+
+Un pase es mejor cuando el jugador al que se le va a pasar no esta marcado, ni ha sido usado y se encuentra
+a distancia maxima.
+*/
+//function mejorDirParaPase(colorEquipo) {}
+
+/*
+PRO: Retorna la distancia hacia la cual se encuentra el jugador al cual se la pasara la pelota en dicha direccion.
+Retorno 0 en caso de que el jugador a recibir este marcado o ya haya tocado la pelota
+PRE: hayPase(dir, colorEquipo) es True
+*/
+function queTanBuenoEsPaseA(dir, colorEquipo) {
+	distancia := 1
+	distanciaBuena := 1
+	Mover(dir)
+	while (not hayJugador(colorEquipo)) {
+		if (hayJugador(colorEquipo) && esPaseBueno(colorEquipo)) {
+			Mover(dir)
+			distancia := distancia + 1
+		}
+		Mover(dir)
+		distancia := distancia + 1
+	}
+	
+	return (distancia)
+}
+
+/*
+PRO: Retorna True si el jugador no esta marcado y no toco la pelota, pues es un buen pase.
+PRE: Que haya un jugador en la celda actual
+*/
+function esPaseBueno(colorEquipo) {
+	return (not marcado(colorEquipo) && not jugadorEstaUsado())
 }
