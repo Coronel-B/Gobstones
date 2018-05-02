@@ -47,13 +47,20 @@ program {
 
 	//return (marcado(Rojo))
 	//return(esPaseBueno(Rojo))
+	//return (esPaseBuenoAl(Norte, Rojo))
 	//return (queTanBuenoEsPaseA(Norte, Rojo)) 
-	return (mejorDirParaPase(Rojo))
+	//return (mejorDirParaPase(Rojo))
+
+	
+	//return (hayGolAl(Este, Rojo))
+	//return (hayGolAl(Sur, Azul))
+	return (hayGol(Rojo))
 }
 
 function colorEquipoLocal() {return (Rojo)}
 function colorEquipoVisitante() {return (Azul)}
 function colorPelota() {return (Negro)}
+function colorArco() {return (Verde)}
 
 //PRE: No puede haber dos jugadores en una misma celda
 function hayJugador(colorEquipo) {
@@ -170,10 +177,10 @@ Retorno 0 en caso de que el jugador a recibir este marcado o ya haya tocado la p
 PRE: hayPase(dir, colorEquipo) es True
 */
 function queTanBuenoEsPaseA(dir, colorEquipo) {
+	distanciaBuena := ifElse(esPaseBuenoAl(dir, colorEquipo), 1, 0)	//sino hay jugador con buen pase devuelvo 0
+	
 	Mover(dir)
 	distancia := 1	
-
-	distanciaBuena := ifElse(esPaseBuenoAl(dir, colorEquipo), 1, 0)	//sino hay jugador con buen pase devuelvo 0
 	
 	while (puedeMover(dir)) {
 		Mover(dir)
@@ -204,10 +211,84 @@ function esPaseBueno(colorEquipo) {
 	return (not marcado(colorEquipo) && not jugadorEstaUsado())
 }
 
-function ifElse(condicion, a, b) {
-	ret := a
+function ifElse(condicion, v, f) {
+	ret := f
 	if (condicion) {
-		ret := b
+		ret := v
 	}
 	return (ret)
 }
+
+/*
+PRO: True si tras una scs de pases, algun jugador del equipo puede lanzar al arco rival y convertir un gol.
+PRE: El cabezal se encuentra sobre una celda que contiene un jugador de colorEquipo que tiene la pelota
+De haber una scs de pases que termina en gol, esta es la que se obtiene de ir dando siempre el pase hacia
+la mejor direccion. Por otra parte esta es unica, es decir, en c/pase hay un unico jugador a maxima distancia 
+posible.
+
+Para que pueda convertir un gol, el jugador con la pelota tiene que estar a menos de 3 celdas del arco rival
+y el arco no tiene que estar bloqueado por ningun jugador, ni rival ni propio en el trayecto desde el jugador 
+hasta el arco.
+*/
+function puedeMeterGol(colorEquipo) {
+	while (not hayGol(colorEquipo) && hayPase(mejorDirParaPase(colorEquipo), colorEquipo)) {
+		PasarLaPelota(mejorDirParaPase(colorEquipo), distancia, colorEquipo)
+	}
+	return (hayGol(colorEquipo))
+}
+
+/*
+PRO: Pasar la pelota de un comaniero a otro de la mejor manera 
+PRE: Que el cabezal este en una celda con un jugador que tiene la pelota
+*/
+procedure PasarLaPelota(dir, distancia, colorEquipo) {
+
+}
+
+/*
+PRO: True si el jugador puede convertir un gol lanzando la pelota en alguna direccion.
+PRE: El cabezal se encuentra sobre un jugador que tiene la pelota
+*/
+function hayGol(colorEquipo) {
+	hayGolAl := False
+	foreach d in [minDir() .. maxDir()] {
+		hayGolAl := hayGolAl || ifElse(hayGolAl(d, colorEquipo), True, False)
+	}
+	return (hayGolAl)
+}
+
+/*
+PRO: Denota True si hay gol en una direccion @param dir
+PRE: El cabezal tiene que estar situado en un jugador con la pelota, el jugador tiene que estar a menos de 3 celdas
+y la trayectoria hacia el arco tiene que estar libre
+*/
+function hayGolAl(dir, colorEquipo) {
+	Mover(dir)
+	celdas := 1
+	while (puedeMover(dir) 
+			&& not hayJugador(colorEquipo) 
+			&& not hayJugador(colorEquipoRival(colorEquipo))) {
+		Mover(dir)
+		celdas := celdas + 1
+	}
+	return (celdas <= 3 && hayArco(colorEquipoRival(colorEquipo)))
+}
+
+/*
+PRO: Denota si en una celda hay una parte del arco de algun equipo
+
+1 bolita verde representa el arco del equipo local
+2 verdes arco visitante
+*/
+function hayArco(colorEquipo) {
+	ret := False
+	if ((colorEquipo == colorEquipoLocal()) 
+		&& nroBolitas(colorArco()) == 1) {
+		ret := True
+	}
+	if ((colorEquipo == colorEquipoVisitante())
+		&& nroBolitas(colorArco()) == 2) {
+		ret := True
+	}
+	return (ret)
+} 
