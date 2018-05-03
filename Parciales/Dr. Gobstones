@@ -1,0 +1,72 @@
+
+function hayDeMismoColorNHacia(n, dir) {
+	return (puedeMoverN(n, dir) && hayDeColorNHacia(n, dir))
+}
+
+function hayDeColorNHacia(n, dir) {
+	
+}
+
+function hayElemento() {
+	col := minColor()
+	while (col /= maxColor() && not hayElementoDe(col)) {
+		col := siguiente(col)
+	}
+	return (hayElementoDe(col))
+}
+
+procedure QuemarTodosLosElementosPosibles() {
+	InicializarRecorridoHacia(Oeste, Sur)
+	while (hayProximaCelda(Oeste, Sur)) {
+		QuemarPosibles()
+		IrAProximaCelda(Oeste, Sur)
+	}
+	QuemarPosibles()
+}
+
+procedure QuemarPosibles() {
+	foreach d in [minDir() .. maxDir()] {
+		QuemarEn(d)
+	}
+}
+
+procedure QuemarEn(dir) {
+	if (hayNConsecutivasHacia(3, dir)) {
+		QuemarN(cantidadAQuemarHacia(dir), dir)
+	}
+}
+
+//hayNConsecutivasHacia me asegura que hay para sacar
+procedure QuemarN(n, dir) {
+	elemento := n
+	SacarTodas(colorActual())
+	while (elemento > 0) {
+		cant := cant + 1
+		Mover(dir)
+	}
+	return (cant)
+}
+
+function cantidadAQuemarHacia(dir) {
+	
+}
+
+function esQuemadaInteligente() {
+	return (contarVirus() > contarTrasQuemar())
+}
+
+function contarTrasQuemar() {
+	BajarPildoraLoMasPosible()
+	QuemarTodosLosElementosPosibles()
+	return (contarVirus())
+}
+
+function contarVirus() {
+	total := 0 
+	InicializarRecorridoHacia(Oeste, Sur)
+	while (hayProximaCelda(Oeste, Sur)) {
+		total := total + ifElse(hayVirus(), 1, 0)
+		IrAProximaCelda(Oeste, Sur)
+	}
+	return (total + ifElse(hayVirus(), 1, 0))
+}
