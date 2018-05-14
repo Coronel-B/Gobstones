@@ -1,0 +1,41 @@
+program {
+	//return (zip([1,3,5],[2,4,6]))
+	//return (longitud([1,2,4]))
+	return (zip([1,3,5,7,9],[2,4,6]))
+}
+
+/*
+PRO: Retorna una lista combinando elementos de dos listas: [e1, f1, .., ek, fk].
+Pueden tener distinta longitud
+
+[e1, .., ek] y [f1, .., fk ]
+*/
+function zip(ls, ls2) {
+	lista := ls
+	lista2 := ls2
+	lsRet := []
+	while (not isEmpty(lista) &&
+			not isEmpty(lista2)) {
+		lsRet := lsRet ++ [head(lista)] ++ [head(lista2)]
+		lista := tail(lista)
+		lista2 := tail(lista2)
+	}
+	if (longitud(ls) > longitud(ls2)) {
+		lsRet := lsRet ++ lista
+	}
+	if (longitud(ls) < longitud(ls2)) {
+		lsRet := lsRet ++ lista2
+	}
+	return (lsRet)
+}
+
+//Retorna la longitud de una lista
+function longitud(lista) {
+	ls := lista
+	contador := 0
+	while (not isEmpty(ls)) {
+		ls := tail(ls)
+		contador := contador + 1
+	}
+	return (contador)
+}
