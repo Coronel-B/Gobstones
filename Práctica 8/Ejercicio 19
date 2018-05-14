@@ -1,0 +1,41 @@
+program {
+	return (reduccionBloques([1,1,2,2,2,2,3,1,2,2]))
+}
+
+
+/*
+PRO: Retorna la lista que resulta de quitar todos los elementos internos
+
+Un elemento es interno si es igual al anterior de la lista
+[1,1,2,2,2,2,3,1,2,2]
+[1,2,3,1,2]
+*/
+function reduccionBloques(ls) {
+
+	lista := ls
+	lsRet := []
+	
+	while (not isEmpty(tail(lista))) {	
+		lsRet := lsRet ++ 
+				ifElse(esInterno(head(lista), head(tail(lista))), [], [head(lista)])
+		lista := tail(lista)
+	}
+	lsRet := lsRet ++
+			ifElse(esInterno(head(lista), last(lsRet)), [], [head(lista)]) 
+	return (lsRet)
+}
+
+/*
+PRO: Retorna True si el elemento actual es interno
+*/
+function esInterno(e, eAnterior){
+	return (e == eAnterior)	
+}
+
+function ifElse(condicion, v, f) {
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+	return (ret)
+}
