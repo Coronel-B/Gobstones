@@ -1,0 +1,16 @@
+program {
+	return (unzipImpares([1,2,3,4,5]))
+}
+
+/*
+RETURN: Retorna una lista que se obtiene de quitar todos los elementos de las posiciones impares
+*/
+function unzipImpares(lista) {
+	ls := lista
+	lsRet := []
+	while (not isEmpty(tail(ls))) {
+		lsRet := lsRet ++ [head(tail(ls))]
+		ls := tail(tail(ls))
+	}
+	return (lsRet)
+}
