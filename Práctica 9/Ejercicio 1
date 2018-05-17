@@ -1,0 +1,72 @@
+type Persona is record {
+	field dni
+	field domicilio 
+ 	field esMasculino
+}
+
+program {
+
+	/*
+	braian := Persona(dni <- 39155039,
+											domicilio <- 1931,
+											esMasculino <- True)
+
+	ramon := Persona(dni <- 24327173,
+											domicilio <- 1931,
+											esMasculino <- True)
+	*/
+	marcela := Persona(dni <- 22842685,
+											domicilio <- 1931,
+											esMasculino <- False)
+	
+	--return (convivientes(braian, ramon))
+	--return (nacimiento(marcela, False))
+	
+	nuevaHija := nacimiento(marcela, False)
+	nuevaHija := registrarNacimiento(nuevaHija, 12345678)	--asigno nuevo documento
+	nuevaHija := cambioDomicilio(nuevaHija, 1950)
+	cacho := cambioSexo(nuevaHija)
+
+	return (cacho)
+
+
+}
+
+function convivientes(persona1, persona2) {
+	return (domicilio(persona1) == domicilio(persona2))
+}
+
+//PRO: Crea una nueva persona que viva con la madre
+-- PRE: Sin DNI asignado (inicializo dni en 0)
+function nacimiento(madre, esMasc) {
+	return (Persona(dni <- sinAsignar(),
+										esMasculino <- esMasc,
+										domicilio <- domicilio(madre)))
+}
+
+function sinAsignar() {return (0)}
+
+-- Retorna la persona con el dni
+-- PRE: La persona no debe tener un dni asignado
+function registrarNacimiento(persona, dni) {
+	return (Persona(persona|dni <- dni))
+}
+
+-- Detona una persona con el domicilio cambiado
+function cambioDomicilio(persona, nuevoDomicilio) {
+	return (Persona(persona|domicilio <- nuevoDomicilio))
+}
+
+-- Retorna la persona con sexo cambiado
+function cambioSexo(persona) {
+	return (Persona(persona|
+											esMasculino <- ifElse(esMasculino(persona) == True, False, True)))
+}
+
+function ifElse(condicion, v, f) {
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+	return (ret)
+}
