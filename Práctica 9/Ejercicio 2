@@ -27,3 +27,22 @@ function alumnoIngresante(persona, legajo) {
  									 materiasRendidas <- 0,
 									 materiasAprobadas <- 0))
 }
+
+//Retorna el numero de materias desaprobadas por un alumno
+function materiasDesaprobadas(alumno) {
+	return (materiasRendidas(alumno) - materiasAprobadas(alumno))
+}
+
+//Retorna un alumno con un nro de legajo distinto
+function cambioLegajo(alumno, nuevoLegajo) {
+	return (Alumno(alumno|legajo <- nuevoLegajo))
+}
+
+-- Retorna el mismo alumno con otro domicilio
+function cambioDomicilioAlumno(alumno, nuevoDomicilio) {
+	return (Alumno(alumno|
+												datosPersonales <- Persona(datosPersonales(alumno)|
+																																								domilio <- nuevoDomicilio)))
+}
+
+
