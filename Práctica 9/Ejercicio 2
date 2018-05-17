@@ -1,0 +1,29 @@
+type Persona is record {
+	field dni
+	field domicilio
+	field esMasculino
+}
+
+type Alumno is record {
+	field datosPersona 
+	field legajo
+	field materiasRendidas
+	field materiasAprobadas
+}
+
+program {
+
+	braian := Persona(dni <- 39155039,
+											domicilio <- 1931,
+											esMasculino <- True)
+
+	return (alumnoIngresante(braian, 42568))
+}
+
+-- Crea un alumno que no curso ninguna materia
+function alumnoIngresante(persona, legajo) {
+	return (Alumno(datosPersona <- persona,
+									 legajo <- legajo,
+ 									 materiasRendidas <- 0,
+									 materiasAprobadas <- 0))
+}
