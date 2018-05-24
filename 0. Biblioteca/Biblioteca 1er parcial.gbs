@@ -1,0 +1,490 @@
+-- Biblioteca
+
+/*
+PRO:
+PRE:
+Tipo:
+Cabezal:
+*/
+
+/*Comandos predefinidos por Gobstones:
+
+hayBolitas(c)
+nroBolitas(c)
+IrAlBorde(<dir>)
+VaciarTablero()
+puedeMover(<dir>)
+
+*/
+
+/*DESPLAZAMIENTOS*/
+
+//Mueve el cabezal tantas posiciones a @param dir como lo indique @param n
+procedure MoverN(d, n) {
+	repeat (n) {
+		Mover(d)	
+	}
+}
+
+
+//PRO: Mueve hacia direccion @param dir si el booleano es True
+procedure MoverSi(b, dir) {
+	if(b) {
+		Mover(dir)
+	}
+}
+
+procedure PonerYMover(c, dir) {
+	Poner(c)
+	Mover(dir)
+}
+
+//Recibe 4 numeros y se mueve en cualquier direccion. Lo hardcodeé porque no me deja anidar repeticiones.
+procedure Move(nro_N, nro_E, nro_S, nro_O) {
+		repeat (nro_N) {
+			Mover(Norte)
+		}
+		repeat (nro_E) {
+			Mover(Este)
+		}
+		repeat (nro_S) {
+			Mover(Sur)
+		}
+		repeat (nro_O) {
+			Mover(Oeste)
+		}
+}
+
+/*
+Cabezal: Termina en el extremo con direccion @param d desde la celda actual
+*/
+procedure IrAlExtremo(d) {
+	while(puedeMover(d)) {
+		Mover(d)
+	}
+}
+
+/*
+.
+.
+.
+.
+*/
+
+procedure IrAlInicioT(d1,d2){
+  IrAlExtremo(opuesto(d1))
+  IrAlExtremo(opuesto(d2))
+}
+
+procedure MoverT(d1,d2){
+   if(puedeMover(d1)){
+     Mover(d1)
+   }else{
+  IrAlExtremo(opuesto(d1))
+  Mover(d2)
+ }
+}
+
+//______________________________________
+
+/*DEVOLVER*/
+
+function ifElse(condicion,v,f){
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+   return(ret)
+}
+
+
+/*Devuelve True si faltan bolitas de al menos un color*/
+function faltanBolitasDeAlgunColor() {
+	devolver := False
+	foreach c in [minColor() .. maxColor()] {
+		if (not hayBolitas(c)) {
+			devolver := True
+		}
+	}
+	return (devolver)
+}
+
+/*
+Devuelve True si hay bolitas de todos colores
+*/
+function hayBolitasDeTodosColores() {
+	devolver := True
+	foreach c in [minColor() .. maxColor()] {
+		if (not hayBolitas(c)) {
+			devolver := False
+		}
+	}
+	return (devolver)
+}
+
+
+
+//Devuelve la cantidad de bolitas de todos los colores de la celda actual
+function cantBolitas() {
+	cant := 0
+	foreach col in [minColor() .. maxColor()] {		
+		cant := cant + nroBolitas(col)
+	}
+	return (cant) 
+}
+
+/*
+PRO: Devuelve true si hay bolitas en direccion @param d, y si devuelve false es porque no hay o no se pudo mover
+Cabezal: Termina en la celda actual
+*/
+function hayBolitasAl_(c,d) {
+	ret := False	
+	if (puedeMover(d)) {
+		Mover(d)
+		ret := hayBolitas(c)
+		Mover(opuesto(d))	
+	}
+	return (ret)
+}
+
+
+
+function puedeMoverT(d1,d2){
+  return(puedeMover(d1)||puedeMover(d2))
+}
+
+//______________________________________
+
+/*PONER Y COPIAR*/
+
+/*
+PRO: Pone @param n bolitas de color @param c en la celda actual
+PRE: Con @param n > 0
+*/
+procedure PonerN(c, n) {
+	repeat (n) {
+		Poner(c)	
+	}
+}
+
+/*
+PRO: Pone n bolitas de color c a la celda lindante en direccion d
+PRE: Que haya al menos una celda en direccion d
+*/
+procedure PonerNAl(n, c, d) {
+	Mover(d)
+	PonerN(n, c)
+	Mover(opuesto(d))
+}
+
+/*
+PRO: Pone un color @param c si el booleano es True
+*/
+procedure PonerSi(b, c) {
+	if (b) {
+		Poner(c)
+	}
+}
+
+/*
+PRO: Pone n bolitas de color c a la celda diagonal
+PRE: Que haya al menos una celda en direccion d
+*/
+procedure PonerNAlDiagonal(n, c, d) {
+	Mover(d)
+	Mover(siguiente(d))
+	PonerN(n, c)
+	Mover(opuesto(d))
+	Mover(opuesto(siguiente(d)))
+}
+
+
+/*
+PRO: Pone una bolita de color @param c en lindantes a la actual
+PRE: Que haya al menos una celda hacia las lindantes.
+*/
+procedure PonerEnLindantes(c) {
+	foreach dir in [minDir() .. maxDir()] {
+		Mover(dir)
+		Poner(c)
+		Mover(opuesto(dir))
+	}
+}
+
+/*
+Pro: Pone en la celda actual tantas bolitas de color x como de color y haya en la actual
+Pre: Recibe dos @params de tipo Color
+*/
+procedure PonerTantasXComoY(x, y) {
+	PonerN(nroBolitas(y), x)
+}
+
+/*
+PRO: Copia las bolitas de la actual a las lindantes y diagonales
+*/
+procedure CopiarCeldaAAdyacentes() {
+	CopiarCeldaALindantes()
+	CopiarCeldaADiagonales()
+
+}
+
+procedure CopiarCeldaADiagonales() {
+	foreach d in [minDir() .. maxDir()] {
+		CopiarCeldaAlDiagonal(d)
+	}
+}
+
+/*
+PRO: Copia las bolitas de la celda actual a las lindantes
+*/
+procedure CopiarCeldaALindantes() {
+	foreach d in [minDir() .. maxDir()] {
+		CopiarCeldaAl(d)
+	}
+}
+
+/*
+PRO: Copia todas las bolitas de la celda actual a la celda diagonal
+*/
+procedure CopiarCeldaAlDiagonal(d) {
+	foreach c in [minColor() .. maxColor()] {
+		PonerNAlDiagonal(nroBolitas(c), c, d)
+	}
+}
+
+/*
+PRO: Copia todas las bolitas de la celda actual a la celda lindante a direccion d
+*/
+procedure CopiarCeldaAl(d) {
+	foreach c in [minColor() .. maxColor()] {
+		PonerNAl(nroBolitas(c), c, d)
+	}
+}
+
+
+/*
+PRO: Si hay bolitas de  color X e Y, pongo una de color c
+TIPO: Los parametros son colores
+*/
+procedure PonerCSiHayXeY(c, x, y) {
+	PonerSi(hayBolitas(x) && hayBolitas(y), c)
+}
+
+/*
+PRO: Pone una bolita de color c1 si hay la misma cant de bolitas de c1 y c2
+*/
+procedure DesempatarDos(c1, c2) {
+	PonerSi(nroBolitas(c1) == nroBolitas(c2), c1)
+}
+
+/*
+PRO: Deja al menos una bolita de c/color en la celda actual, es decir pone al menos una cuando no haya ninguna de color @param c
+*/
+procedure AlMenosUnaDeCada() {
+	foreach c in [minColor() .. maxColor()] {
+		PonerSi(nroBolitas(c) == 0, c)
+	}
+}
+
+/*
+PRO: Marca la celda actual con color @param c
+PRE: En direccion @param d tiene que haber al menos una bolita de color @param c
+Cabezal: Termina en la celda actual
+*/
+procedure Marcar(c, d){
+	Mover(d)
+    if(hayBolitas(c)){
+    	Mover(opuesto(d))
+        Poner(c)
+    } else {	
+		Mover(opuesto(d))
+  }
+}
+
+//______________________________________
+
+/*SACAR*/
+
+/*
+PRO: Saca @param n bolitas de color @param c de la celda actual
+PRE: Con @param n > 0. Tiene que haber al menos n bolitas en la celda actual.
+*/
+procedure SacarN(c, n) {
+	repeat (n) {
+		Sacar(c)	
+	}
+}
+
+//PRO: Saca una bolita de color @param c si el booleano es True
+procedure SacarSi(b, c) {
+	if(b) {
+		Sacar(c)
+	}
+}
+
+/*
+PRO: Si hay bolitas de color c saca 1
+PRE: Lo uso cuando no hay precondicion de la cant de bolitas que hay como minimo
+*/
+procedure SacarSiHay(c) {
+	if (hayBolitas(c)) {
+		Sacar(c)
+	}
+}
+
+
+/*
+PRO: Saca todas las bolitas de un determinado color
+TIPO: Recibe un color @param c
+*/
+procedure SacarTodas_(c) {
+	SacarN(c, nroBolitas(c))
+}
+
+/*
+PRO: Saca todas las bolitas de la celda actual
+*/
+procedure LimpiarCelda() {
+	foreach c in [minColor() .. maxColor()] {
+		SacarTodas_(c)
+	}
+}
+
+
+/*
+PRO: P/c/color c saca TODAS las bolitas de color c si la actual tiene bolitas de un color mas chico que c.
+Por ej. Si tengo negro saco todas las rojas y verdes. Si tengo azul, saco todas.
+*/
+procedure DejarColorMinimo() {
+
+	foreach c in [minColor() .. maxColor()] {
+		if (hayBolitas(c)) {
+			SacaBolitas(c)
+		}
+	}
+}
+
+/*
+PRO: Saca todas las bolitas comenzando por el siguiente(c)
+*/
+procedure SacaBolitas(c) {
+	foreach colorASacar in [siguiente(c) .. maxColor()] {
+		if (hayBolitas(colorASacar) && not siguiente(c) == minColor()) {
+			SacarTodas_(colorASacar)
+		}
+	}
+}
+
+
+// _____________________________________
+
+/*PONER O SACAR*/
+
+/*
+PRO: Si hay una bolita de color acorde, entonces pone una bolita de color c. Sino saca una bolita de color c
+PRE: Sino hay bolitas de color acorde, al menos de haber una de color c
+Tipo: recibe dos colores
+*/
+procedure PonerOSacarAcorde(c, acorde) {
+	if (hayBolitas(acorde)) {
+		Poner(c)
+	} else {
+		Sacar(c)
+	}
+}
+
+
+/*
+PRO: Modifica los colores de las bolitas de la celda actual
+De rojo a verde, de verde a negro, de negro a azul y de azul a rojo 
+*/
+procedure ProcesoCelda() {
+	azules := nroBolitas(Azul)
+	negras := nroBolitas(Negro)
+	rojas := nroBolitas(Rojo)
+	verdes := nroBolitas(Verde)
+
+	PonerN(Rojo, azules)
+	PonerN(Azul, negras)
+	PonerN(Verde, rojas)
+	PonerN(Negro, verdes)
+
+	SacarN(Azul, azules)
+	SacarN(Negro, negras)
+	SacarN(Rojo, rojas)
+	SacarN(Verde, verdes)
+}
+
+
+//______________________________________
+
+/*DRAW*/
+
+/*
+PROPOSITO: Dibuja una linea de longitud @param n en direccion @param dir, dejando 
+el cabezal en la posicion inicial
+PRECONDICION: La celda actual esta vacia y debe haber al menos "n" celdas en direccion "dir"
+*/
+procedure DibujarLineaHacia(n, dir, c) {
+	repeat (n-1) {
+		PonerYMover(c, dir)
+	}
+	Poner(c)
+	repeat (n-1) {
+		Mover(opuesto(dir))
+	}
+}
+
+/*
+PRO: Recorre las primeras n celdas en direccion d poniendo bolitas de colores
+PRE: Que haya n celdas en direccion d de la actual
+*/
+procedure Escalera(n, c, d) {
+	x := 1
+	repeat (n-1) {
+		PonerN(x, c)
+		Mover(d)
+		x := x + 1
+	}
+	PonerN(x, c)
+}
+
+//______________________________________
+
+/*
+LINDANTES Y ADYACENTES
+*/
+
+/*
+PRO: Pone una bolita de color @param pone  si y solo si cero, dos o cuatro de las lindantes tienen bolitas de color test.
+TIPO: Recibe dos colores
+*/
+procedure ParidadLindantes(test, pone) {
+	c := 0
+	foreach dir in [minDir() .. maxDir()] {
+		if (contadorLindante(dir, test)) {
+			c := c + 1
+		}
+	}
+	foreach i in [0, 2, 4] {
+		if (c == i) {
+			Poner(pone)
+		}
+	}
+}
+
+/*
+PRO: Si me puedo mover a la lindante y en esa celda hay bolitas de color @param test, cuento 1.
+TIPO: Recibe una direccion @param dir y un color @param test
+*/
+function contadorLindante(dir, test) {
+	ret := False
+	if (puedeMover(dir)) {
+		Mover(dir)
+		if (hayBolitas(test)) {
+			ret := True
+		}
+		Mover(opuesto(dir))
+	}
+	return (ret)
+}

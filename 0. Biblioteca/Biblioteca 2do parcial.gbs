@@ -1,0 +1,290 @@
+-- Biblioteca
+
+/*
+PRO:
+PRE:
+Tipo:
+Cabezal:
+*/
+
+/*
+Comandos predefinidos:
+
+Las listas tienen que ser declaradas e inicializadas
+
+isEmpty(<lista>)	
+head(<lista>) 	//primer elemento de lista: [e]
+last(<lista>)	//ultimo elemento de lista
+tail(<lista>)	//lista sin el primer elemento: ls
+init(<lista>)	//lista sin el ultimo elemento
+
+Operaciones: ls ++ [e]
+
+*/
+
+/*
+ALGORITMO DE LISTAS EN BUCLES
+
+function nombreFuncion() {
+	while (x()) {
+		PROCESO 
+		MODIFICO
+	}
+	return (ret)
+}
+
+*/
+
+
+--Desplazamientos
+
+/*
+Cabezal: Termina en el extremo con direccion @param d desde la celda actual
+*/
+procedure IrAlExtremo(d) {
+	while(puedeMover(d)) {
+		Mover(d)
+	}
+}
+
+procedure IrAlInicioT(d1,d2){
+  IrAlExtremo(opuesto(d1))
+  IrAlExtremo(opuesto(d2))
+}
+
+procedure MoverT(d1,d2){
+   if(puedeMover(d1)){
+     Mover(d1)
+   }else{
+  IrAlExtremo(opuesto(d1))
+  Mover(d2)
+ }
+}
+
+function puedeMoverT(d1,d2){
+  return(puedeMover(d1)||puedeMover(d2))
+}
+
+--_______________________
+
+function ifElse(condicion, v, f) {
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+	return (ret)
+}
+
+//PRO: Devuelve un elemento dependiendo el booleano
+function singularSi(b, e) {
+	return (ifElse(b, [e], []))
+}
+
+//PRO: Dada una lista, retorna un booleano indicando si la lista tiene un unico elemento
+function isSingular(lista) {
+	return (not isEmpty(lista) && isEmpty(tail(lista)))
+}
+
+//PRO: Retorna la lista de direcciones en las que el cabezal no se puede mover
+function direccionesAlBorde() {
+	borde := []
+	foreach dir in [minDir() .. maxDir()] {
+		borde := borde ++ singularSi(not puedeMover(dir), dir)
+	}
+	return (borde)
+}
+
+//PRO: Retorna una ls de los colores que hay en la actual
+function coloresCelda() {
+	lista := []
+	foreach color in [minColor() .. maxColor()] {
+		lista := lista ++ singularSi(hayBolitas(color), color)
+	}
+	return (lista)
+} 
+
+/*
+PRO: Dada una lista de colores, pone en la actual una bolita de color Ci por c/i=1,2,3..
+*/
+procedure PonerLista(ls) {
+	foreach c in ls {
+		if (not isEmpty(ls)) {
+			Poner(c)
+		}
+	}
+}
+
+/*Devuelve la cantidad de colores @param c que hay en el tablero*/
+function aparicionesDeColor(c) {
+	cant := 0
+	while (puedeMoverT(Este, Norte)) {
+		cant := cant + ifElse(hayBolitas(c), nroBolitas(c), 0)
+		MoverT(Este, Norte)
+	}
+	cant := cant + ifElse(hayBolitas(c), nroBolitas(c), 0)
+	return (cant)
+}
+
+/*
+PRO: Devuelve la numero de bolitas @param c que hay en las celdas recorridas, incluyendo a la actual y final.
+PRE: El recorrido no tiene que caer fuera del tablero y se tiene que pasar una lista con las direcciones en el orden que se quiera recorrer
+*/
+function aparicionesDeColorEnCamino(c, 	lsDir) {	//lsDir: lista de direcciones
+	i := 0
+	ls := lsDir
+	while (not isEmpty(ls)) {
+		i := i + nroBolitas(c)
+		Mover(head(ls))
+		ls := tail(ls)
+	}
+	i := i + nroBolitas(c)
+	return (i)
+}
+
+/*
+PRO: Pone en la celda actual Ni bolitas de color Ci p/c/i=1,..,k
+PRE: La lista de colores y numeros tiene que tener la misma longitud
+TIPO: Recibe [C1,..,Ck] y [N1,..,Nk]
+*/
+procedure PonerListaN(listaColores, listaNumeros) {
+	lsC := listaColores
+	lsN := listaNumeros
+	while (not isEmpty(lsC) && not isEmpty(lsN)) {
+		PonerN(head(lsC), head(lsN))
+		lsC := tail(lsC)
+		lsN := tail(lsN)
+	}
+}
+
+-- ____________________________________
+-- SIN TABLERO
+
+/*
+PRO: Retorna una lista con n repeticiones de x, si n<=0 retorna una lista nula
+TIPO @param n es un numero y @param x es un valor de cualquier tipo. 
+*/
+function repeticion(n, x) {
+	if (n<=0) {
+		ret := []
+	} else {
+		ret := repeticionParcial(n, x)
+	}
+	return (ret)
+}
+
+-- PRO: Retorna una lista de n repeticiones de x
+-- PRE: @param x es un valor de cualquier tipo
+function repeticionParcial(n, x) {
+	ls := []
+	repeat (n) {
+		ls := ls ++ [x]
+	}
+	return (ls)
+}
+
+/*
+PRO: Retorna la sumatoria de una lista
+TIPO: Recibe una lista de numeros [Ni]
+*/
+function sumatoria(listaNumeros) {
+	ret := 0
+	foreach lsN in listaNumeros {
+		ret := ret + lsN
+	}
+	return (ret)
+}
+
+/*
+PRO: Retorna una lista [Ek .. E1]
+TIPO: Dada una lista [E1 .. Ek]
+*/
+function reverso(listaElementos) {
+	lsE := listaElementos
+	lsRet := []
+	while (not isEmpty(lsE)) {
+		lsRet := lsRet ++ [last(lsE)]	//ls ++ [e]
+		lsE := init(lsE)	
+	}
+	return (lsRet)
+}
+
+/*
+PRO: Retorna la cantidad de elementos de una lista
+TIPO: Recibe una lista de cualquier tipo
+*/
+function longitud(ls) {
+	c := 0
+	foreach i in ls {
+		c := c + 1
+	}
+	return (c)
+}
+
+// ____
+/*
+PRO: Retorna una lista ms = [m2 .. mk-1]/mi=(ni-1) + ni + (ni+1)
+PRE: Cada mi tiene que tener dos vecinos sumados, por ende en la lista a retornar tendra dos elementos menos.
+TIPO: Recibe una lista ns = [n1 .. nk]
+*/
+function sumatoriaVecinos(listaNumeros) {
+	ns := listaNumeros
+	ms := []	//Inicializo
+	while (not isEmpty(ns)) {
+		//Proceso la sumatoria
+		ms := ms ++ elementoSumatoria(ns)
+		ns := tail(ns)
+	}
+	return (ms)
+}
+
+/*
+PRO: Proceso el elemento de la sumatoria
+TIPO: Devuelvo un elemento de lista con los vecinos sumados
+*/
+
+function elementoSumatoria(nsAux) {
+	ms := []
+	if (longitud(nsAux) >= 3) {
+		ms := ms ++ [sumoElementos(nsAux)]
+	}
+	return (ms)
+}
+
+/*
+PRO: Suma 3 numeros, el actual con los vecinos
+PRE: Tienen que existir 2 elementos vecinos
+TIPO: Retorna un numero
+*/
+function sumoElementos(nsAux) {
+	ns := nsAux
+	c := 0
+	repeat (3) {
+		c := c + head(ns)
+		ns := tail(ns)
+	}
+	return (c)
+}
+
+
+// ____
+
+/*
+PRO: Retorna una lista que resulta de quitar todas las apariciones de @e en @ls
+TIPO: Recibe una lista @param ls y un elemento @param e
+*/
+function sinElemento(e, lista) {
+	lsRet := []
+	foreach i in lista {
+		if ([i] /= [e]) {
+			lsRet := lsRet ++ [i]
+		}
+	}
+	return (lsRet)
+}
+
+
+
+
+
+
+
