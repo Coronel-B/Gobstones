@@ -6,9 +6,7 @@ procedure IrAlOrigen() {
 	IrAlExtremo(Oeste)
 }
 
-/*
-PRO: 	Posiciona el cabezal en la ultima celda en un recorrido en direccion @param d
-*/
+--PRO: Posiciona el cabezal en la ultima celda en un recorrido en direccion @param d
 procedure IrAlExtremo(d) {
 	while(puedeMover(d)) {
 		Mover(d)
