@@ -1,0 +1,21 @@
+program {
+	return coloresCelda() 
+}
+
+function coloresCelda() {
+	lista := []
+	foreach color in [minColor() .. maxColor()] {
+		//lista := lista ++ ifElse(hayBolitas(color), [color], [])
+		lista := lista ++ singularSi(hayBolitas(color), color)
+		
+	}
+	return (lista)
+}
+
+//devuelve un elemento dependiendo el booleano
+function singularSi(b, e) {
+	return (ifElse(b, [e], []))
+}
+
+
+

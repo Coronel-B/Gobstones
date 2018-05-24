@@ -1,0 +1,14 @@
+program {
+	return(aparicionesDeColor(Negro))
+}
+
+/*Devuelve la cantidad de colores @param c que hay en el tablero*/
+function aparicionesDeColor(c) {
+	cant := 0
+	while (puedeMoverT(Este, Norte)) {
+		cant := cant + ifElse(hayBolitas(c), nroBolitas(c), 0)
+		MoverT(Este, Norte)
+	}
+	cant := cant + ifElse(hayBolitas(c), nroBolitas(c), 0)
+	return (cant)
+}

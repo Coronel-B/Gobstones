@@ -1,0 +1,15 @@
+program {
+	return (multiplicionLista([1,2],4))
+}
+
+/*
+PRO: Retorna una lista que contenga @param n listas @param ls
+TIPO: Recibe una lista ls y un numero n
+*/
+function multiplicionLista(ls, n) {
+	lsRet := []
+	repeat (n) {
+		lsRet := lsRet ++ ls
+	}
+	return (lsRet)
+}

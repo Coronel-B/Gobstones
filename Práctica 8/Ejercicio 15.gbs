@@ -1,0 +1,26 @@
+program {
+	return (multiplicionInterna([88,10],3))
+}
+
+/*
+PRO: Retorna una lista en la que cada elemento de [E1 .. Ek] aparece n veces repetido
+TIPO: [E1 .. Ek] y un nro n 
+*/
+function multiplicionInterna(lista, n) {
+	ls := lista
+	lsRet := []
+	while (not isEmpty(ls)) {
+		lsRet := lsRet ++ repitoElemento(ls, n)	//proceso 
+		ls := tail(ls)									//modifico
+	}
+	return (lsRet)
+}
+
+//PRO: Devuelve una lista con @param n veces del primer elemento repetido
+function repitoElemento(ls, n) {
+	lsRet := []
+	repeat (n) {
+		lsRet := lsRet ++ [head(ls)]
+	}
+	return (lsRet)
+}

@@ -1,0 +1,29 @@
+//MANEJO BASICO DE LISTAS SIN USO DEL TABLERO
+
+program {
+	//return (repeticion(-1, 8))
+	return (repeticion(3, Azul))
+}	
+
+/*
+PRO: Retorna una lista con n repeticiones de x, si n<=0 retorna una lista nula
+TIPO @param n es un numero y @param x es un valor de cualquier tipo. 
+*/
+function repeticion(n, x) {
+	if (n<=0) {
+		ret := []
+	} else {
+		ret := repeticionParcial(n, x)
+	}
+	return (ret)
+}
+
+-- PRO: Retorna una lista de n repeticiones de x
+-- PRE: @param x es un valor de cualquier tipo
+function repeticionParcial(n, x) {
+	ls := []
+	repeat (n) {
+		ls := ls ++ [x]
+	}
+	return (ls)
+}

@@ -1,0 +1,15 @@
+program {
+	return (sumatoria([1,2,3]))
+}
+
+/*
+PRO: Retorna la sumatoria de una lista
+TIPO: Recibe una lista de numeros [Ni]
+*/
+function sumatoria(listaNumeros) {
+	ret := 0
+	foreach lsN in listaNumeros {
+		ret := ret + lsN
+	}
+	return (ret)
+}

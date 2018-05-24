@@ -1,0 +1,26 @@
+/*
+COMANDOS LISTAS:
+
+head y last devuelven elementos de listas, no listas. ls ++ [e]
+
+Las listas tienen que ser declaradas e inicializadas
+
+isEmpty(<lista>)	//me devuelve true or false
+head(<lista>) 	//primer elemento
+last(<lista>)	//ultimo elemento
+tail(<lista>)	//me devuelve una LISTA sin el primer elemento. 
+init(<lista>)	//me devuelve una LISTA sin el ultimo elemento
+
+Expresiones:
+head(tail(<lista>))	//devuelve el 2do
+head(tail(tail(<lista>)))	//devuelve el 3er
+*/
+
+program {
+	return (isSingular([1]))
+}
+
+//PRO: Dada una lista, retorna un booleano indicando si la lista tiene un unico elemento
+function isSingular(lista) {
+	return (not isEmpty(lista) && isEmpty(tail(lista)))
+}

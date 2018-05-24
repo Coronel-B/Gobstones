@@ -1,0 +1,15 @@
+program {
+	return (longitud([]))
+}
+
+/*
+PRO: Retorna la cantidad de elementos de una lista
+TIPO: Recibe una lista de cualquier tipo
+*/
+function longitud(ls) {
+	c := 0
+	foreach i in ls {
+		c := c + 1
+	}
+	return (c)
+}

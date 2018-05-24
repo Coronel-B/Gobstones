@@ -1,0 +1,17 @@
+program {
+	return (reverso([1,2,3,4,5]))
+}
+
+/*
+PRO: Retorna una lista [Ek .. E1]
+TIPO: Dada una lista [E1 .. Ek]
+*/
+function reverso(listaElementos) {
+	lsE := listaElementos
+	lsRet := []
+	while (not isEmpty(lsE)) {
+		lsRet := lsRet ++ [last(lsE)]	//ls ++ [e]
+		lsE := init(lsE)	
+	}
+	return (lsRet)
+}

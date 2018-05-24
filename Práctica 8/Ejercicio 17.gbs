@@ -1,0 +1,18 @@
+program {
+	return (sinElemento(Azul, [Azul, Rojo, Verde, Azul,Negro, Azul,Rojo]))
+}
+
+/*
+PRO: Retorna una lista que resulta de quitar todas las apariciones de @e en @ls
+TIPO: Recibe una lista @param ls y un elemento @param e
+*/
+function sinElemento(e, lista) {
+	lsRet := []
+	foreach i in lista {
+		if ([i] /= [e]) {
+			lsRet := lsRet ++ [i]
+		}
+	}
+	return (lsRet)
+}
+

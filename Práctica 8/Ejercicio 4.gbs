@@ -1,0 +1,14 @@
+program {
+	PonerLista([minColor(), maxColor()])
+}
+
+/*
+PRO: Dada una lista de colores, pone en la actual una bolita de color Ci por c/i=1,2,3..
+*/
+procedure PonerLista(ls) {
+	foreach c in ls {
+		if (not isEmpty(ls)) {
+			Poner(c)
+		}
+	}
+}

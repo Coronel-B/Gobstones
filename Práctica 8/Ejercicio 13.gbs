@@ -1,0 +1,17 @@
+program {
+	return (opuestos([Norte, Sur, Este, Este]))
+}
+
+/*
+PRO: Retorna una lista con las direcciones opuestas [opuesto(D1) .. opuesto(Dk)]
+TIPO: Recibe una lista [D1 .. Dk]
+*/
+function opuestos(listaDirecciones) {
+	lsDir := listaDirecciones
+	lsRet := []
+	while (not isEmpty(lsDir)) {
+		lsRet := lsRet ++ [opuesto(head(lsDir))]
+		lsDir := tail(lsDir)
+	}
+	return (lsRet)
+}

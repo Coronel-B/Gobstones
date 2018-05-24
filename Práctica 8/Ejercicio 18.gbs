@@ -1,0 +1,18 @@
+program {
+	return (pares([0,1,2,3,4,6,7,11,16]))
+}
+
+/*
+PRO: Retorna una lista con los numeros pares que hay en @ls
+TIPO: Recibe una lista @ls de numeros 
+*/
+function pares(lista) {
+	lsRet := []
+	foreach i in lista {
+		if ((i mod 2) == 0) {
+			lsRet := lsRet ++ [i]
+		}
+	}
+	return (lsRet)
+}
+

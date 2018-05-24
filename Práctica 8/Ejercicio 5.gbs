@@ -1,0 +1,12 @@
+program {
+	RecorrerCamino([Norte, Norte, Este])
+}
+
+/*Mueve el cabezal en d1, d2, .. , dk dada una lista*/
+procedure RecorrerCamino(ls) {
+	lista := ls
+	while (not isEmpty(lista)) {
+		Mover(head(lista))
+		lista := tail(lista)
+	}
+}

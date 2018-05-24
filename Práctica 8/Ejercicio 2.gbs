@@ -1,0 +1,21 @@
+program {
+	return (direccionesAlBorde())
+}
+
+//Retorna la lista de direcciones en las que el cabezal no se puede mover
+function direccionesAlBorde() {
+	borde := []
+	foreach dir in [minDir() .. maxDir()] {
+		//borde := borde ++ ifElse(not puedeMover(dir), [dir], [])
+		borde := borde ++ singularSi(not puedeMover(dir), dir)
+	}
+	return (borde)
+}
+
+//devuelve un elemento dependiendo el booleano
+function singularSi(b, e) {
+	return (ifElse(b, [e], []))
+}
+
+
+

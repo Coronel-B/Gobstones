@@ -1,0 +1,142 @@
+LISTAS
+
+Una lista es un conjunto finito y ordenado de elementos de un mismo tipo.
+
+[] denota una lista vacia 
+[1,2] denota una lista de numeros compuesta por dos elementos
+[ hayBolitas(color)] denota una lista de booleanos compuesta por un solo elemento
+[ 0 , True ] no es una lista debido a un erro de tipos , denota BOOM
+
+
+Operaciones sobre listas
+
+	head (lista) -> denota el primer elemento de la lista
+
+	last (lista) -> denota el ultimo elemento de la lista
+
+	tail (lista) -> denota la lista sin su primer elemento
+
+	init (lista) -> denota la lista sin su ultimo elemento 
+
+	isEmpty (lista) -> denota True si la lista esta vacia
+
+
+Expresiones 
+
+	ls := [] <- denota lista vacia 
+
+	ls := [] ++ [21] <- denota la lista de un solo elemento (21)
+
+	[] ++ ls ++ [] <- denota la lista de un solo elemento (21)
+
+	[3] ++ ls ++ [1] ++ ls <- denota la lista de cuatro elementos (3,21,1,21)
+
+	99 + last(ls) <- denota 120
+
+
+ESQUEMA DE RECORRIDOS
+
+   //1. Inicializacion
+   lsRecorrido := ls 	
+
+   //2. Condiciones
+   while(not isEmpty (ls)) {
+
+    //3. Proceso
+    lsRecorrido := tail(lsRecorrido) // lsRecorrido := init(lsRecorrido)
+
+    //4. Modifico
+   }
+
+
+  
+EJEMPLO DE BUSQUEDA
+
+/*
+PRO: Denota si existe un alumno mayor a 25
+PRE: Edades no es vacia
+@param edades es una lista de numeros
+*/
+function mayorDe25 (edades) {
+ 
+
+    lsRec := edades
+    while( not isEmpty(edades) && head(lsRec) < 25 )
+    {
+      lsRec := tail(lsRec)
+    }
+    return( not isEmpty(lsRec)) 
+}
+
+EJEMPLO DE FILTRO
+
+function mayoresDeEdad (edades)
+
+/*  proposito : denota la lista de alumnos mayores de 17
+    
+    precondicion : ninguna 
+    
+    parametro : edades una lista de numeros 
+*/
+
+    edadesRec := edades
+    
+    mayores := []
+    
+    while( not isEmpty( edadesRec )) 
+    {
+     mayores := mayores ++ singularSi( esMayorDe( head( edadesRec, 17 )), head( edadesRec) 
+    
+     edadesRec := tail( edadesRec)
+
+    }
+    
+    return( mayores )
+}
+
+
+function EsMayorDe (edad , valorMax)
+{
+ /* proposito : denota True si edad es mayor que valorMax
+    
+    precondcion : ninguna
+    
+    parametro : edad y valorMax son numeros positivos
+ */
+
+    return (edad > valorMax)
+}
+
+// ejemplo de mapeo sobre listas 
+
+function tomarMultiplicado (mochila, multiplicador)
+{
+ /* proposito : denota una lista con los elemntos de mochila actualizadas con multiplicador
+    
+    precondicion : ninguna
+    
+    parametro : mochila es una lista de numeros y multiplicador es un numero
+ */
+
+    mochilaActualizada := []
+    
+    foreach numero in mochila 
+    {
+      mochilaActualizada := mochilaActualizada ++ [ numeros * multiplicador ] 
+    }
+
+    return( mochilaActualizada )
+}
+
+// aclaracion : se utiliza foreach cuando se deben recorrer todos los elementos de la lista, se utiliza while para recorridos                  
+                parciales ( ejemplos quiero revisar los elementos cuarto, quinto y sexto de una lista de diez elementos) 
+
+
+
+
+
+
+    
+   
+      
+

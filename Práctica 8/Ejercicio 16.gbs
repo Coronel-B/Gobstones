@@ -1,0 +1,59 @@
+program {
+	return (sumatoriaVecinos([1,2,3,4,5]))
+}
+
+/*
+PRO: Retorna una lista ms = [m2 .. mk-1]/mi=(ni-1) + ni + (ni+1)
+PRE: Cada mi tiene que tener dos vecinos sumados, por ende en la lista a retornar tendra dos elementos menos.
+TIPO: Recibe una lista ns = [n1 .. nk]
+*/
+function sumatoriaVecinos(listaNumeros) {
+	ns := listaNumeros
+	ms := []	//Inicializo
+	while (not isEmpty(ns)) {
+		//Proceso la sumatoria
+		ms := ms ++ elementoSumatoria(ns)
+		ns := tail(ns)
+	}
+	return (ms)
+}
+
+/*
+PRO: Proceso el elemento de la sumatoria
+TIPO: Devuelvo un elemento de lista con los vecinos sumados
+*/
+
+function elementoSumatoria(nsAux) {
+	ms := []
+	if (longitud(nsAux) >= 3) {
+		ms := ms ++ [sumoElementos(nsAux)]
+	}
+	return (ms)
+}
+
+/*
+PRO: Suma 3 numeros, el actual con los vecinos
+PRE: Tienen que existir 2 elementos vecinos
+TIPO: Retorna un numero
+*/
+function sumoElementos(nsAux) {
+	ns := nsAux
+	c := 0
+	repeat (3) {
+		c := c + head(ns)
+		ns := tail(ns)
+	}
+	return (c)
+}
+
+/*
+PRO: Retorna la cantidad de elementos de una lista
+TIPO: Recibe una lista de cualquier tipo
+*/
+function longitud(ls) {
+	c := 0
+	foreach i in ls {
+		c := c + 1
+	}
+	return (c)
+}

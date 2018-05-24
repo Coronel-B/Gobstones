@@ -1,0 +1,18 @@
+program {
+	PonerListaN([Azul, Verde], [2,5])
+}
+
+/*
+PRO: Pone en la celda actual Ni bolitas de color Ci p/c/i=1,..,k
+PRE: La lista de colores y numeros tiene que tener la misma longitud
+TIPO: Recibe [C1,..,Ck] y [C1,..,Nk]
+*/
+procedure PonerListaN(listaColores, listaNumeros) {
+	lsC := listaColores
+	lsN := listaNumeros
+	while (not isEmpty(lsC) && not isEmpty(lsN)) {
+		PonerN(head(lsC), head(lsN))
+		lsC := tail(lsC)
+		lsN := tail(lsN)
+	}
+}

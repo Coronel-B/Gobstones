@@ -1,0 +1,19 @@
+program {
+	return(aparicionesDeColorEnCamino(Azul, [Este, Este, Norte, Norte, Oeste, Norte, Oeste]))
+}
+
+/*
+PRO: Devuelve la numero de bolitas @param c que hay en las celdas recorridas, incluyendo a la actual y final.
+PRE: El recorrido no tiene que caer fuera del tablero y se tiene que pasar una lista con las direcciones en el orden que se quiera recorrer
+*/
+function aparicionesDeColorEnCamino(c, 	lsDir) {	//lsDir: lista de direcciones
+	i := 0
+	ls := lsDir
+	while (not isEmpty(ls)) {
+		i := i + nroBolitas(c)
+		Mover(head(ls))
+		ls := tail(ls)
+	}
+	i := i + nroBolitas(c)
+	return (i)
+}

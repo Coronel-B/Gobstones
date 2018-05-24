@@ -1,0 +1,91 @@
+-- Biblioteca
+
+/*
+PRO:
+PRE:
+Tipo:
+Cabezal:
+*/
+
+/*
+Comandos predefinidos:
+
+Las listas tienen que ser declaradas e inicializadas
+
+isEmpty(<lista>)	
+head(<lista>) 	//primer elemento de lista: [e]
+last(<lista>)	//ultimo elemento de lista
+tail(<lista>)	//lista sin el primer elemento: ls
+init(<lista>)	//lista sin el ultimo elemento
+
+Operaciones: ls ++ [e]
+
+*/
+
+
+
+function ifElse(condicion, v, f) {
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+	return (ret)
+}
+
+//PRO: Devuelve un elemento dependiendo el booleano
+function singularSi(b, e) {
+	return (ifElse(b, [e], []))
+}
+
+//PRO: Dada una lista, retorna un booleano indicando si la lista tiene un unico elemento
+function isSingular(lista) {
+	return (not isEmpty(lista) && isEmpty(tail(lista)))
+}
+
+//PRO: Retorna la lista de direcciones en las que el cabezal no se puede mover
+function direccionesAlBorde() {
+	borde := []
+	foreach dir in [minDir() .. maxDir()] {
+		borde := borde ++ singularSi(not puedeMover(dir), dir)
+	}
+	return (borde)
+}
+
+//PRO: Retorna una ls de los colores que hay en la actual
+function coloresCelda() {
+	lista := []
+	foreach color in [minColor() .. maxColor()] {
+		lista := lista ++ singularSi(hayBolitas(color), color)
+	}
+	return (lista)
+} 
+
+/*
+Cabezal: Termina en el extremo con direccion @param d desde la celda actual
+*/
+procedure IrAlExtremo(d) {
+	while(puedeMover(d)) {
+		Mover(d)
+	}
+}
+
+/*
+.
+.
+.
+.
+*/
+
+procedure IrAlInicioT(d1,d2){
+  IrAlExtremo(opuesto(d1))
+  IrAlExtremo(opuesto(d2))
+}
+
+procedure MoverT(d1,d2){
+   if(puedeMover(d1)){
+     Mover(d1)
+   }else{
+  IrAlExtremo(opuesto(d1))
+  Mover(d2)
+ }
+}
