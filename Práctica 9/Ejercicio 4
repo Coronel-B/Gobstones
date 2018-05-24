@@ -1,0 +1,115 @@
+/*
+PRO: Cuenta modela a los tipos de cuentas que puede tener una persona
+*/
+type Cuenta is record {
+	field numero
+	field tipoCuenta //numero
+	field nombreCliente //numero
+	field tipoMoneda //color
+	field saldo
+}
+/*
+type Cuenta2 is record {
+	field numero
+}*/
+
+program {
+	cuenta := Cuenta(numero <- 11,
+					 tipoCuenta <- cuentaCajaAhorro(),
+					 nombreCliente <- 1,
+					 tipoMoneda <- dolar(),
+					 saldo <- 6000)
+	cuenta := actualizarSaldo(cuenta, 26000)
+	cuenta := cambioDeTipo(cuenta, cuentaSueldo())
+	cuenta := cambioDeTipoAutomatico(cuenta)
+	//return (saldoEnPesos(cuenta))
+	
+	/*cuenta2 := Cuenta(numero <- 10,
+					 tipoCuenta <- cuentaSueldo(),
+					 nombreCliente <- 2,
+					 tipoMoneda <- euro(),
+					 saldo <- 25000)
+	return (mayorSaldo(cuenta, cuenta2))*/
+	
+	--return (extraccionDeCajero(cuenta, 4000))
+	return (puedeExtraerDeCajero(cuenta, 20000))
+}
+
+function cuentaCorriente() {return(1)}
+function cuentaCajaAhorro() {return(2)}
+function cuentaSueldo() {return(3)}
+
+function peso() {return(Negro)}
+function dolar() {return(Verde)}
+function euro() {return(Azul)}
+
+//Devuelve una nueva cuenta con el nuevo saldo
+function actualizarSaldo(cuenta, nuevoSaldo) {
+	return (Cuenta(cuenta|saldo<-nuevoSaldo))
+}
+
+//Devuelve una cuenta con un nuevo tipo de cuenta bancaria
+function cambioDeTipo(cuenta, nuevoTipoDeCuenta) {
+	return (Cuenta(cuenta|tipoCuenta <- nuevoTipoDeCuenta))
+}
+
+/*
+PRO: Devuelve una nueva cuenta con un nuevo tipo si es necesario
+
+Cambia un cuenta de tipo sueldo con mayor de 25k a tipo caja de ahorro si existe
+*/
+function cambioDeTipoAutomatico(cuenta) {
+	cuentaActualizada := cuenta
+	if (tipoCuenta(cuenta) == cuentaSueldo() && saldo(cuenta) > 25000) {
+		cuentaActualizada := Cuenta(cuenta|tipoCuenta <- cuentaCajaAhorro())
+	}
+	return (cuentaActualizada)
+}
+
+//Devuelve el saldo en pesos
+//1 dolar son 25 pesos y 1 euro son 30 pesos
+function saldoEnPesos(cuenta) {
+	cantPesos := saldo(cuenta)
+	if (tipoMoneda(cuenta) == dolar()) {
+		cantPesos := saldo(cuenta) * 25
+	}
+	if (tipoMoneda(cuenta) == euro()) {
+		cantPesos := saldo(cuenta) * 30
+	}
+	return (cantPesos)
+}
+
+//Retorna el numero de la cuenta bancaria que tiene mayor saldo
+//PRE: El saldo de las cuentas tiene que ser distinto
+function mayorSaldo(cuenta1, cuenta2) {
+	numeroCuenta := numero(cuenta1)
+	if (saldoEnPesos(cuenta1) < saldoEnPesos(cuenta2)) {
+		numeroCuenta := numero(cuenta2)
+	}	
+	return(numeroCuenta)
+}
+
+//Actualiza el saldo de la cuenta
+//PRE: montoAExtraer <= saldo(cuenta)
+function extraccionDeCajero(cuenta, montoAExtraer) {
+	return (Cuenta(cuenta|saldo <- saldo(cuenta) - montoAExtraer))
+}
+
+//Indica si la extraccion resultara en un saldo negativo
+function puedeExtraerDeCajero(cuenta, montoAExtraer) {
+	return (montoAExtraer <= saldo(cuenta)) 	
+}
+
+//Actualiza el saldo de la cuenta
+//PRE: montoADepositar > 0
+function depositoEnCajero(cuenta, montoADepositar) {
+	return (Cuenta(cuenta|saldo <- saldo(cuenta) + montoADepositar))
+}
+
+function ifElse(condicion,v,f){
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+   return(ret)
+}
