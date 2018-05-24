@@ -1,0 +1,103 @@
+-- INVARIANTE DE REP: los valores de fila y columna tienen que ser >= 0
+type Coord is record {
+	field fila
+	field columna
+}
+
+program {
+	/*coord1 := Coord(fila <- 3, columna <- 1)
+	coord2 := Coord(fila <- 1, columna <- 3)
+	return (esMayorCoord(coord1, coord2))*/
+	--return (coordActual())
+	coord3 := Coord(fila <- 4, columna <- 5)
+	IrACoord(coord3)
+	
+}
+
+/*
+PRO: Prepara una coordenada con fila <- x y columna <- y
+RET: Coord
+@param x y @param y son numeros naturales
+*/
+function coord(x, y) {
+	return (Coord(fila <- x,
+				  columna <- y))
+}
+
+/*
+PRO: Prepara la coordenada del origen
+RET: Coord
+*/
+function coordOrigen() {
+	return (Coord(fila <- 0,
+				  columna <- 0))
+}
+
+/*
+PRO: Determina si la primer coordenada aparece despues de la segunda en un recorrido
+que va primero hacia el norte y luego hacia el este.
+RET: Booleano
+@param coord1 y @param coord2
+*/
+function esMayorCoord(coord1, coord2) {
+	return (fila(coord1) > fila(coord2) ||
+			(fila(coord1) == fila(coord2) && columna(coord1) > columna(coord2)))
+}
+
+/*
+PRO: Prepara la coordenada en la que se encuentra el cabezal
+RET: Coord
+*/
+function coordActual() {
+	return (Coord(fila <- cantPosicionesAl(Oeste),
+				  columna <- cantPosicionesAl(Sur)))
+}
+
+/*
+PRO: Prepara el numero de posiciones que hay hacia una determinada direccion @param dir
+RET: Numero
+*/
+function cantPosicionesAl(dir) {
+	c := 0
+	while (puedeMover(dir)) {
+		Mover(dir)
+		c := c + 1
+	}
+	return (c)
+}
+
+/*
+PRO: Prepara la ultima coordenada en un recorrido hacia el noroeste
+RET: Coord
+*/
+function ultimaCoord() {
+	IrAlExtremo(Norte)
+	IrAlExtremo(Este)
+	return (coordActual())
+}
+
+--PRO: Posiciona el cabezal en la ultima celda en un recorrido en direccion @param d
+procedure IrAlExtremo(d) {
+	while(puedeMover(d)) {
+		Mover(d)
+	}
+}
+
+/*
+PRO: Posiciona el cabezal en la celda que indica la coordenada @param coord
+PRE: Tiene que existir una celda en dicha coordenada
+*/
+procedure IrACoord(coord) {
+	MoverN(Este, fila(coord))
+	MoverN(Norte, columna(coord))
+}
+
+/*
+PRO: Mueve el cabezal @param n veces hacia la direccion @param dir
+PRE: Tiene que existir n posiciones hacia dir
+*/
+procedure MoverN(dir, n) {
+	repeat (n) {
+		Mover(dir)
+	}
+}
