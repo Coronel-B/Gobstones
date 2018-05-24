@@ -1,0 +1,74 @@
+program {
+	//return (pertenece(3, [1,2,4]))
+	//return (sinDuplicados([1,3,4,2,4,3,5]))
+	//return (union([1,3,4], [2,4,3,5]))
+	return (interseccion([1,3,4],[2,4,3,5]))
+}
+
+/*
+PRO: Indica si el elemento pertenece a la lista
+RETURN: Booleano
+@param e: elemento
+@param xs: lista
+*/
+function pertenece(e, xs) {
+	ls := xs
+
+	//not isEmpty(ls) lo pongo como primer premisa sino no funciona
+	while(not isEmpty(ls) && head(ls) /= e) {	
+		ls := tail(ls)
+	}
+
+	return (not isEmpty(ls))
+}
+
+/*
+PRO: Filtra todos los elementos que no estan repetidos de una lista
+RETURN: Lista
+@param ls: lista
+*/
+function sinDuplicados(ls) {
+	lista := ls
+	filtro := []
+
+	while(not isEmpty(lista)) {
+		//filtro := filtro ++ ifElse(not pertenece(head(lista), filtro), [head(lista)], [])
+		filtro := filtro ++ singularSi(not pertenece(head(lista), filtro), head(lista))
+		lista := tail(lista)
+	}
+
+	return (filtro)
+}
+
+/*
+PRO: Une dos listas y filtra los elementos que no estan duplicados
+PRE: @param ls y @param ms no contienen elementos repetidos
+RETURN: lista
+@param ls: lista
+@param ms: lista
+*/
+function union(ls, ms) {
+	lsRet := ls ++ ms
+	return (sinDuplicados(lsRet))
+}
+
+/*
+PRO: Agrupa todos los elementos que aparecen en las 2 listas
+PRE: @param ls y @param ms no tienen elementos duplicados
+RETURN: lista
+@param ls: lista
+@param ms: lista
+
+[1,3,4],[2,4,3,5]
+*/
+function interseccion(ls, ms) {
+	lista := ls ++ ms	//tiene elementos duplicados
+	lsRet := []
+	
+	while(not isEmpty(lista)) {
+		lsRet := lsRet ++ ifElse(pertenece(head(lista), tail(lista)), [head(lista)], [])
+		lista := tail(lista)
+	}
+	
+	return (lsRet)
+}
