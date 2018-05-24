@@ -1,0 +1,65 @@
+/*
+PRO: Empleado modela los empleados de una fabrica
+INVARIANTE REPRESENTACION: sueldo >= 12000
+*/
+type Empleado is record {
+	field nombre //numero
+	field dni
+	field puesto //numero segun tabla
+	field sueldo
+}
+
+program {
+	braian := Empleado(nombre <- 1,
+					   dni <- 39155039,
+					   puesto <- desarrollador(),
+					   sueldo <- 22000)
+	//return (actualizarSueldo(braian, 26000))
+
+	/*maxi := Empleado(nombre <- 2, 
+					 dni <- 32145685,
+					 puesto <- liderDeProyecto(),
+					 sueldo <-30000)*/
+
+	//return (tieneMayorCargo(maxi, braian))	
+	//return (tienenIgualSueldo(braian, maxi))
+	return (bonoPorFinalizacionDeProyecto(braian, 35))
+}
+
+function gestorDeProyecto() {return(4)}
+function liderDeProyecto() {return(3)}
+function desarrollador() {return(2)}
+function operador() {return(1)}
+
+//Devuelve un empleado con un nuevo sueldo
+function actualizarSueldo(empleado, nuevoSueldo) {
+	return (Empleado(empleado|sueldo <- nuevoSueldo))
+}
+
+//Devuelve un empleado con un nuevo puesto
+function recategorizar(empleado, nuevoPuesto) {
+	return (Empleado(empleado|puesto<-nuevoPuesto))
+}
+
+//PRO: Devuelve el empleado que tiene mayor cargo
+//PRE: El cargo de los empleados tiene que ser !=
+function tieneMayorCargo(empleado1, empleado2) {
+	mayorCargo := empleado1
+	if (puesto(empleado1) < puesto(empleado2)) {
+		mayorCargo := empleado2
+	}
+	return (mayorCargo)
+}
+
+//Indica si 2 empleados cobran lo mismo
+function tienenIgualSueldo(empleado1, empleado2) {
+	return (sueldo(empleado1) == sueldo(empleado2))
+}
+
+//PRO: Calcula el nuevo valor a cobrar para un empleado
+//PRE: porcentajeDeAumento tiene que estar en [0,100]EZ
+//El monto por el cual se incrementa el sueldo del empleado es (sueldo x porcentaje / 100)
+//El div tiene mayor orden de precedencia que *
+function bonoPorFinalizacionDeProyecto(empleado, porcentajeDeAumento) {
+	return (sueldo(empleado) div 100 * porcentajeDeAumento + sueldo(empleado))
+}
