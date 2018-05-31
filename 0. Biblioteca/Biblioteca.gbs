@@ -56,4 +56,15 @@ procedure MoverN(d, n) {
 	}
 }
 
-function puedeMoverN() {}
+/*
+PRO: Indica si se puede mover n veces en direccion d
+RET: Booleano
+*/
+function puedeMoverN(d, n) {
+	c := n
+	while(puedeMover(d) && c /= 0) {
+		Mover(d)
+		c := c - 1
+	}
+	return (c == 0)
+}
