@@ -9,9 +9,9 @@ La isla es el tablero de Gobstones
 */
 program {
 	mapa := [Indicacion(direccion<-Norte, distancia<-2), 
-						Indicacion(direccion<-Este, distancia<-2),
+						Indicacion(direccion<-Este, distancia<-12),
 						Indicacion(direccion<-Norte, distancia<-3),
-						Indicacion(direccion<-Este, distancia<-3)]
+						Indicacion(direccion<-Este, distancia<-2)]
 	return (busquedaDelTesoro(mapa))
 }
 
@@ -26,13 +26,28 @@ del tablero
 function busquedaDelTesoro(mapa) {
 	PuntoDePartida()
 	ls := mapa
-	while (not isEmpty(ls)) {
-		Mover()
+	while (not isEmpty(ls) && 
+					puedeMoverN(direccion(head(ls)), distancia(head(ls)))) {
+		MoverN(direccion(head(ls)), distancia(head(ls)))
+		ls := tail(ls)
 	}
-	
-	return (True)
+	return (isEmpty(ls) && nroBolitas(Rojo) == 2)
 }
 
+
+
+/*
+PRO: Se posiciona en donde esta el pirata
+PRE: Tiene que existir el pirata
+*/
+procedure PuntoDePartida() {
+	InicializarRecorridoHacia(Norte, Este)
+	while(not hayBolitas(Rojo)) {
+		MoverProximaCelda(Norte, Este)
+	}
+}
+
+--______________________________
 /*
 PRO: Se mueve n veces en direccion d
 PRE: Se tiene que poder mover n veces
@@ -48,18 +63,12 @@ PRO: Indica si se puede mover n veces en direccion d
 RET: Booleano
 */
 function puedeMoverN(d, n) {
-	
-}
-
-/*
-PRO: Se posiciona en donde esta el pirata
-PRE: Tiene que existir el pirata
-*/
-procedure PuntoDePartida() {
-	InicializarRecorridoHacia(Norte, Este)
-	while(not hayBolitas(Rojo)) {
-		MoverProximaCelda(Norte, Este)
+	c := n
+	while(puedeMover(d) && c /= 0) {
+		Mover(d)
+		c := c - 1
 	}
+	return (c == 0)
 }
 
 /*Mueve en una direccion y sino puede mueve hacia la otra direccion*/
