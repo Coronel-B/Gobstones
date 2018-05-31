@@ -1,0 +1,43 @@
+/*
+PRO: Modela un padron en base a su dni, domicilio y sexo
+INVARIANTE DE REPRESENTACION: dni y domicilio >0. dni es pk
+*/
+type Persona is record {
+	field dni			//numero
+	field domicilio		//numero
+	field esMasculino	//booleano
+}
+
+type Padron is record {
+	field personas --[Persona]
+}
+
+program {
+	-- Uso el tipo Padron como renombre de una lista de personas
+	padron := [Persona(dni<-39155039, domicilio<-1931, esMasculino<-True),
+						  Persona(dni<-24327173, domicilio<-1931, esMasculino<-True),
+							Persona(dni<-22842685, domicilio<-1931, esMasculino<-False),
+							Persona(dni<-12334135, domicilio<-32, esMasculino<-True)]
+	return (perteneceDNI(padron, 39155039))
+}
+
+/*
+PRO: Indica si hay una persona con dicho @dni en el @padron
+RET: Booleano
+@param padron: Padron
+@param dni: Numero
+*/
+function perteneceDNI(padron, dni) {
+	ls := padron
+	while(not isEmpty(ls) && dni(head(ls))/=dni) {
+		ls := tail(ls)	
+	}
+	return (dni(head(ls))==dni)
+}
+
+/*
+PRO: Prepara la primer persona que tenga el DNI indicado
+PRE: Existe alguna persona con dicho DNI
+RET: Persona
+@param padron:
+*/
