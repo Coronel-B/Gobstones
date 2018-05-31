@@ -1,11 +1,5 @@
 //RECORRIDOS 
 
-//PRO: Posiciona el cabezal al origen del tablero
-procedure IrAlOrigen() {
-	IrAlExtremo(Sur)
-	IrAlExtremo(Oeste)
-}
-
 --PRO: Posiciona el cabezal en la ultima celda en un recorrido en direccion @param d
 procedure IrAlExtremo(d) {
 	while(puedeMover(d)) {
@@ -14,7 +8,7 @@ procedure IrAlExtremo(d) {
 }
 
 /*Mueve en una direccion y sino puede mueve hacia la otra direccion*/
-procedure MoverT(d,d2) {
+procedure MoverProximaCelda(d,d2) {
 	if (puedeMover(d)) {
 		Mover(d)
 	} 
@@ -25,7 +19,7 @@ procedure MoverT(d,d2) {
 }
 
 //True cuando el cabezal no se encuentra en el extremo (d,d2)
-function puedeMoverT(d,d2) {
+function puedeMoverProximaCelda(d,d2) {
 	return (puedeMover(d) || puedeMover(d2))
 }
 
@@ -47,3 +41,19 @@ function ifElse(condicion, v, f) {
 	}
 	return (ret)
 }
+
+-- __________________________________________
+
+-- MOVIMIENTOS
+
+/*
+PRO: Se mueve n veces en direccion d
+PRE: Se tiene que poder mover n veces
+*/
+procedure MoverN(d, n) {
+	repeat (n) {
+		Mover(d)
+	}
+}
+
+function puedeMoverN() {}
