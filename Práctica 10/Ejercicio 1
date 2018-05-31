@@ -1,0 +1,92 @@
+# Un mapa es una lista de indicaciones
+type Indicacion is record {
+	field direccion	-- Direccion
+	field distancia -- Numero
+}
+
+/*
+La isla es el tablero de Gobstones
+*/
+program {
+	mapa := [Indicacion(direccion<-Norte, distancia<-2), 
+						Indicacion(direccion<-Este, distancia<-2),
+						Indicacion(direccion<-Norte, distancia<-3),
+						Indicacion(direccion<-Este, distancia<-3)]
+	return (busquedaDelTesoro(mapa))
+}
+
+/*
+PRO: Toma un mapa e indica si encuentra o no el tesoro
+PRE: El pirata se denota con 1 roja y existe. El tesoro si existe son 2 rojas
+RET: Booleano
+
+Con un determinado mapa el pirata podra caer al agua por fuera de los limites
+del tablero 
+*/
+function busquedaDelTesoro(mapa) {
+	PuntoDePartida()
+	ls := mapa
+	while (not isEmpty(ls)) {
+		Mover()
+	}
+	
+	return (True)
+}
+
+/*
+PRO: Se mueve n veces en direccion d
+PRE: Se tiene que poder mover n veces
+*/
+procedure MoverN(d, n) {
+	repeat (n) {
+		Mover(d)
+	}
+}
+
+/*
+PRO: Indica si se puede mover n veces en direccion d
+RET: Booleano
+*/
+function puedeMoverN(d, n) {
+	
+}
+
+/*
+PRO: Se posiciona en donde esta el pirata
+PRE: Tiene que existir el pirata
+*/
+procedure PuntoDePartida() {
+	InicializarRecorridoHacia(Norte, Este)
+	while(not hayBolitas(Rojo)) {
+		MoverProximaCelda(Norte, Este)
+	}
+}
+
+/*Mueve en una direccion y sino puede mueve hacia la otra direccion*/
+procedure MoverProximaCelda(d,d2) {
+	if (puedeMover(d)) {
+		Mover(d)
+	} 
+	if (not puedeMover(d) && puedeMover(d2)) {
+		IrAlExtremo(opuesto(d))
+		Mover(d2)
+	}
+}
+
+//True cuando el cabezal no se encuentra en el extremo (d,d2)
+function puedeMoverProximaCelda(d,d2) {
+	return (puedeMover(d) || puedeMover(d2))
+}
+
+/*PRO: Se posiciona al opuesto del extremo de dos direccion para inicializar un recorrido*/
+procedure InicializarRecorridoHacia(d1, d2) {
+	IrAlExtremo(opuesto(d1))
+	IrAlExtremo(opuesto(d2))
+}
+
+--PRO: Posiciona el cabezal en la ultima celda en un recorrido en direccion @param d
+procedure IrAlExtremo(d) {
+	while(puedeMover(d)) {
+		Mover(d)
+	}
+}
