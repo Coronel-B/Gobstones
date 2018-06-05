@@ -1,0 +1,20 @@
+type Alumno is record {
+    field legajo --Numero
+    field parciales --[Parcial] puede haber mas de 1 parcial con el mismo tema p/los parciales recuperados
+}
+
+//PRO: Modela un parcial dado por un alumno
+type Parcial is record {
+    field tema --Numero
+    field nota --Numero
+}
+
+type Curso is record {
+    field alumnos --[Alumno]
+    field temas --[Numero]
+}
+
+program {
+
+}
+
