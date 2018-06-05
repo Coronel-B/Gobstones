@@ -2,19 +2,103 @@ type Alumno is record {
     field legajo --Numero
     field parciales --[Parcial] puede haber mas de 1 parcial con el mismo tema p/los parciales recuperados
 }
-
 //PRO: Modela un parcial dado por un alumno
 type Parcial is record {
     field tema --Numero
     field nota --Numero
 }
-
 type Curso is record {
     field alumnos --[Alumno]
     field temas --[Numero]
 }
 
 program {
-
+    parcial1 := Parcial(tema<-1, nota<-10)
+    parcial2 := Parcial(tema<-2, nota<-9)
+    parcial3 := Parcial(tema<-3, nota<-8)
+    braian := Alumno(legajo<-1, parciales[])
+    factorovich := Alumno(legajo<-2, parciales[parcial1,parcial2])
+    tobia := Alumno(legajo<-3, parciales[parcial2,parcial3])
+    inpr := Curso(alumnos<-[braian, factorovich, tobia], temas[1,2,3])
+    db := Curso(alumnos<-[], temas[1])
+    mate := Curso(alumnos<-[tobia], temas[1,2,3])
 }
+
+/*
+PRO: Prepara un curso con una lista vacia de alumnos
+PRE: No tiene
+RET: Curso
+@param temas: [Numero]
+*/
+function nuevoCurso(temas) {
+    return (Curso(alumnos<-[], temas<-temas))
+}
+
+/*
+PRO: Agrega un alumno con un @legajo a un @curso con una lista vacia de parciales
+PRE: No tiene
+RET: Curso
+@param curso: Curso
+@param legajo: Numero
+*/
+function inscripcionAlumno(curso, legajo) {
+    return (Curso(curso|alumnos <- alumnos(curso) ++ nuevoAlumno(legajo)))
+}
+
+/*
+PRO: Crea un nuevo alumno con un determinado @legajo con una lista vacia de parciales
+PRE: No tiene
+RET: [Alumno]
+@param legajo: Numero
+*/
+function nuevoAlumno(legajo) {
+    return ([Alumno(legajo <- legajo, parciales <- [])])
+}
+
+/*
+PRO: Prepara un nuevo curso en base a @curso en el que se registro el alumno 
+con un nro de @legajo que rindio el @tema con la @nota correspondiente
+PRE: El alumno correspondiente al legajo y el tema deben formar parte del curso.
+Sino la funcion tiene que denotar BOOM.
+RET: Curso
+@param curso: Curso
+@param legajo, nota, tema: Numero
+
+Dividir en subtareas todas las operaciones auxiliares que sean necesarias. 
+Como minimo se sugiere una funcion para:
+- retornar el alumno correspondiente al legajo  LISTO
+- eliminar al alumno correspondiente al legajo
+- agregar a un alumno cualquiera al curso
+*/
+function evaluacionAlumno(curso, legajo, nota, tema) {
+    return (Curso(curso|alumnos, temas <- temas(curso) ++ [tema]))
+}
+
+/*
+PRO: Prepara un alumno con un determinado @legajo y @parcial
+PRE: El alumno y el tema del parcial tienen que formar parte del curso 
+RET: Alumno
+@param legajo: Numero
+@param parcial: Parcial
+*/
+function crearAlumno(legajo, parcial) {
+    return (Alumno(legajo <- legajo, parciales <- parcial))
+}
+
+
+
+/*
+PRO: Prepara un parcial con un @tema y una @nota
+PREC: No tiene
+RET: Parcial
+@param tema, nota: Numero
+*/
+function crearParcial(tema, nota) {
+    return (Parcial(tema <- tema, nota <- nota))
+}
+
+
+
+
+
 
