@@ -84,7 +84,7 @@ function agregarActor(videoclub, nroPelicula, nroActor) {
 		peliculas := tail(peliculas)
 	}
 	pelisRet := pelisRet ++ peliculaModificada ++ tail(pelisRet)
-	return (pelisRet)
+	return (Videoclub(videoclub|pelis <- pelisRet))
 }
 
 #ALGORITMO DE BUSQUEDA DE 1 ELEMENTO
