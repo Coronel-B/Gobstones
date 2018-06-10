@@ -1,0 +1,135 @@
+type Videoclub is record {
+	field pelis -- [Pelicula]
+	field alquileres --[Alquiler]
+}
+
+type Pelicula is record {
+	field nroPelicula -- Numero:: pk
+	field actores -- [Numero]: pk
+	field cantCopias -- Numero: Indica de cuantas copias es dueno el videoclub
+}
+
+type Alquiler is record {
+	field nroPelicula -- Numero: fk
+	field nroCliente -- Numero: pk
+	field diasAlquiler -- Numero: Cant de dias que se llevaron la pelicula
+}
+
+program {
+	/* Ej. 1
+	videoclub := Videoclub(pelis <- [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], alquileres <- [2,3,5,7,11,13])
+	return (pelisAburridas(videoclub))*/
+
+	videoclub := Videoclub(pelis <- [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], alquileres <- [2,3,5,7,11,13])
+	//pelicula_1 := Pelicula(nroPelicula <- 1, actores <- [2,3], cantCopias <- 4)
+	return (agregarActor(videoclub, 1, 5))
+			
+
+}
+
+/*
+PRO: Prepara la lista de peliculas que no alquilo nadie
+PRE: Ninguna
+RET: [Pelicula]
+@param videoclub: Videoclub
+*/
+function pelisAburridas(videoclub) {
+	aburridas := []
+	foreach pelicula in pelis(videoclub) {
+		if (not pertenece(pelicula, alquileres(videoclub))) {
+			aburridas := aburridas ++ [pelicula] 
+		}
+	}
+	return (aburridas)
+}
+
+/*
+PRO: Indica si el elemento pertenece a la lista
+RETURN: Booleano
+@param e: elemento
+@param xs: lista
+*/
+function pertenece(e, xs) {
+	ls := xs
+
+	//not isEmpty(ls) lo pongo como primer premisa sino no funciona
+	while(not isEmpty(ls) && head(ls) /= e) {	
+		ls := tail(ls)
+	}
+
+	return (not isEmpty(ls))
+}
+
+#ALGORITMO DE MODIFICAR 1 ELEMENTO
+/*
+PRO: Prepara un nuevo videoclub de @videoclub que resulta de agregar un actor
+@nroActor a la lista de actores [actores] de la pelicula @nroPelicula correspondiente 
+a la lista de pelis [Pelicula]
+PRE: @videoclub tiene la pelicula @nroPelicula. El actor @nroActor puede o no ser parte
+de la pelicula @nroPelicula antes de ser agregado. La solucion tiene que funcionar para
+cualquier caso.
+RET: Videoclub
+@param videoclub: Videoclub
+@param nroPelicula: Numero
+@param nroActor: Numero
+*/
+function agregarActor(videoclub, nroPelicula, nroActor) {
+	pelicula := buscarPelicula(videoclub, nroPelicula)
+	peliculaModificada := Pelicula(pelicula|actores <- sinDuplicados(actores(pelicula) ++ [nroActor]))
+
+	peliculas := pelis(videoclub)
+	pelisRet := []
+	while (head(peliculas) /= pelicula) {
+		pelisRet := pelisRet ++ [head(peliculas)]
+		peliculas := tail(peliculas)
+	}
+	pelisRet := pelisRet ++ peliculaModificada ++ tail(pelisRet)
+	return (pelisRet)
+}
+
+#ALGORITMO DE BUSQUEDA DE 1 ELEMENTO
+/*
+PRO: Prepara una pelicula con un determinado @nroPelicula
+PRE: Videoclub @videoclub tiene la pelicula @nroPelicula
+RET: Pelicula 
+@param videoclub: Videoclub
+@param nroPelicula: Numero
+*/
+function buscarPelicula(videoclub, nroPelicula) {
+	peliculas := pelis(videoclub)
+	while(nroPelicula(head(peliculas)) /= nroPelicula) {
+		peliculas := (tail(peliculas))
+	}
+	return (head(peliculas))
+}
+
+/*
+PRO: Filtra todos los elementos de una lista sin repetirlos 
+RETURN: Lista
+@param ls: lista
+*/
+function sinDuplicados(ls) {
+	lista := ls
+	filtro := []
+
+	while(not isEmpty(lista)) {
+		//filtro := filtro ++ ifElse(not pertenece(head(lista), filtro), [head(lista)], [])
+		filtro := filtro ++ singularSi(not pertenece(head(lista), filtro), head(lista))
+		lista := tail(lista)
+	}
+
+	return (filtro)
+}
+
+function ifElse(condicion, v, f) {
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+	return (ret)
+}
+
+//PRO: Devuelve un elemento dependiendo el booleano
+function singularSi(b, e) {
+	return (ifElse(b, [e], []))
+}
