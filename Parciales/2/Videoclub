@@ -35,17 +35,22 @@ function loteAlquileres() {
 }
 
 program {
+	videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())	
+
 	// Ej. 1
-	/*videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())
-	return (pelisAburridas(videoclub))*/
+	//return (pelisAburridas(videoclub))
 
 	// Ej. 2
-	/*videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())
-	return (agregarActor(videoclub, 1, 99))	*/
+	//return (agregarActor(videoclub, 1, 99))	
 
 	// Ej. 3
-	videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())
-	return (cuantoDebe(videoclub, 10))
+	//return (cuantoDebe(videoclub, 10))
+
+	// Ej. 4
+	//return (actoresTotales(videoclub))
+
+	// Ej. 5
+	return (actoresDeModa(videoclub))
 }
 
 /*
@@ -69,7 +74,7 @@ PRO: Prepara una lista con todos los valores de las instancias de un campo deter
 de un registro
 PRE: No tiene
 RET: Una lista de campos del mismo dominio: [nroPelicula(instancia)]
-@param instancias: [instancia]
+@param instancias: [instancia] representa una lista de instancias de un registro
 */
 function camposDeInstancias(instancias) {
 	lsRet := []
@@ -114,7 +119,7 @@ function agregarActor(videoclub, nroPelicula, nroActor) {
 	pelicula := buscarPelicula(videoclub, nroPelicula)
 	peliculaModificada := Pelicula(pelicula|actores <- sinDuplicados(actores(pelicula) ++ [nroActor]))
 
-	peliculas := pelis(videoclub)
+	/*peliculas := pelis(videoclub)
 	pelisRet := []
 	while (head(peliculas) /= pelicula) {
 		pelisRet := pelisRet ++ [head(peliculas)]
@@ -122,8 +127,25 @@ function agregarActor(videoclub, nroPelicula, nroActor) {
 	}
 	//Asegurarme de hacer el tail de la ls que obtuve del param (peliculas) y no del filtro que voy a devolver.
 	pelisRet := pelisRet ++ [peliculaModificada] ++ tail(peliculas)
-	return (Videoclub(videoclub|pelis <- pelisRet))
+	return (Videoclub(videoclub|pelis <- pelisRet))*/
+	
+	return (Videoclub(videoclub|pelis <- sinElemento(pelicula, pelis(videoclub)) ++ [peliculaModificada]))
 }
+
+/*
+PRO: Retorna una lista que resulta de quitar todas las apariciones de @e en @ls
+TIPO: Recibe una lista @param ls y un elemento @param e
+*/
+function sinElemento(e, lista) {
+	lsRet := []
+	foreach i in lista {
+		if ([i] /= [e]) {
+			lsRet := lsRet ++ [i]
+		}
+	}
+	return (lsRet)
+}
+
 
 #ALGORITMO DE BUSQUEDA DE 1 ELEMENTO
 /*
@@ -185,9 +207,20 @@ function cuantoDebe(videoclub, nroCliente) {
 	debe := 0
 	foreach alquilerCliente in alquileresCliente(alquileres(videoclub), nroCliente) {
 		//Costo por alquiler
-		debe := debe + (60 div diasAlquiler(alquilerCliente) * cantCopias(buscarPelicula(videoclub, nroPelicula(alquilerCliente))))
+		debe := debe + costoPorAlquiler(videoclub, alquilerCliente)
 	}
 	return (debe)
+}
+
+/*
+PRO: Prepara el costo que pagara un nroCliente por alquiler
+PRE: No tiene
+RET: Numero
+@param videoclub: Videoclub
+@param alquiler: Alquiler
+*/
+function costoPorAlquiler(videoclub, alquiler) {
+	return (60 div cantCopias(buscarPelicula(videoclub, nroPelicula(alquiler)) * diasAlquiler(alquiler)))
 }
 
 /*
@@ -201,6 +234,96 @@ function alquileresCliente(alquileres, nroCliente) {
 	alquileresRet := []
 	foreach alquiler in alquileres {
 		alquileresRet := alquileresRet ++ singularSi(nroCliente(alquiler) == nroCliente, alquiler)
+	}
+	return (alquileresRet)
+}
+
+/*
+PRO: Prepara la lista de actores de todas las peliculas del @videoclub sin repetidos
+PRE: Ninguna
+RET: [Numero]
+@param videoclub: Videoclub
+*/
+function actoresTotales(videoclub) {
+	actores := []
+	foreach peli in pelis(videoclub) {
+		actores := actores ++ actores(peli)
+	}
+	return (sinDuplicados(actores))
+}
+
+/*
+PRO: Prepara una [] de [] de 2 elementos con las peliculas alquiladas de distintos actores.
+El primer elemento siempre es el numero que identifica al actor y el segundo es
+la cantidad de alquileres entre todas las peliculas en donde este actuaba.
+La lista tiene que estar ordenada de manera descendente segun la cantidad
+total de alquileres del actor.
+PRE: Ninguna
+RET: [[e,e2]] representa una lista de listas de 2 elementos
+@param videoclub: Videoclub
+*/
+function actoresDeModa(videoclub) {
+	actoresDeModa := []
+	foreach actor in actoresTotales(videoclub) {
+		actoresDeModa := actoresDeModa ++ 
+						 [[actor, longitud(alquileresDePeliculas(alquileres(videoclub), peliculasDeActor(pelis(videoclub), actor)))]]
+	}
+	return (actoresDeModa)
+}
+
+/*
+PRO: Retorna la cantidad de elementos de una lista
+TIPO: Recibe una lista de cualquier tipo
+*/
+function longitud(ls) {
+	c := 0
+	foreach i in ls {
+		c := c + 1
+	}
+	return (c)
+}
+
+/*
+PRO: Prepara una lista con todas las peliculas de un actor en particular
+PRE: Las peliculas tienen que representar a todas las del videoclub
+RET: [Pelicula] representa las peliculas de un actor
+@param peliculas: [Pelicula] 
+@param nroActor: Numero
+*/
+function peliculasDeActor(peliculas, nroActor) {
+	peliculasRet := []
+	foreach pelicula in peliculas {
+		peliculasRet := peliculasRet ++ singularSi(pertenece(nroActor, actores(pelicula)), pelicula)
+	}
+	return (peliculasRet)
+}
+
+/*
+PRO: Prepara todos los @alquileres de una @pelicula en particular
+PRE: Ninguna
+RET: [Alquiler]
+@param alquileres: [Alquiler] representa los alquileres de un videoclub
+@param pelicula: Pelicula representa la pelicula de un actor
+*/
+function alquileresDeActor(alquileres, pelicula) {
+	alquileresRet := []
+	foreach alquiler in alquileres {
+		alquileresRet := alquileresRet ++ singularSi(nroPelicula(alquiler) == nroPelicula(pelicula), alquiler)
+	}
+	return (alquileresRet)
+}
+
+/*
+PRO: Prepara todos los @alquileres de distintas @peliculas 
+PRE: Los alquileres tienen que ser los pertenecientes a un videoclub y las peliculas pertenecientes a un actor.
+RET: [Alquiler]
+@param alquileres: [Alquiler] representa alquileres de un videoclub
+@param peliculas: [Pelicula] representa peliculas de un actor
+*/
+function alquileresDePeliculas(alquileres, peliculas) {
+	alquileresRet := []
+	foreach pelicula in peliculas {
+		alquileresRet := alquileresRet ++ alquileresDeActor(alquileres, pelicula)
 	}
 	return (alquileresRet)
 }
