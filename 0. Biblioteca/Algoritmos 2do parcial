@@ -24,6 +24,8 @@ function agregarActor(videoclub, nroPelicula, nroActor) {
 	//Asegurarme de hacer el tail de la ls que obtuve del param (peliculas) y no del filtro que voy a devolver.
 	pelisRet := pelisRet ++ [peliculaModificada] ++ tail(peliculas)
 	return (Videoclub(videoclub|pelis <- pelisRet))
+	
+	//return (Videoclub(videoclub|pelis <- sinElemento(pelicula, pelis(videoclub)) ++ [peliculaModificada]))
 }
 
 #ALGORITMO DE BUSQUEDA DE 1 ELEMENTO
