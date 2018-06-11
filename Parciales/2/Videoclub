@@ -15,15 +15,28 @@ type Alquiler is record {
 	field diasAlquiler -- Numero: Cant de dias que se llevaron la pelicula
 }
 
+function lotePeliculas() {
+	return ([Pelicula(nroPelicula <- 1, actores <- [1,2,3], cantCopias <- 5), 
+			Pelicula(nroPelicula <- 2, actores <- [2,3], cantCopias <- 4),
+			Pelicula(nroPelicula <- 3, actores <- [5,2,3], cantCopias <- 3),
+			Pelicula(nroPelicula <- 4, actores <- [6,4], cantCopias <- 0),
+			Pelicula(nroPelicula <- 5, actores <- [1,6,7], cantCopias <- 1)])
+}
+
+function loteAlquileres() {
+	return ([Alquiler(nroPelicula <- 2, nroCliente <- 10, diasAlquiler <- 3),
+			Alquiler(nroPelicula <- 3, nroCliente <- 10, diasAlquiler <- 3),
+			Alquiler(nroPelicula <- 5, nroCliente <- 10, diasAlquiler <- 3)])
+}
+
 program {
-	/* Ej. 1
-	videoclub := Videoclub(pelis <- [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], alquileres <- [2,3,5,7,11,13])
+	// Ej. 1
+	/*videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())
 	return (pelisAburridas(videoclub))*/
 
-	videoclub := Videoclub(pelis <- [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], alquileres <- [2,3,5,7,11,13])
-	//pelicula_1 := Pelicula(nroPelicula <- 1, actores <- [2,3], cantCopias <- 4)
-	return (agregarActor(videoclub, 1, 5))
-			
+	// Ej. 2
+	/*videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())
+	return (agregarActor(videoclub, 1, 99))	*/
 
 }
 
@@ -36,12 +49,28 @@ RET: [Pelicula]
 function pelisAburridas(videoclub) {
 	aburridas := []
 	foreach pelicula in pelis(videoclub) {
-		if (not pertenece(pelicula, alquileres(videoclub))) {
+		if (not pertenece(nroPelicula(pelicula), camposDeInstancias(alquileres(videoclub)))) {
 			aburridas := aburridas ++ [pelicula] 
 		}
 	}
 	return (aburridas)
 }
+
+/*
+PRO: Prepara una lista con todos los valores de las instancias de un campo determinado 
+de un registro
+PRE: No tiene
+RET: Una lista de campos del mismo dominio: [nroPelicula(instancia)]
+@param instancias: [instancia]
+*/
+function camposDeInstancias(instancias) {
+	lsRet := []
+	foreach instancia in instancias {
+		lsRet := lsRet ++ [nroPelicula(instancia)]	
+	}
+	return (lsRet)
+}
+
 
 /*
 PRO: Indica si el elemento pertenece a la lista
@@ -83,7 +112,8 @@ function agregarActor(videoclub, nroPelicula, nroActor) {
 		pelisRet := pelisRet ++ [head(peliculas)]
 		peliculas := tail(peliculas)
 	}
-	pelisRet := pelisRet ++ peliculaModificada ++ tail(pelisRet)
+	//Asegurarme de hacer el tail de la ls que obtuve del param (peliculas) y no del filtro que voy a devolver.
+	pelisRet := pelisRet ++ [peliculaModificada] ++ tail(peliculas)
 	return (Videoclub(videoclub|pelis <- pelisRet))
 }
 
@@ -98,7 +128,7 @@ RET: Pelicula
 function buscarPelicula(videoclub, nroPelicula) {
 	peliculas := pelis(videoclub)
 	while(nroPelicula(head(peliculas)) /= nroPelicula) {
-		peliculas := (tail(peliculas))
+		peliculas := tail(peliculas)
 	}
 	return (head(peliculas))
 }
@@ -130,6 +160,7 @@ function ifElse(condicion, v, f) {
 }
 
 //PRO: Devuelve un elemento dependiendo el booleano
+
 function singularSi(b, e) {
 	return (ifElse(b, [e], []))
 }
