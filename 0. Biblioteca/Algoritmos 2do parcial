@@ -1,0 +1,43 @@
+#ALGORITMO DE MODIFICAR 1 ELEMENTO
+/*
+PRO: Prepara un nuevo videoclub de @videoclub que resulta de agregar un actor
+@nroActor a la lista de actores [actores] de la pelicula @nroPelicula correspondiente 
+a la lista de pelis [Pelicula]
+PRE: @videoclub tiene la pelicula @nroPelicula. El actor @nroActor puede o no ser parte
+de la pelicula @nroPelicula antes de ser agregado. La solucion tiene que funcionar para
+cualquier caso.
+RET: Videoclub
+@param videoclub: Videoclub
+@param nroPelicula: Numero
+@param nroActor: Numero
+*/
+function agregarActor(videoclub, nroPelicula, nroActor) {
+	pelicula := buscarPelicula(videoclub, nroPelicula)
+	peliculaModificada := Pelicula(pelicula|actores <- sinDuplicados(actores(pelicula) ++ [nroActor]))
+
+	peliculas := pelis(videoclub)
+	pelisRet := []
+	while (head(peliculas) /= pelicula) {
+		pelisRet := pelisRet ++ [head(peliculas)]
+		peliculas := tail(peliculas)
+	}
+	//Asegurarme de hacer el tail de la ls que obtuve del param (peliculas) y no del filtro que voy a devolver.
+	pelisRet := pelisRet ++ [peliculaModificada] ++ tail(peliculas)
+	return (Videoclub(videoclub|pelis <- pelisRet))
+}
+
+#ALGORITMO DE BUSQUEDA DE 1 ELEMENTO
+/*
+PRO: Prepara una pelicula con un determinado @nroPelicula
+PRE: Videoclub @videoclub tiene la pelicula @nroPelicula
+RET: Pelicula 
+@param videoclub: Videoclub
+@param nroPelicula: Numero
+*/
+function buscarPelicula(videoclub, nroPelicula) {
+	peliculas := pelis(videoclub)
+	while(nroPelicula(head(peliculas)) /= nroPelicula) {
+		peliculas := tail(peliculas)
+	}
+	return (head(peliculas))
+}
