@@ -15,7 +15,7 @@ Las listas tienen que ser declaradas e inicializadas
 isEmpty(<lista>)	
 head(<lista>) 	//primer elemento de lista: [e]
 last(<lista>)	//ultimo elemento de lista
-tail(<lista>)	//lista sin el primer elemento: ls
+tail(<lista>)	//lista sin el primer elemento: ls. PRE: La lista no puede estar vacia
 init(<lista>)	//lista sin el ultimo elemento
 
 Operaciones: ls ++ [e]
@@ -76,6 +76,7 @@ function ifElse(condicion, v, f) {
 }
 
 //PRO: Devuelve un elemento dependiendo el booleano
+//PRE: Si quiero devolver una lista de elementos no uso esta funcion sino obtendre una lista de lista
 function singularSi(b, e) {
 	return (ifElse(b, [e], []))
 }
