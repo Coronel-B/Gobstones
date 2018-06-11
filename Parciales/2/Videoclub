@@ -3,6 +3,10 @@ type Videoclub is record {
 	field alquileres --[Alquiler]
 }
 
+/*
+PRE: Si una pelicula tiene 0 copias no podra estar alquilada
+Las peliculas con mas copias son mas baratas
+*/
 type Pelicula is record {
 	field nroPelicula -- Numero:: pk
 	field actores -- [Numero]: pk
@@ -24,9 +28,10 @@ function lotePeliculas() {
 }
 
 function loteAlquileres() {
-	return ([Alquiler(nroPelicula <- 2, nroCliente <- 10, diasAlquiler <- 3),
-			Alquiler(nroPelicula <- 3, nroCliente <- 10, diasAlquiler <- 3),
-			Alquiler(nroPelicula <- 5, nroCliente <- 10, diasAlquiler <- 3)])
+	return ([Alquiler(nroPelicula <- 2, nroCliente <- 10, diasAlquiler <- 8),
+			Alquiler(nroPelicula <- 3, nroCliente <- 10, diasAlquiler <- 6),
+			Alquiler(nroPelicula <- 5, nroCliente <- 10, diasAlquiler <- 2),
+			Alquiler(nroPelicula <- 5, nroCliente <- 2, diasAlquiler <- 2)])
 }
 
 program {
@@ -38,6 +43,9 @@ program {
 	/*videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())
 	return (agregarActor(videoclub, 1, 99))	*/
 
+	// Ej. 3
+	videoclub := Videoclub(pelis <- lotePeliculas(), alquileres <- loteAlquileres())
+	return (cuantoDebe(videoclub, 10))
 }
 
 /*
@@ -160,7 +168,39 @@ function ifElse(condicion, v, f) {
 }
 
 //PRO: Devuelve un elemento dependiendo el booleano
-
 function singularSi(b, e) {
 	return (ifElse(b, [e], []))
+}
+
+/*
+PRO: Prepara cuanto debe abonar el cliente. 
+Las peliculas con mas copias son mas baratas y el costo de un alquiler es
+60 dividido la cantidad de copias y multiplicado por la cant de dias alquiladas.
+PRE: El cliente @nroCliente es un cliente valido que ha realizado al menos un alquiler.
+RET: Numero
+@param videoclub: Videoclub
+@param nroCliente: Numero
+*/
+function cuantoDebe(videoclub, nroCliente) {
+	debe := 0
+	foreach alquilerCliente in alquileresCliente(alquileres(videoclub), nroCliente) {
+		//Costo por alquiler
+		debe := debe + (60 div diasAlquiler(alquilerCliente) * cantCopias(buscarPelicula(videoclub, nroPelicula(alquilerCliente))))
+	}
+	return (debe)
+}
+
+/*
+PRO: Prepara los @alquileres de un @nroCliente
+PRE: No tiene
+RET: [Alquiler]
+@param alquileres: [Alquiler]
+@param nroCliente: Numero
+*/
+function alquileresCliente(alquileres, nroCliente) {
+	alquileresRet := []
+	foreach alquiler in alquileres {
+		alquileresRet := alquileresRet ++ singularSi(nroCliente(alquiler) == nroCliente, alquiler)
+	}
+	return (alquileresRet)
 }
