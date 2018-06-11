@@ -43,3 +43,19 @@ function buscarPelicula(videoclub, nroPelicula) {
 	}
 	return (head(peliculas))
 }
+
+#ALGORITMO DE VALORES DE UN CAMPO DE INSTANCIAS DE UN REGISTRO
+/*
+PRO: Prepara una lista con todos los valores de las instancias de un campo determinado 
+de un registro
+PRE: No tiene
+RET: Una lista de campos del mismo dominio: [nroPelicula(instancia)]
+@param instancias: [instancia] representa una lista de instancias de un registro
+*/
+function camposDeInstancias(instancias) {
+	lsRet := []
+	foreach instancia in instancias {
+		lsRet := lsRet ++ [nroPelicula(instancia)]	
+	}
+	return (lsRet)
+}
