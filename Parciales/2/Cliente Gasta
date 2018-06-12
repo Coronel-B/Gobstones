@@ -1,0 +1,121 @@
+type Cliente is record {
+	field idCliente -- pk: Numero > 0
+	field puntos	-- Numero >= 0
+}
+
+type Local is record {
+	field idLocal -- pk: Numero > 0
+	field nombre -- Numero
+}
+
+type Transaccion is record {
+	field idLocal -- fk: Numero > 0
+	field idCliente -- fk: Numero > 0
+	field puntaje -- Numero
+}
+
+/*
+INV. REP: C/transaccion tiene idCliente e idLocal que pertenecen a los respectivos
+campos clientes y locales.
+*/
+type CGasta is record {
+	field clientes -- [Cliente] No tiene duplicados
+	field locales -- [Local] No tiene duplicados
+	field transacciones -- [Transaccion] 
+}
+
+function loteClientes() {
+	return ([Cliente(idCliente <- 1, puntos <- 10),
+						Cliente(idCliente <- 2, puntos <- 15),
+						Cliente(idCliente <- 3, puntos <- 20)])
+}
+
+function loteLocales() {
+	return ([Local(idLocal <- 1, nombre <- 1),
+						Local(idLocal <- 2, nombre <- 2),
+						Local(idLocal <- 3, nombre <- 3)])
+}
+
+function loteTransacciones() {
+	return ([Transaccion(idLocal <- 1, idCliente <- 1, puntaje <- 5),
+						Transaccion(idLocal <- 2, idCliente <- 2, puntaje <- 5)])
+}
+
+program {
+	cgasta := CGasta(clientes <- loteClientes(), 
+											locales <- loteLocales(),
+											transacciones <- loteTransacciones())
+	transaccion := Transaccion(idLocal <- 3, idCliente <- 3, puntaje <- 0)
+	return (altaDeTransaccion(cgasta, transaccion, 12))
+
+
+}
+
+/*
+PRO: Prepara un nuevo cgasta de @cgasta en el cual se da de alta una nueva
+transaccion de @transaccion con un nuevo @puntaje
+@transaccion viene solamente con los ids.
+Luego de dar de alta una nueva transaccion los puntos del cliente quedan 
+desactualizados en el sistema.
+PRE: @transaccion tiene a idCliente y idLocal que existen en el @cgasta
+RET: CGasta
+@param cgasta: CGasta
+@param transaccion: Transaccion
+@param puntaje: Numero
+*/
+function altaDeTransaccion(cgasta, transaccion, puntaje) {
+	return (CGasta(cgasta| transacciones <- transacciones(cgasta) ++ modificarTransaccion(transaccion, puntaje)))
+}
+
+/*
+PRO: Crea una transaccion modificada de @transaccion con un nuevo @puntaje
+PRE: @transaccion tiene a idCliente y idLocal 
+RET: [Transaccion] representa 1e de Transaccion en una ls
+@param transaccion: Transaccion
+@param puntaje: Numero
+*/
+function modificarTransaccion(transaccion, puntaje) {
+	return ([Transaccion(transaccion| puntaje <- puntaje)])
+}
+
+/*
+PRO: Prepara un cgasta con una nueva Transaccion, luego que el cliente
+con @idCliente realiza alguna transaccion en el @local por el valor de
+@puntaje, que puede ser positivo (transaccion de compra) o negativo 
+(transaccion de canje).
+Actualizar los puntos del cliente.
+PRE: @idCliente y @local pertenecen a cgasta. Y los puntos del cliente
+@idCliente son mayores que puntaje.
+RET: CGasta
+@param cgasta: CGasta
+@param idCliente: Numero > 0
+@param local: Local
+@param puntaje: Numero
+*/
+function actualizarCliente(cgasta, idCliente, local, puntaje) {
+	
+}
+
+/*
+PRO: Prepara una nueva transaccion 
+PRE: Los puntos del cliente @idCliente son mayores que puntaje.
+RET: [Transaccion] representa 1e de Transaccion en una ls
+@param idCliente: Numero > 0
+@param local: Local
+@param puntaje: Numero
+*/
+function nuevaTransaccion(idCliente, local, puntaje) {
+	return (Transaccion(idLocal <- idLocal(local), idCliente <- idCliente, puntaje <- puntaje))
+}
+
+/*
+PRO:
+PRE:
+RET:
+@param 
+@param
+*/
+function 
+
+
+
