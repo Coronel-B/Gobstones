@@ -1,0 +1,44 @@
+/*
+PRO: Prepara la identificacion del usuario mas popular, es decir, aquel que tiene mas seguidores
+PRE: Hay al menos 1 usuario en la plataforma
+RET: Numero que representa el id del usuario mas popular
+@param instagram: Instagram
+*/
+function usuarioMasPopular(instagram) {
+	masPopular := head(usuarios(instagram))
+	foreach usuario in usuarios(instagram) {
+		masPopular := ifElse(esMasPopularQue(masPopular, usuario), usuario, masPopular)
+	}
+	return (masPopular)
+}
+
+/*
+PRO: Indica si @usuario tiene mas seguidores que @masPopular
+PRE: No tiene
+RET: Booleano
+*/
+function esMasPopularQue(masPopular, usuario) {
+	return (longitud(seguidores(usuario)) > longitud(seguidores(masPopular)))
+}
+
+_____
+
+/*
+PRO: Retorna la cantidad de elementos de una lista
+TIPO: Recibe una lista de cualquier tipo
+*/
+function longitud(ls) {
+	c := 0
+	foreach i in ls {
+		c := c + 1
+	}
+	return (c)
+}
+
+function ifElse(condicion, v, f) {
+	ret := f
+	if (condicion) {
+		ret := v
+	}
+	return (ret)
+}
