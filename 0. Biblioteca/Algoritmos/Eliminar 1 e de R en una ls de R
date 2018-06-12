@@ -1,0 +1,31 @@
+/*
+PRO: Elimina los likes que haya hecho el usuario con el id @idUsuario en la lista de 
+publicaciones @listaPublicaciones
+PRE: Ninguna
+RET: Lista de elementos de tipo Publicacion
+@param listaPublicaciones: Lista de elementos de tipo Publicacion
+@param idUsuario: Numero
+*/
+function quitarLikes(listaPublicaciones, idUsuario) {
+	publicaciones := []
+	foreach publicacion in listaPublicaciones {
+		publicaciones := publicaciones ++ [Publicacion(publicacion|likes<-sinElemento(idUsuario, likes(publicacion)))]
+	}
+	return (publicaciones)
+}
+
+___
+
+/*
+PRO: Retorna una lista que resulta de quitar todas las apariciones de @e en @ls
+TIPO: Recibe una lista @param ls y un elemento @param e
+*/
+function sinElemento(e, lista) {
+	lsRet := []
+	foreach i in lista {
+		if ([i] /= [e]) {
+			lsRet := lsRet ++ [i]
+		}
+	}
+	return (lsRet)
+}
