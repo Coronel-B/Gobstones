@@ -1,0 +1,14 @@
+/*
+PRO: Prepara una pelicula con un determinado @nroPelicula
+PRE: Videoclub @videoclub tiene la pelicula @nroPelicula
+RET: Pelicula 
+@param videoclub: Videoclub
+@param nroPelicula: Numero
+*/
+function buscarPelicula(videoclub, nroPelicula) {
+	peliculas := pelis(videoclub)
+	while(nroPelicula(head(peliculas)) /= nroPelicula) {
+		peliculas := tail(peliculas)
+	}
+	return (head(peliculas))
+}
