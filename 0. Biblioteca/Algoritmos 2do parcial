@@ -1,4 +1,4 @@
-#ALGORITMO DE MODIFICAR 1 ELEMENTO
+#ESQUEMA DE MODIFICAR 1 ELEMENTO
 /*
 PRO: Prepara un nuevo videoclub de @videoclub que resulta de agregar un actor
 @nroActor a la lista de actores [actores] de la pelicula @nroPelicula correspondiente 
@@ -28,7 +28,45 @@ function agregarActor(videoclub, nroPelicula, nroActor) {
 	//return (Videoclub(videoclub|pelis <- sinElemento(pelicula, pelis(videoclub)) ++ [peliculaModificada]))
 }
 
-#ALGORITMO DE BUSQUEDA DE 1 ELEMENTO
+
+
+#ESQUEMA DE MODIFICAR 1 ELEMENTO
+/*
+PRO: Prepara un nuevo instagram en el que el usuario con id @idUsuario
+ahora sigue al usuario con id @idUsuarioASeguir
+PRE: Ambos usuarios existen y @idUsuario no sigue a @idUsuarioASeguir
+RET: Instagram
+@param instagram: Instagram
+@param idUsuario, idUsuarioASeguir: Usuario
+*/
+function seguirA(instagram, idUsuario, idUsuarioASeguir) {
+	usuarios := usuarios(instagram)
+	usuariosRet := []
+	while (id(head(usuarios)) /= idUsuarioASeguir) {
+		usuariosRet := usuariosRet ++ [head(usuarios)]
+		usuarios := tail(usuarios)
+	}
+	usuarioActualizado := nuevoSeguidor(head(usuarios), idUsuario)
+	return (Instagram(instagram|usuarios <- usuariosRet ++ usuarioActualizado ++ tail(usuarios)))
+}
+
+/*
+PRO: Prepara un usuario al cual se le suma un seguidor con id @idSeguidor 
+PRE: El seguidor no tiene que estar siguiendo al seguido y ambos usuarios tienen que ser distintos
+RET: Lista con un elemento de Usuario
+@param seguido: Usuario
+@param idSeguidor: Numero
+
+Con dicha precondicion respeto la invariante de representacion de mi modelo en el cual no puede haber
+repetidos en la lista de seguidores.
+*/
+function nuevoSeguidor(seguido, idSeguidor) {
+	return ([Usuario(seguido|seguidores<-seguidores(seguido) ++ [idSeguidor])])
+}
+
+
+
+#ESQUEMA DE BUSQUEDA DE 1 ELEMENTO
 /*
 PRO: Prepara una pelicula con un determinado @nroPelicula
 PRE: Videoclub @videoclub tiene la pelicula @nroPelicula
@@ -44,7 +82,9 @@ function buscarPelicula(videoclub, nroPelicula) {
 	return (head(peliculas))
 }
 
-#ALGORITMO DE VALORES DE UN CAMPO DE INSTANCIAS DE UN REGISTRO
+
+
+#ESQUEMA DE VALORES DE UN CAMPO DE INSTANCIAS DE UN REGISTRO
 /*
 PRO: Prepara una lista con todos los valores de las instancias de un campo determinado 
 de un registro
@@ -58,4 +98,121 @@ function camposDeInstancias(instancias) {
 		lsRet := lsRet ++ [nroPelicula(instancia)]	
 	}
 	return (lsRet)
+}
+
+
+
+#ESQUEMA DE 1 MAXIMO
+/*
+PRO: Prepara la identificacion del usuario mas popular, es decir, aquel que tiene mas seguidores
+PRE: Hay al menos 1 usuario en la plataforma
+RET: Numero que representa el id del usuario mas popular
+@param instagram: Instagram
+*/
+function usuarioMasPopular(instagram) {
+	masPopular := head(usuarios(instagram))
+	foreach usuario in usuarios(instagram) {
+		masPopular := ifElse(esMasPopularQue(masPopular, usuario), usuario, masPopular)
+	}
+	return (masPopular)
+}
+
+/*
+PRO: Indica si @usuario tiene mas seguidores que @masPopular
+PRE: No tiene
+RET: Booleano
+*/
+function esMasPopularQue(masPopular, usuario) {
+	return (longitud(seguidores(usuario)) > longitud(seguidores(masPopular)))
+}
+
+
+
+# ESQUEMA DE DOBLE FILTRADO: De publicaciones y usuarios
+
+/*
+1. Entendemos el problema ayudandome con el modelo de datos
+2. Planteamos la estrategia
+3. Escribimos la solucion
+*/
+
+/*
+PRO: Prepara la lista de todas las publicaciones que el usuario con id @idUsuario
+marco con like y que ademas son publicaciones de usuarios a los que el sigue
+PRE: El usuario con @idUsuario existe en la plataforma.
+RET: Lista de publicaciones 
+@param instagram: Instagram
+@param idUsuario: Numero
+*/
+function publicacionesSeguidasQueLeGustaron(instagram, idUsuario) {
+	publicaciones := [] -- publicaciones de todos los usuarios
+	foreach usuario in seguidos(instagram, idUsuario) {	//Primer filtro
+		-- Guardo las publicaciones, de todos los usuarios, que tienen el like del usuario con id @idUsuario
+		publicaciones := publicaciones ++ publicacionesConLike(usuario, idUsuario)	//Segundo filtro 
+	}
+	return (publicaciones)
+}
+
+/*
+PRO: Prepara las publicaciones de un usuario que tienen like de otro usuario con id @idUsuario
+PRE: Los usuarios tienen que existir y ser distintos
+RET: Lista con elementos de tipo Publicacion
+@param usuario: Usuario
+@param idUsuario: Numero
+*/
+function publicacionesConLike(usuario, idUsuario) {
+	publicaciones := []
+	foreach publicacion in publicaciones(usuario) {
+		-- Guardo las publicaciones de un usuario que tienen el like del usuario con id @idUsuario
+		publicaciones := publicaciones ++ ifElse(pertenece(idUsuario, likes(publicacion)), [publicacion], [])
+	}
+	return (publicaciones)
+}
+
+/*
+PRO: Prepara los seguidos de un usuario con id @idUsuario
+PRE: @idUsuario tiene que existir
+RET: Lista con elementos de tipo Usuario
+@param instagram: Instagram
+@param idUsuario: Usuario
+*/
+function seguidos(instagram, idUsuario) {
+	usuarios := []
+	foreach usuario in usuarios(instagram) {
+		usuarios := usuarios ++ ifElse(pertenece(idUsuario, seguidores(usuario)), [usuario], [])
+	}
+	return (usuarios)
+}
+
+
+
+#ESQUEMA DE ELIMINAR 1 E DE R EN UNA LS DE R
+/*
+PRO: Retorna una lista que resulta de quitar todas las apariciones de @e en @ls
+TIPO: Recibe una lista @param ls y un elemento @param e
+*/
+function sinElemento(e, lista) {
+	lsRet := []
+	foreach i in lista {
+		if ([i] /= [e]) {
+			lsRet := lsRet ++ [i]
+		}
+	}
+	return (lsRet)
+}
+
+/*
+PRO: Elimina los likes que haya hecho el usuario con el id @idUsuario en la lista de 
+publicaciones @listaPublicaciones
+PRE: Ninguna
+RET: Lista de elementos de tipo Publicacion
+@param listaPublicaciones: Lista de elementos de tipo Publicacion
+@param idUsuario: Numero
+*/
+function quitarLikes(listaPublicaciones, idUsuario) {
+	publicaciones := []
+	foreach publicacion in listaPublicaciones {
+		publicaciones := publicaciones ++ [Publicacion(publicacion|likes<-sinElemento(idUsuario, likes(publicacion)))]
+	}
+	return (publicaciones)
 }
