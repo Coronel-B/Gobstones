@@ -32,21 +32,26 @@ function loteClientes() {
 
 function loteLocales() {
 	return ([Local(idLocal <- 1, nombre <- 1),
-						Local(idLocal <- 2, nombre <- 2),
-						Local(idLocal <- 3, nombre <- 3)])
+						Local(idLocal <- 2, nombre <- 2)])
 }
 
 function loteTransacciones() {
-	return ([Transaccion(idLocal <- 1, idCliente <- 1, puntaje <- 5),
-						Transaccion(idLocal <- 2, idCliente <- 2, puntaje <- 5)])
+	return ([Transaccion(idLocal <- 1, idCliente <- 1, puntaje <- 40),
+						Transaccion(idLocal <- 2, idCliente <- 2, puntaje <- 35)])
 }
 
 program {
+	local := Local(idLocal <- 3, nombre <- 3)
 	cgasta := CGasta(clientes <- loteClientes(), 
-											locales <- loteLocales(),
+											locales <- loteLocales() ++ [local],
 											transacciones <- loteTransacciones())
-	transaccion := Transaccion(idLocal <- 3, idCliente <- 3, puntaje <- 0)
-	return (altaDeTransaccion(cgasta, transaccion, 12))
+	
+	-- Ej. 1
+	--transaccion := Transaccion(idLocal <- 3, idCliente <- 3, puntaje <- 0)
+	--return (altaDeTransaccion(cgasta, transaccion, 12))
+
+	-- Ej. 2
+	return (actualizarCliente(cgasta, 2, local, 13))
 
 
 }
@@ -79,11 +84,11 @@ function modificarTransaccion(transaccion, puntaje) {
 }
 
 /*
-PRO: Prepara un cgasta con una nueva Transaccion, luego que el cliente
+PRO: Prepara un cgasta con una NUEVA Transaccion, luego que el cliente
 con @idCliente realiza alguna transaccion en el @local por el valor de
 @puntaje, que puede ser positivo (transaccion de compra) o negativo 
 (transaccion de canje).
-Actualizar los puntos del cliente.
+ACTUALIZAR los puntos del cliente.
 PRE: @idCliente y @local pertenecen a cgasta. Y los puntos del cliente
 @idCliente son mayores que puntaje.
 RET: CGasta
@@ -93,11 +98,12 @@ RET: CGasta
 @param puntaje: Numero
 */
 function actualizarCliente(cgasta, idCliente, local, puntaje) {
-	
+	return (CGasta(cgasta|transacciones <- transacciones(cgasta) ++ nuevaTransaccion(idCliente, local, puntaje),
+														clientes <- sinDuplicados(clientes(cgasta) ++ actualizarPuntos(head(buscarCliente(cgasta, idCliente)), puntaje)) ))
 }
 
 /*
-PRO: Prepara una nueva transaccion 
+PRO: Prepara una nueva transaccion luego que el
 PRE: Los puntos del cliente @idCliente son mayores que puntaje.
 RET: [Transaccion] representa 1e de Transaccion en una ls
 @param idCliente: Numero > 0
@@ -105,17 +111,35 @@ RET: [Transaccion] representa 1e de Transaccion en una ls
 @param puntaje: Numero
 */
 function nuevaTransaccion(idCliente, local, puntaje) {
-	return (Transaccion(idLocal <- idLocal(local), idCliente <- idCliente, puntaje <- puntaje))
+	return ([Transaccion(idLocal <- idLocal(local), idCliente <- idCliente, puntaje <- puntaje)])
 }
 
 /*
-PRO:
-PRE:
-RET:
-@param 
-@param
+PRO: Prepara un cliente con los puntos actualizados.
+El puntaje puede ser positivo o negativo.
+PRE: Los puntos del cliente @idCliente son mayores que puntaje.
+RET: [Cliente] 1e de ls de Cliente 
+@param cliente: Cliente
+@param puntaje: Numero
 */
-function 
+function actualizarPuntos(cliente, puntaje) {
+	return ([Cliente(cliente|puntos <- puntos(cliente) + puntaje)])
+}
+
+/*
+PRO: Busca y prepara un cliente con @idCliente de @cgasta 
+PRE: El cliente existe en cgasta
+RET: [Cliente] 1e de ls de Cliente. SI DESPUES QUIERO RECIBIR SOLO EL REGISTRO LLAMO A LA FUNCION CON UN HEAD
+@param cgasta: CGasta 
+@param idCliente: Numero
+*/
+function buscarCliente(cgasta, idCliente) {
+	clientes := clientes(cgasta)
+	while(idCliente(head(clientes)) /= idCliente) {
+		clientes := tail(clientes)
+	}
+	return ([head(clientes)])
+}
 
 
 
