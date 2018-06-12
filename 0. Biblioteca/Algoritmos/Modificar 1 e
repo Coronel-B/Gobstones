@@ -1,0 +1,67 @@
+Forma #1:
+
+/*
+PRO: Prepara un nuevo videoclub de @videoclub que resulta de agregar un actor
+@nroActor a la lista de actores [actores] de la pelicula @nroPelicula correspondiente 
+a la lista de pelis [Pelicula]
+PRE: @videoclub tiene la pelicula @nroPelicula. El actor @nroActor puede o no ser parte
+de la pelicula @nroPelicula antes de ser agregado. La solucion tiene que funcionar para
+cualquier caso.
+RET: Videoclub
+@param videoclub: Videoclub
+@param nroPelicula: Numero
+@param nroActor: Numero
+*/
+function agregarActor(videoclub, nroPelicula, nroActor) {
+	pelicula := buscarPelicula(videoclub, nroPelicula)
+	peliculaModificada := Pelicula(pelicula|actores <- sinDuplicados(actores(pelicula) ++ [nroActor]))
+
+	peliculas := pelis(videoclub)
+	pelisRet := []
+	while (head(peliculas) /= pelicula) {
+		pelisRet := pelisRet ++ [head(peliculas)]
+		peliculas := tail(peliculas)
+	}
+	//Asegurarme de hacer el tail de la ls que obtuve del param (peliculas) y no del filtro que voy a devolver.
+	pelisRet := pelisRet ++ [peliculaModificada] ++ tail(peliculas)
+	return (Videoclub(videoclub|pelis <- pelisRet))
+	
+	//return (Videoclub(videoclub|pelis <- sinElemento(pelicula, pelis(videoclub)) ++ [peliculaModificada]))
+}
+
+-------
+
+Forma #2:
+
+/*
+PRO: Prepara un nuevo instagram en el que el usuario con id @idUsuario
+ahora sigue al usuario con id @idUsuarioASeguir
+PRE: Ambos usuarios existen y @idUsuario no sigue a @idUsuarioASeguir
+RET: Instagram
+@param instagram: Instagram
+@param idUsuario, idUsuarioASeguir: Usuario
+*/
+function seguirA(instagram, idUsuario, idUsuarioASeguir) {
+	usuarios := usuarios(instagram)
+	usuariosRet := []
+	while (id(head(usuarios)) /= idUsuarioASeguir) {
+		usuariosRet := usuariosRet ++ [head(usuarios)]
+		usuarios := tail(usuarios)
+	}
+	usuarioActualizado := nuevoSeguidor(head(usuarios), idUsuario)
+	return (Instagram(instagram|usuarios <- usuariosRet ++ usuarioActualizado ++ tail(usuarios)))
+}
+
+/*
+PRO: Prepara un usuario al cual se le suma un seguidor con id @idSeguidor 
+PRE: El seguidor no tiene que estar siguiendo al seguido y ambos usuarios tienen que ser distintos
+RET: Lista con un elemento de Usuario
+@param seguido: Usuario
+@param idSeguidor: Numero
+
+Con dicha precondicion respeto la invariante de representacion de mi modelo en el cual no puede haber
+repetidos en la lista de seguidores.
+*/
+function nuevoSeguidor(seguido, idSeguidor) {
+	return ([Usuario(seguido|seguidores<-seguidores(seguido) ++ [idSeguidor])])
+}
