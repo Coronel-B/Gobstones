@@ -1,84 +1,124 @@
+/*
+Hay virus de distintos colores: azules, rojos y verdes.
+En la pantalla van cayendo pildoras para acabar con los virus
+Cada pildora tiene 2 partes de colores.
+Al ubicar 4 elementos del mismo color, ya sean virus o partes de pildoras, alineados
+en forma verticual u horizontal, estos son "quemados" o eliminados de la pantalla. En 
+el caso de la pildora se elimina solo la parte afectada y no ambas.
+
+El objetivo del juego consiste en eliminar los virus, el jugador controla las pildoras 
+que van cayendo pudiendo moverlas horizontalmente.
+
+- Un virus esta representado por 2 bolitas del color correspondiente al del virus
+- Una pildora esta representada por 2 celdas, donde c/celda tiene 1 bolita que representa 
+la parte de 1 pildora. 
+- En cada celda, en todo momento hay, o bien nada (celda vacia), o bien un y solo un elemento
+(ya sea un virus o una parte de pildora)
+*/
+
 program {
-	return (hayNConsecutivasHacia(Norte, 4))
+	# Ejercicio 1
+	//return (hayDeMismoColorNHacia(1, Norte))
+
+	# Ejercicio 2
+	//return (hayNConsecutivasHacia(Norte, 4))
+	return (hayNConsecutivasHacia_2(Norte, 5))
+
+
 }
 
-function puedeMoverHaciaN(d, n) {
-	c := n
-	while (puedeMover(d) && c > 0) {
-		Mover(d)
-		c := c - 1
-	}
-	return (c == 0)
+# Ejercicio 1:
+/*
+PRO: Indica si hay un elemento del mismo color que el de la celda actual a @param n
+lugares en @param dir
+PRE: La celda actual contiene un y solo un elemento
+RET: Boolean
+@param n: Numero >= 0
+@param dir: Direccion
+*/
+function hayDeMismoColorNHacia(n, dir) {
+	return (puedeMoverNHacia(dir, n) && hayDeMismoColorNHaciaParcial(n, dir))
 }
 
-function hayMismoColorHaciaN(d, n) {
-	return (puedeMoverHaciaN(d, n) && hayMismoColorHaciaNParcial(d, n))
+/*
+PRO: Indica si hay un elemento del mismo color que el de la celda actual a n lugares en dir
+PRE: La celda actual contiene un y solo un elemento, y se tiene que poder mover n posiciones en dir
+RET: Boolean
+@param n: Numero >= 0
+@param dir: Direccion
+*/
+function hayDeMismoColorNHaciaParcial(n, dir) {
+	color := colorActual()
+	MoverN(dir, n)
+	return (hayElemento() && color == colorActual())
 }
 
-function hayMismoColorHaciaNParcial(d, n) {
-	colorActual := colorActual()
-	if (puedeMoverHaciaN(d, n)) {
-		MoverN(d,n)
-	}
-	return (colorActual == colorActual())
-}
-
-//PRO: Devuelve el color que hay en la celda actual
-//PRE: Tiene que existir 1 solo color en la actual
+/*
+PRO: Prepara el color que hay en la celda actual
+PRE: Tiene que existir un y solo un color en la celda actual
+RET: Color
+*/
 function colorActual() {
 	color := minColor()
-	ret := False
-	foreach c in [minColor() .. maxColor()] {
-		if (hayBolitas(c) && ret == False) {
-			color := c
-			ret := True
-		}
+	while (not hayBolitas(color)) {
+		color := siguiente(color)
 	}
 	return (color)
 }
 
-//PRE: Que se pueda mover n celdas en alguna d
-procedure MoverN(d, n) {
-	repeat (n) {
-		Mover(d)
-	}
-}
-
-//PRO: Si existen n bolitas del mismo color hacia d devuelve True
-function hayNConsecutivasHacia(d, n) {
-	color := colorActual()
-	c := 0
-	while (puedeMoverHaciaN(d, n-c) 
-			&& hayElemento()
-			&& hayMismoColorHaciaN(d, 1)
-			&& c < n) {
-		Mover(d)
-		c := c + 1
-		
-	}
-	return (hayElemento() && hayBolitas(color) && c==n)
-}
-
 /*
-PRO: True si hay algun color de alguna bolita
-PRE: Si existen bolitas tienen que ser de 1 solo color
+PRO: Indica si hay algun color de alguna bolita
+PRE: Ninguna
+RET: Booleano
 */
 function hayElemento() {
-	ret := True
 	color := minColor()
-	foreach c in [minColor() .. maxColor()] {
-		if (hayBolitas(c) && ret == True) {
-			ret := False
-			color := c
-		}
+	while (not hayBolitas(color) && color /= maxColor()) {
+		color := siguiente(color)
 	}
 	return (hayBolitas(color))
 }
 
-function ifElse(condicion,v,f){
-	ret := f
-	if (condicion) {
-		ret := v
+# Ejercicio 2:
+/*
+PRO: Indica si el cabezal se encuentra sobre un elemento y existen n celdas consecutivas 
+(contando la celda actual) en @param dir que contengan elementos del mismo color que de la actual 
+PRE: Ninguna. 
+RET: Booleano
+@param d: Direccion
+@param n: Numero
+
+Estructurar solucion usando hayDeMismoColorNHacia()
+*/
+function hayNConsecutivasHacia(d, n) {
+	c := 1
+	while (c < n &&
+			hayElemento() && 	
+			hayDeMismoColorNHacia(1, d)) {
+		Mover(d)
+		c := c + 1
 	}
-   return(ret)
+	return (c==n)
+}
+
+//Solucion 2:
+function hayNConsecutivasHacia_2(d, n) {
+	boolRet := maxBool()
+	foreach c in [0 .. (n-1)] {
+		boolRet := boolRet && ifElse(hayElemento() && hayDeMismoColorNHacia(c, d), True, False)
+	}
+	return (boolRet)
+}
+
+# Ejercicio 3:
+/*
+PRO: Elimina del tablero todos aquellos elementos que pueden ser quemados.
+Esto implica, todos los grupos de 4 o mas elementos consecutivos.
+PRE: Ninguna
+
+Es posible que una vez quemado los elementos queden pedazos de pildoras flotando,
+y no hay que realizar ninguna accion para que estos caigan al suelo.
+*/
+procedure QuemarTodosLosElementosPosibles() {
+
 }
