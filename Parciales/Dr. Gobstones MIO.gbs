@@ -21,10 +21,18 @@ program {
 	//return (hayDeMismoColorNHacia(1, Norte))
 
 	# Ejercicio 2
-	//return (hayNConsecutivasHacia(Norte, 4))
-	return (hayNConsecutivasHacia_2(Norte, 5))
+	//return (hayNConsecutivasHacia(Norte, 2)) 
+	//return (hayNConsecutivasHacia_2(Norte, 2)) 
 
+	# Ejercicio 3
+    //return (cantMaxElementosConsecutivos(Norte))
+	//MarcarElementosQuemables(Norte, 4)
+	//MarcarElementosQuemablesLindantes()
+	//MarcarTodosLosElementosQuemables()
+	//QuemarTodosLosElementosPosibles()
 
+	# Ejercicio 4
+	BajarPildora() 
 }
 
 # Ejercicio 1:
@@ -83,10 +91,10 @@ function hayElemento() {
 /*
 PRO: Indica si el cabezal se encuentra sobre un elemento y existen n celdas consecutivas 
 (contando la celda actual) en @param dir que contengan elementos del mismo color que de la actual 
-PRE: Ninguna. 
+PRE: n>1
 RET: Booleano
 @param d: Direccion
-@param n: Numero
+@param n: Numero 
 
 Estructurar solucion usando hayDeMismoColorNHacia()
 */
@@ -120,5 +128,120 @@ Es posible que una vez quemado los elementos queden pedazos de pildoras flotando
 y no hay que realizar ninguna accion para que estos caigan al suelo.
 */
 procedure QuemarTodosLosElementosPosibles() {
+	MarcarTodosLosElementosQuemables()
+	d1 := Norte; d2 := Este
+	IrAlVertice(opuesto(d1), opuesto(d2))
+	while (puedeMoverSiguiente(d1, d2)) {
+		if (hayBolitas(Negro)) {
+			QuemarElemento()
+		}
+		MoverSiguiente(d1, d2)
+	}
+	if (hayBolitas(Negro)) {
+		QuemarElemento()
+	}
+}
 
+/*
+PRO: Quema 1 elemento del tablero
+PRE: La celda tiene que tener una marca de elemento quemable
+*/
+procedure QuemarElemento() {
+	LimpiarCelda()
+}
+
+/*
+PRO: Marca todas las celdas que tienen elementos quemables en el tablero 
+PRE: Ninguna
+*/
+procedure MarcarTodosLosElementosQuemables() {
+	d1 := Norte; d2 := Este
+	IrAlVertice(opuesto(d1), opuesto(d2))
+	while (puedeMoverSiguiente(d1, d2)) {
+		MarcarElementosQuemablesLindantes()
+		MoverSiguiente(d1, d2)
+	}
+	MarcarElementosQuemablesLindantes()
+}
+
+/*
+PRO: Marca todas las celdas que tienen elementos quemables en lindantes hacia el Norte y Este
+PRE: Ninguna
+*/
+procedure MarcarElementosQuemablesLindantes() {
+	foreach d in [Este, Norte] {
+		if (hayElemento() && cantMaxElementosConsecutivos(d) >= 4) {
+			MarcarElementosQuemables(d, cantMaxElementosConsecutivos(d))
+		}	
+	}
+	
+}
+
+/*
+PRO: Marca todos las celdas que tienen elementos quemables en una direccion y deja el cabezal en la celda actual
+PRE: En la celda actual tiene que existir un elemento a quemar y en dicha @param d tienen que 
+estar los consecutivos 
+@param d: Direccion
+@param n: Numero
+*/
+procedure MarcarElementosQuemables(d, n) {
+	foreach i in [1 .. n] {
+		Poner(Negro)
+		Mover(d)
+	}
+	MoverN(opuesto(d), n) -- NO OLVIDAR DEJAR EL CABEZAL EN LA ACTUAL EN PROCEDIMIENTOS CUANDO LO MUEVO
+}
+
+/*
+PRO: Prepara la cantidad maxima de elementos consecutivos en una direccion
+PRE: El cabezal tiene que estar posicionado en una celda con elemento
+RET: Numero
+@param d: Direccion
+*/
+function cantMaxElementosConsecutivos(d) {
+	n := 2
+	while (hayNConsecutivasHacia(d, n)) {
+		n := n + 1
+	}
+	return (n-1)
+}
+
+# Ejercicio 4
+/*
+PRO: Indica si, una vez que la pildora actual cae hasta la posicion mas abajo posible
+(sin moverla horizontalmente), se produce una quemada que elimina algun virus
+PRE: El cabezal se encuentra sobre la pildora actual, sobre la parte derecha de la misma
+RET: Booleano
+
+Notar que solo se quema una vez que la pildora cayo a la posicion mas al fondo posible y no 
+en el transcurso de la caida.
+Hacer uso sobre el procedimiento BajarPildora()
+*/
+function esQuemadaInteligente() {
+	return (True)
+}
+
+/*
+PRO: Baja la pildora sobre la que se encuentra el cabezal hasta la posicion lo mas abajo posible
+PRE: El cabezal se encuentra sobre la pildora actual, sobre la parte derecha de la misma
+*/
+procedure BajarPildoraHastaFondo() {
+	
+}
+
+/*
+PRO: Bajar la pildora sobre la que se encuentra el cabezal una celda mas al sur
+PRE: El cabezal se encuentra sobre la parte derecha de una pildora y la celda
+lindante al Sur y al SurOeste existen y estan vacias
+*/
+procedure BajarPildora() {
+	colorDerecho := colorActual()
+	LimpiarCelda()
+	Mover(Oeste)
+	colorIzquierdo := colorActual()
+	LimpiarCelda()
+	Mover(Sur)
+	Poner(colorIzquierdo)
+	Mover(Este)
+	Poner(colorDerecho)
 }
