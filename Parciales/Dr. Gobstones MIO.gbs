@@ -32,7 +32,11 @@ program {
 	//QuemarTodosLosElementosPosibles()
 
 	# Ejercicio 4
-	BajarPildora() 
+	//BajarPildora() 
+	//return (pildoraPuedeBajar())
+	//BajarPildoraHastaFondo()
+	//return (contarVirus())
+	return (esQuemadaInteligente())
 }
 
 # Ejercicio 1:
@@ -72,19 +76,6 @@ function colorActual() {
 		color := siguiente(color)
 	}
 	return (color)
-}
-
-/*
-PRO: Indica si hay algun color de alguna bolita
-PRE: Ninguna
-RET: Booleano
-*/
-function hayElemento() {
-	color := minColor()
-	while (not hayBolitas(color) && color /= maxColor()) {
-		color := siguiente(color)
-	}
-	return (hayBolitas(color))
 }
 
 # Ejercicio 2:
@@ -218,7 +209,38 @@ en el transcurso de la caida.
 Hacer uso sobre el procedimiento BajarPildora()
 */
 function esQuemadaInteligente() {
-	return (True)
+	virusIniciales := contarVirus()
+	BajarPildoraHastaFondo()
+	QuemarTodosLosElementosPosibles() 
+	return (virusIniciales > contarVirus())
+}
+
+/*
+PRO: Indica la cantidad de virus que hay en el tablero
+PRE: Ninguna
+RET: Booleano
+*/
+function contarVirus() {
+	d1 := Norte; d2 := Este
+	cantidadVirus := 0
+	IrAlVertice(opuesto(d1), opuesto(d2))
+	while (puedeMoverSiguiente(d1, d2)) {
+		cantidadVirus := cantidadVirus + ifElse(hayVirus(), 1, 0)
+		MoverSiguiente(d1, d2)	-- NO OLVIDAR MOVER A LA SIG POSICION SINO ENTRA EN UN BUCLE INFINITO
+	}
+	cantidadVirus := cantidadVirus + ifElse(hayVirus(), 1, 0)
+	return (cantidadVirus)
+}
+
+/*
+PRO: Indica si en una celda hay un virus
+PRE: Ninguna
+RET: Booleano
+*/
+function hayVirus() {
+	return (hayElemento() && 
+			nroBolitas(colorActual()) > 1 &&
+ 			(colorActual() == Azul || colorActual() == Verde || colorActual() == Rojo))
 }
 
 /*
@@ -226,8 +248,35 @@ PRO: Baja la pildora sobre la que se encuentra el cabezal hasta la posicion lo m
 PRE: El cabezal se encuentra sobre la pildora actual, sobre la parte derecha de la misma
 */
 procedure BajarPildoraHastaFondo() {
-	
+	while (pildoraPuedeBajar()) {
+		BajarPildora()
+	}
 }
+
+/*
+PRO: Indica si una pildora puede bajar, es decir, si existen y estan vacias una celda al sur y
+otra al suroeste con respecto a la actual.
+PRE: El cabezal tiene que estar posicionado en la parte derecha de una pildora
+RET: Booleano
+*/
+function pildoraPuedeBajar() {
+	return (puedeMover(Sur) && pildoraPuedeBajarParcial())
+}
+
+/*
+PRO: Indica si una pildora puede bajar, es decir, si al sur y suroeste de la actual las celdas 
+estan vacias
+PRE: El cabezal tiene que estar en la parte derecha de la pildora 
+RET: Booleano
+*/
+function pildoraPuedeBajarParcial() {
+	Mover(Sur)
+	surVacio := not hayElemento()
+	Mover(Oeste) 
+	surOesteVacio := not hayElemento()
+	return (surVacio && surOesteVacio)
+}
+
 
 /*
 PRO: Bajar la pildora sobre la que se encuentra el cabezal una celda mas al sur
