@@ -1,25 +1,114 @@
 -- Biblioteca
 
 /*
-PRO:
-PRE:
-Tipo:
-Cabezal:
+Procedimientos predefinidos Gobstones: 
+IrAlBorde(<dir>), VaciarTablero()
+
+Operaciones aritmeticas:
++, -, *, div, mod y ^
+
+Operaciones sobre colores:
+minColor() y maxColor()
+
+Operaciones sobre direcciones:
+minDir(), maxDir(), opuesto(<dir>) o -<dir>, anterior(<dir>), siguiente(<dir>)
+
+Operaciones sobre booleanos:
+not, &&, ||, minBool(), maxBool()
+
+Operaciones que combinan varios tipos:
+	comparacion por igualdad: ==, /=
+	comparacion de orden: <,>,<= y >=
+	movimiento en el orden: siguiente(<tipo>) y previo(<tipo>)
+
+Operaciones sobre el tablero:
+hayBolitas(<color>), puedeMover(<dir>), nroBolitas(<color>)
+
 */
 
-/*Comandos predefinidos por Gobstones:
+# ______________
 
-hayBolitas(c)
-nroBolitas(c)
-IrAlBorde(<dir>)
-VaciarTablero()
-puedeMover(<dir>)
+-- ESQUEMAS DE RECORRIDOS
 
-*/
+procedure LimpiarTablero() {
+		IrAlInicioT(Norte, Este)
+		while(puedeMoverT(Norte, Este)) {
+				LimpiarCelda()
+				MoverT(Norte, Este)
+		}
+		LimpiarCelda() 
+}
+
+procedure LimpiarFila() {
+		IrAlExtremo(Oeste)
+		while(puedeMover(Este)) {
+				LimpiarCelda()
+				Mover(Este)
+		}
+		LimpiarCelda()
+}
+
+procedure hayVaciaHacia(d) {
+		while(puedeMover(d) && not vacia()) {
+				Mover(d)
+		}
+		return(vacia())
+}
+
+procedure IrASiguienteColor(c) {
+		while(not hayBolitas(c)) {
+				MoverT(Norte, Este)
+		}
+}
+
+procedure haySiguienteColor(c) {
+		while(puedeMoverT(Norte, Este) &&
+				not hayBolitas(c)) {
+				MoverT(Norte, Este)
+		}
+		return(hayBolitas(c))
+}
+
+procedure IrAUltimaConColor(c) {
+		while(haySiguienteColor(c)) {
+				IrASiguienteColor(c)
+		}
+}
+
+procedure BuscarSiguienteVacia(d1,d2){
+//Pro:Posiciona el cabezal en la siguiente celda vacia del tablero en un recorrido en direcciones d1yd2
+//Pre:Ninguna
+//Para:d1 d2 direccion
+ IrAlInicioT(d1, d2)
+  while(puedeMoverT(d1, d2)&&not vacia()){
+    MoverT(d1, d2)
+  }
+}
+
+#________________________
 
 /*DESPLAZAMIENTOS*/
 
-//Mueve el cabezal tantas posiciones a @param dir como lo indique @param n
+/*
+PRO: Indica si puede mover @param n posiciones hacia @param dir
+PRE: Ninguna
+RET: Boolean
+@param d: Direccion
+@param n: Numero
+*/
+function puedeMoverN(d, n) {
+	c := n
+	while (puedeMover(d) && c > 0) {
+		Mover(d)
+		c := c - 1
+	}
+	return (c == 0)
+}
+
+/*
+PRO: Mueve el cabezal tantas posiciones a @param dir como lo indique @param n
+PRE: Se tiene que poder mover n veces en dir
+*/
 procedure MoverN(d, n) {
 	repeat (n) {
 		Mover(d)	
@@ -39,55 +128,38 @@ procedure PonerYMover(c, dir) {
 	Mover(dir)
 }
 
-//Recibe 4 numeros y se mueve en cualquier direccion. Lo hardcode√© porque no me deja anidar repeticiones.
-procedure Move(nro_N, nro_E, nro_S, nro_O) {
-		repeat (nro_N) {
-			Mover(Norte)
-		}
-		repeat (nro_E) {
-			Mover(Este)
-		}
-		repeat (nro_S) {
-			Mover(Sur)
-		}
-		repeat (nro_O) {
-			Mover(Oeste)
-		}
+/*
+PRO: Indica si el cabezal puede mover hacia la siguiente celda
+PRE: Ninguna
+RET: Booleano
+@param d1 y d2: Direccion
+*/
+function puedeMoverSiguiente(d1, d2) {
+	return (puedeMover(d1) || puedeMover(d2))
 }
 
 /*
-Cabezal: Termina en el extremo con direccion @param d desde la celda actual
+PRO: Mueve el cabezal a un vertice del tablero
+PRE: Ninguna
 */
-procedure IrAlExtremo(d) {
-	while(puedeMover(d)) {
-		Mover(d)
-	}
+procedure IrAlVertice(d1,d2){
+  IrAlBorde(d1)
+  IrAlBorde(d2)
 }
 
 /*
-.
-.
-.
-.
+PRO: Mueve el cabezal a la siguiente celda disponible de la actual
+PRE: El cabezal no tiene que estar en el vertice de las direcciones que son parametro,
+es decir, tiene que poder mover a la siguiente direccion
 */
-
-procedure IrAlInicioT(d1,d2){
-  IrAlExtremo(opuesto(d1))
-  IrAlExtremo(opuesto(d2))
-}
-
-procedure MoverT(d1,d2){
+procedure MoverSiguiente(d1,d2){
    if(puedeMover(d1)){
      Mover(d1)
    }else{
-  IrAlExtremo(opuesto(d1))
+  IrAlBorde(opuesto(d1))
   Mover(d2)
  }
 }
-
-//______________________________________
-
-/*DEVOLVER*/
 
 function ifElse(condicion,v,f){
 	ret := f
@@ -122,7 +194,32 @@ function hayBolitasDeTodosColores() {
 	return (devolver)
 }
 
+/*
+PRO: Indica si hay algun color de alguna bolita
+PRE: Ninguna
+RET: Booleano
+*/
+function conBolitas() {
+	color := minColor()
+	while (not hayBolitas(color) && color /= maxColor()) {
+		color := siguiente(color)
+	}
+	return (hayBolitas(color))
+}
 
+function lindanteConBolitas(d) {
+	return (puedeMover(d) && lindanteConBolitasParcial(d))
+}
+
+function lindanteConBolitasParcial(d) {
+	Mover(d)
+	return (conBolitas())
+}
+
+//Determina si la celda actual no tiene bolitas de ning¥un color
+function vacia() {
+	return (not conBolitas())
+}
 
 //Devuelve la cantidad de bolitas de todos los colores de la celda actual
 function cantBolitas() {
@@ -134,23 +231,22 @@ function cantBolitas() {
 }
 
 /*
-PRO: Devuelve true si hay bolitas en direccion @param d, y si devuelve false es porque no hay o no se pudo mover
-Cabezal: Termina en la celda actual
+PRO: Indica si hay una celda lindante en direccion @param d con bolitas de color @param c
+PRE: Ninguna
 */
-function hayBolitasAl_(c,d) {
-	ret := False	
-	if (puedeMover(d)) {
-		Mover(d)
-		ret := hayBolitas(c)
-		Mover(opuesto(d))	
-	}
-	return (ret)
+function lindanteConColor(c,d) {
+		return (puedeMover(d) && hayBolitasAlConColor(c,d))
 }
 
-
-
-function puedeMoverT(d1,d2){
-  return(puedeMover(d1)||puedeMover(d2))
+/*
+PRO: Indica si hay bolitas de @param c en la celda al @param d
+PRE: Se tiene que poder mover en d
+@param d: Direccion
+@param c: Color
+*/
+function hayBolitasAlConColor(c,d) {
+	Mover(d)
+	return (hayBolitas(c))
 }
 
 //______________________________________
@@ -271,10 +367,24 @@ procedure PonerCSiHayXeY(c, x, y) {
 }
 
 /*
-PRO: Pone una bolita de color c1 si hay la misma cant de bolitas de c1 y c2
+PRO: Pongo una azul si hay la misma cant de bolitas de todos los colores
 */
-procedure DesempatarDos(c1, c2) {
-	PonerSi(nroBolitas(c1) == nroBolitas(c2), c1)
+procedure Desempatar() {
+	x := cantBolitas() div 4
+	ret := True
+	foreach c in [minColor() .. maxColor()] {
+		if (verificoNroBolitas(c, x) == False) {
+			ret := False
+		}
+	}
+	if (ret == True) {
+		Poner(Azul)
+	}
+	
+}
+
+function verificoNroBolitas(c, x) {
+	return (nroBolitas(c) == x)
 }
 
 /*
@@ -350,30 +460,6 @@ procedure LimpiarCelda() {
 	}
 }
 
-
-/*
-PRO: P/c/color c saca TODAS las bolitas de color c si la actual tiene bolitas de un color mas chico que c.
-Por ej. Si tengo negro saco todas las rojas y verdes. Si tengo azul, saco todas.
-*/
-procedure DejarColorMinimo() {
-
-	foreach c in [minColor() .. maxColor()] {
-		if (hayBolitas(c)) {
-			SacaBolitas(c)
-		}
-	}
-}
-
-/*
-PRO: Saca todas las bolitas comenzando por el siguiente(c)
-*/
-procedure SacaBolitas(c) {
-	foreach colorASacar in [siguiente(c) .. maxColor()] {
-		if (hayBolitas(colorASacar) && not siguiente(c) == minColor()) {
-			SacarTodas_(colorASacar)
-		}
-	}
-}
 
 
 // _____________________________________
