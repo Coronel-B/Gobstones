@@ -138,3 +138,85 @@ procedure MoverSiguiente(d1,d2){
 
 -------------------
 
+/*
+PRO: Actualiza sobre el mapa las fabricas que elaboran menos de una cantidad 
+@param minimo de productos, agregando la cantidad necesaria para llegar a ese
+minimo
+PRE: Ninguna
+*/
+procedure ActualizarProduccionAl(minimo) {
+	d := Este; d2 := Norte
+	IrAlVertice(opuesto(d), opuesto(d2))
+	while (hayFabrica() && cantProductos() < minimo) {
+		ActualizarFabrica(cantProductos(), minimo, colorProducto())
+		MoverSiguiente(d, d2)
+	}
+	while (hayProximaFabrica()) {
+		IrAProximaFabrica()
+		if (cantProductos() < minimo) {
+			ActualizarFabrica(cantProductos(), minimo, colorProducto())
+		}
+	}
+}
+
+/*
+PRO: Indica la cantidad de productos que elabora una fabrica
+PRE: Tiene que existir una fabrica en la celda actual
+RET: Numero
+*/
+function cantProductos() {
+	return (nroBolitas(colorProducto()))
+}
+
+function colorProducto() {
+
+}
+
+/*
+PRO: Actualiza la cantidad de productos de una fabrica
+PRE: Tiene que existir 1 fabrica en la celda actual con cantidad de bolitas 
+a sacar > 0
+@param sacar y poner: Numero
+*/
+procedure ActualizarFabrica(sacar, poner, color) {
+	SacarN(color, sacar)
+	PonerN(color, poner)
+}
+
+/*
+PRO: Indica si existe una proxima fabrica en un recorrido (Este, Norte)
+PRE: Ninguna
+RET: Booleano
+*/
+function hayProximaFabrica() {
+	d := Este; d2 := Norte; 
+	bool := minBool()
+	if (hayFabrica() && puedeMoverSiguiente(d, d2)) {
+		MoverSiguiente(d, d2)
+		bool := maxBool()
+	}
+	while (not hayFabrica() && puedeMoverSiguiente(d, d2)) {
+		MoverSiguiente(d, d2)
+	}
+	return (hayFabrica() && bool == True)
+}
+
+/*
+PRO: Pone @param n bolitas de color @param c en la celda actual
+PRE: Con @param n > 0
+*/
+procedure PonerN(c, n) {
+	repeat (n) {
+		Poner(c)	
+	}
+}
+
+/*
+PRO: Saca @param n bolitas de color @param c de la celda actual
+PRE: Con @param n > 0. Tiene que haber al menos n bolitas en la celda actual.
+*/
+procedure SacarN(c, n) {
+	repeat (n) {
+		Sacar(c)	
+	}
+}
