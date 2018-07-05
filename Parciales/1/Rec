@@ -1,0 +1,140 @@
+/*
+Tailandia tiene distintas fabricas y en c/u produce 1 solo electrodomestico.
+Cada fabrica tiene elaboradas una cierta cantidad de electrodomesticos que 
+ya elaboro.
+*/
+
+program {
+	#return (hayCentroFabril())
+	#IrAProximaFabrica()
+
+}
+
+/*
+PRO: Indica si en una region actual hay fabrica
+PRE: Ninguna
+RET: Booleano
+*/
+function hayFabrica() {
+	return (hayBolitas(Negro))
+}
+
+/*
+El tablero representa un mapa de regiones o celdas, y en c/region puede haber
+1 o ninguna fabrica.
+PRO: Indica si existen fabricas en todos los sectores lindantes (ortogonales y diagonales)
+existentes (notar que en los bordes hay menos regiones)
+PRE: El cabezal se encuentra sobre una fabrica
+Requisito: Tiene que ser una funcion total
+RET: Booleano
+*/
+function hayCentroFabril() {
+	esCentro := True
+	c := 0 
+	direccion := minDir()
+
+	while (esCentro == True && c<5) {
+		esCentro := esCentro && (hayFabricaAl(direccion) || not puedeMover(direccion))
+		esCentro := esCentro && (hayFabricaAlDiagonal(direccion, siguiente(direccion)) ||
+								 (not puedeMover(direccion) || not puedeMover(siguiente(direccion)))
+								)
+		direccion := siguiente(direccion)
+		c := c+1
+	}
+	return (esCentro)
+}
+
+/*
+PRO: Indica si existe una fabrica en direccion d 
+PRE: Ninguna
+@param d: Direccion
+RET: Booleano
+*/
+function hayFabricaAl(d) {
+	return (puedeMover(d) && hayFabricaAlParcial(d))
+}
+
+/*
+PRO: Indica si existe una fabrica en direccion d
+PRE: Se tiene que poder mover una direccion en d
+@param d: Direccion
+RET: Booleano
+*/
+function hayFabricaAlParcial(d) {
+	Mover(d)
+	return (hayFabrica())
+}
+
+/*
+PRO: Indica si existe una fabrica en diagonal
+PRE: Ninguna
+@param d y d2: Direccion
+RET: Booleano
+*/
+function hayFabricaAlDiagonal(d, d2) {
+	return (puedeMover(d) && puedeMover(d2) && hayFabricaAlDiagonalParcial(d, d2))
+}
+
+/*
+PRO: Indica si existe una fabrica en diagonal
+PRE: Se tiene que poder mover una direccion en d y d2
+@param d y d2: Direccion
+RET: Booleano
+*/
+function hayFabricaAlDiagonalParcial(d, d2) {
+	Mover(d)
+	Mover(d2)
+	return (hayFabrica())
+}
+
+---------------
+
+/*
+PRO: Deposita el cabezal en la siguiente fabrica en un recorrido (Este, Norte)
+PRE: En ese recorrido existe una fabrica y si la actual es fabrica voy a la siguiente
+*/
+procedure IrAProximaFabrica() {
+	d := Este; d2 := Norte
+	if (hayFabrica()) {
+		MoverSiguiente(d, d2)
+	}
+	while (not hayFabrica() && puedeMoverSiguiente(d, d2)) {
+		MoverSiguiente(d, d2)
+	}	
+}
+
+/*
+PRO: Indica si el cabezal puede mover hacia la siguiente celda
+PRE: Ninguna
+RET: Booleano
+@param d1 y d2: Direccion
+*/
+function puedeMoverSiguiente(d1, d2) {
+	return (puedeMover(d1) || puedeMover(d2))
+}
+
+/*
+PRO: Mueve el cabezal a un vertice del tablero
+PRE: Ninguna
+*/
+procedure IrAlVertice(d1,d2){
+  IrAlBorde(d1)
+  IrAlBorde(d2)
+}
+
+/*
+PRO: Mueve el cabezal a la siguiente celda disponible de la actual
+PRE: El cabezal no tiene que estar en el vertice de las direcciones que son parametro,
+es decir, tiene que poder mover a la siguiente direccion
+*/
+procedure MoverSiguiente(d1,d2){
+   if(puedeMover(d1)){
+     Mover(d1)
+   }else{
+  IrAlBorde(opuesto(d1))
+  Mover(d2)
+ }
+}
+
+-------------------
+
