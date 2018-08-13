@@ -15,8 +15,11 @@ Introducción a la programación es una materia de la Universidad Nacional de Qu
 * Instalando el IDE PyGobstones en alguna plataforma
 	http://inpr.web.unq.edu.ar/instalacion-de-pygobstones/
 	
-* https://gobstones.github.io/gobstones-jr/?course=gobstones/curso-inpr-unq
-
+* Para empezar: 
+	https://gobstones.github.io/gobstones-jr/?course=gobstones/curso-inpr-unq
+	
+* Manual técnico para Gobstones Web:
+	https://github.com/gobstones/gobstones-web/wiki/Manual-t%C3%A9cnico
 
 ### Lineamientos de contribución 
 
