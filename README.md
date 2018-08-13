@@ -1,4 +1,4 @@
-# Bienvenidos #
+# Bienvenidos 
 
 Introducción a la programación es una materia de la Universidad Nacional de Quilmes.
 
@@ -8,21 +8,22 @@ Introducción a la programación es una materia de la Universidad Nacional de Qu
 	independientemente de las herramientas, en un gran contenido práctico.
 * 1.0
 
-### ¿Cómo me preparo? ###
+### ¿Cómo me preparo? 
 
 * Descargando el material del repositorio (libro, teóricas, guías prácticas y modelos de parciales): 
 
 * Instalando el IDE PyGobstones en alguna plataforma
 	http://inpr.web.unq.edu.ar/instalacion-de-pygobstones/
+	
+* https://gobstones.github.io/gobstones-jr/?course=gobstones/curso-inpr-unq
 
 
-### Lineamientos de contribución ###
+### Lineamientos de contribución 
 
 * Probar los ejercicios en el IDE
 * Revisación de código
 * Sugerir cambios o mejoras optimizadas.
 
-
-### Contacto ###
+### Contacto 
 
 * braiancoronelosmar@gmail.com
