@@ -17,6 +17,7 @@ Introducción a la programación es una materia de la Universidad Nacional de Qu
 	
 * Para empezar: 
 	https://gobstones.github.io/gobstones-jr/?course=gobstones/curso-inpr-unq
+	https://gobstones.github.io/gobstones-sr/?course=gobstones/curso-inpr-unq
 	
 * Manual técnico para Gobstones Web:
 	https://github.com/gobstones/gobstones-web/wiki/Manual-t%C3%A9cnico
