@@ -1,9 +1,0 @@
-<BoardCoding>
-    <Cell>
-        <Red>0</Red>
-        <Green>0</Green>
-        <Blue>0</Blue>
-        <Black>1</Black>
-        <Image>src/peon.png</Image>
-    </Cell>
-</BoardCoding>
