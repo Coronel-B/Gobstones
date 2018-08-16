@@ -1,0 +1,152 @@
+name: Piezas de Ajedrez
+rules:
+  - image: casilleroSinPieza.png
+    when:
+      black: 0
+      blue: 0
+      green: 0
+      red: 0
+  - image: peonNegro.png
+    when:
+      black: 1
+      blue: 0
+      green: 0
+      red: 0
+  - image: torreNegra.png
+    when:
+      black: 4
+      blue: 0
+      green: 0
+      red: 0
+  - image: caballoNegro.png
+    when:
+      black: 3
+      blue: 0
+      green: 0
+      red: 0
+  - image: alfilNegro.png
+    when:
+      black: 2
+      blue: 0
+      green: 0
+      red: 0
+  - image: reyNegro.png
+    when:
+      black: 6
+      blue: 0
+      green: 0
+      red: 0
+  - image: reinaNegra.png
+    when:
+      black: 5
+      blue: 0
+      green: 0
+      red: 0
+  - image: peonBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 1
+      green: 0
+      red: 1
+  - image: torreBlancaSeleccionado.png
+    when:
+      black: 0
+      blue: 4
+      green: 0
+      red: 1
+  - image: caballoBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 3
+      green: 0
+      red: 1
+  - image: alfilBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 2
+      green: 0
+      red: 1
+  - image: reyBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 6
+      green: 0
+      red: 1
+  - image: reinaBlancaSeleccionado.png
+    when:
+      black: 0
+      blue: 5
+      green: 0
+      red: 1
+    - image: peonNegroSeleccionado.png
+    when:
+      black: 1
+      blue: 0
+      green: 0
+      red: 1
+  - image: torreNegraSeleccionado.png
+    when:
+      black: 4
+      blue: 0
+      green: 0
+      red: 1
+  - image: caballoNegroSeleccionado.png
+    when:
+      black: 3
+      blue: 0
+      green: 0
+      red: 1
+  - image: alfilNegroSeleccionado.png
+    when:
+      black: 2
+      blue: 0
+      green: 0
+      red: 1
+  - image: reyNegroSeleccionado.png
+    when:
+      black: 6
+      blue: 0
+      green: 0
+      red: 1
+  - image: reinaNegraSeleccionado.png
+    when:
+      black: 5
+      blue: 0
+      green: 0
+      red: 1
+  - image: peonBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 1
+      green: 0
+      red: 1
+  - image: torreBlancaSeleccionado.png
+    when:
+      black: 0
+      blue: 4
+      green: 0
+      red: 1
+  - image: caballoBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 3
+      green: 0
+      red: 1
+  - image: alfilBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 2
+      green: 0
+      red: 1
+  - image: reyBlancoSeleccionado.png
+    when:
+      black: 0
+      blue: 6
+      green: 0
+      red: 1
+  - image: reinaBlancaSeleccionado.png
+    when:
+      black: 0
+      blue: 5
+      green: 0
+      red: 1
