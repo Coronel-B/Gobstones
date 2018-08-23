@@ -216,7 +216,7 @@ function lindanteConBolitasParcial(d) {
 	return (conBolitas())
 }
 
-//Determina si la celda actual no tiene bolitas de ning´un color
+//Determina si la celda actual no tiene bolitas de ningï¿½un color
 function vacia() {
 	return (not conBolitas())
 }
@@ -313,6 +313,16 @@ Pre: Recibe dos @params de tipo Color
 */
 procedure PonerTantasXComoY(x, y) {
 	PonerN(nroBolitas(y), x)
+}
+
+/*
+PRO: Pone una bolita de c/color en la actual
+PRE: Ninguna
+*/
+procedure PonerUnaDeCada() {
+    foreach i in [minColor() .. maxColor()] {
+        Poner(i)
+    }
 }
 
 /*
