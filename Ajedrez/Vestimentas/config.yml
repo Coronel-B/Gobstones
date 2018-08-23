@@ -1,150 +1,156 @@
 name: Piezas de Ajedrez
 rules:
-  - image: casilleroSinPieza.png
+  - image: casilleroVacio.png
     when:
-      black: 0
+      black: 10
       blue: 0
       green: 0
       red: 0
-  - image: peonNegro.png
+  - image: casilleroDespuesDeMover.png
+    when:
+      black: 11
+      blue: 0
+      green: 0
+      red: 0
+  - image: peonN.png
     when:
       black: 1
       blue: 0
       green: 0
       red: 0
-  - image: torreNegra.png
+  - image: torreN.png
     when:
       black: 4
       blue: 0
       green: 0
       red: 0
-  - image: caballoNegro.png
+  - image: caballoN.png
     when:
       black: 3
       blue: 0
       green: 0
       red: 0
-  - image: alfilNegro.png
+  - image: alfilN.png
     when:
       black: 2
       blue: 0
       green: 0
       red: 0
-  - image: reyNegro.png
+  - image: reyN.png
     when:
       black: 6
       blue: 0
       green: 0
       red: 0
-  - image: reinaNegra.png
+  - image: reinaN.png
     when:
       black: 5
       blue: 0
       green: 0
       red: 0
-  - image: peonBlancoSeleccionado.png
+  - image: peonB.png
     when:
       black: 0
       blue: 1
       green: 0
       red: 1
-  - image: torreBlancaSeleccionado.png
+  - image: torreB.png
     when:
       black: 0
       blue: 4
       green: 0
       red: 1
-  - image: caballoBlancoSeleccionado.png
+  - image: caballoB.png
     when:
       black: 0
       blue: 3
       green: 0
       red: 1
-  - image: alfilBlancoSeleccionado.png
+  - image: alfilB.png
     when:
       black: 0
       blue: 2
       green: 0
       red: 1
-  - image: reyBlancoSeleccionado.png
+  - image: reyB.png
     when:
       black: 0
       blue: 6
       green: 0
       red: 1
-  - image: reinaBlancaSeleccionado.png
+  - image: reinaB.png
     when:
       black: 0
       blue: 5
       green: 0
       red: 1
-    - image: peonNegroSeleccionado.png
+    - image: peonNSeleccionado.png
     when:
       black: 1
       blue: 0
       green: 0
       red: 1
-  - image: torreNegraSeleccionado.png
+  - image: torreNSeleccionado.png
     when:
       black: 4
       blue: 0
       green: 0
       red: 1
-  - image: caballoNegroSeleccionado.png
+  - image: caballoNSeleccionado.png
     when:
       black: 3
       blue: 0
       green: 0
       red: 1
-  - image: alfilNegroSeleccionado.png
+  - image: alfilNSeleccionado.png
     when:
       black: 2
       blue: 0
       green: 0
       red: 1
-  - image: reyNegroSeleccionado.png
+  - image: reyNSeleccionado.png
     when:
       black: 6
       blue: 0
       green: 0
       red: 1
-  - image: reinaNegraSeleccionado.png
+  - image: reinaNSeleccionado.png
     when:
       black: 5
       blue: 0
       green: 0
       red: 1
-  - image: peonBlancoSeleccionado.png
+  - image: peonBSeleccionado.png
     when:
       black: 0
       blue: 1
       green: 0
       red: 1
-  - image: torreBlancaSeleccionado.png
+  - image: torreBSeleccionado.png
     when:
       black: 0
       blue: 4
       green: 0
       red: 1
-  - image: caballoBlancoSeleccionado.png
+  - image: caballoBSeleccionado.png
     when:
       black: 0
       blue: 3
       green: 0
       red: 1
-  - image: alfilBlancoSeleccionado.png
+  - image: alfilBSeleccionado.png
     when:
       black: 0
       blue: 2
       green: 0
       red: 1
-  - image: reyBlancoSeleccionado.png
+  - image: reyBSeleccionado.png
     when:
       black: 0
       blue: 6
       green: 0
       red: 1
-  - image: reinaBlancaSeleccionado.png
+  - image: reinaBSeleccionado.png
     when:
       black: 0
       blue: 5
