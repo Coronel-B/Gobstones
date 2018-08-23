@@ -2,15 +2,21 @@ name: Piezas de Ajedrez
 rules:
   - image: casilleroVacio.png
     when:
-      black: 10
+      black: 0
       blue: 0
       green: 0
       red: 0
-  - image: casilleroDespuesDeMover.png
+  - image: casilleroLuegoBlancasMueven.png
     when:
-      black: 11
-      blue: 0
-      green: 0
+      black: 0
+      blue: 1
+      green: 1
+      red: 1
+  - image: casilleroLuegoNegrasMueven.png
+    when:
+      black: 1
+      blue: 1
+      green: 1
       red: 0
   - image: peonN.png
     when:
@@ -51,57 +57,57 @@ rules:
   - image: peonB.png
     when:
       black: 0
-      blue: 1
+      blue: 0
       green: 0
       red: 1
   - image: torreB.png
     when:
       black: 0
-      blue: 4
+      blue: 0
       green: 0
-      red: 1
+      red: 4
   - image: caballoB.png
     when:
       black: 0
-      blue: 3
+      blue: 0
       green: 0
-      red: 1
+      red: 3
   - image: alfilB.png
     when:
       black: 0
-      blue: 2
+      blue: 0
       green: 0
-      red: 1
+      red: 2
   - image: reyB.png
     when:
       black: 0
-      blue: 6
+      blue: 0
       green: 0
-      red: 1
+      red: 6
   - image: reinaB.png
     when:
       black: 0
-      blue: 5
+      blue: 0
       green: 0
-      red: 1
+      red: 5
     - image: peonNSeleccionado.png
     when:
       black: 1
       blue: 0
-      green: 0
-      red: 1
+      green: 1
+      red: 0
   - image: torreNSeleccionado.png
     when:
       black: 4
       blue: 0
-      green: 0
-      red: 1
+      green: 1
+      red: 0
   - image: caballoNSeleccionado.png
     when:
       black: 3
       blue: 0
-      green: 0
-      red: 1
+      green: 1
+      red: 0
   - image: alfilNSeleccionado.png
     when:
       black: 2
@@ -112,47 +118,47 @@ rules:
     when:
       black: 6
       blue: 0
-      green: 0
-      red: 1
+      green: 1
+      red: 0
   - image: reinaNSeleccionado.png
     when:
       black: 5
       blue: 0
-      green: 0
-      red: 1
+      green: 1
+      red: 0
   - image: peonBSeleccionado.png
     when:
       black: 0
-      blue: 1
-      green: 0
+      blue: 0
+      green: 1
       red: 1
   - image: torreBSeleccionado.png
     when:
       black: 0
-      blue: 4
-      green: 0
-      red: 1
+      blue: 0
+      green: 1
+      red: 4
   - image: caballoBSeleccionado.png
     when:
       black: 0
-      blue: 3
-      green: 0
-      red: 1
+      blue: 0
+      green: 1
+      red: 3
   - image: alfilBSeleccionado.png
     when:
       black: 0
-      blue: 2
-      green: 0
-      red: 1
+      blue: 0
+      green: 1
+      red: 2
   - image: reyBSeleccionado.png
     when:
       black: 0
-      blue: 6
-      green: 0
-      red: 1
+      blue: 0
+      green: 1
+      red: 6
   - image: reinaBSeleccionado.png
     when:
       black: 0
-      blue: 5
-      green: 0
-      red: 1
+      blue: 0
+      green: 1
+      red: 5
