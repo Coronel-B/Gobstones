@@ -1,5 +1,61 @@
+/*
+AJEDREZ
+
+Es un juego en el que intervienen 2 jugadores, que mueven piezas en un tablero 
+de tamaño fijo dividido en casilleros. 
+El tablero del juego se representa con el tablero de Gobstones.
+Las piezas pueden ser de 6 clases diferentes y c/u con un orden de precendencia 
+en terminos de cual vale más:
+. peón -> 1
+. alfil -> 2
+. caballo -> 3 
+. torre -> 4 
+. reina -> 5 
+. rey -> 6
+
+Cada jugador empieza con 8 peones, 2 torres, 2 caballos, 2 alfiles, 1 reina y 
+1 rey. Con todas las piezas blancas o todas negras.
+
+Los movimientos de las piezas son los siguientes: 
+
+La única pieza que puede saltar piezas propias y enemigas es el caballo.
+Si una pieza se mueve sobre una casilla ocupada por una pieza del oponente, 
+captura a dicha pieza, que se retira permanentemente del tablero.
+
+. Peon: En el primer movimiento puede avanzar 2 posiciones o capturar. Captura 
+avanzando una posición en diagonal hacia izquierda o derecha. A partir del 
+segundo movimiento inclusive avanza 1 posición o captura.
+. Alfil: Mueve y captura hacia todas las diagonales.
+. Caballo: Mueve en L (2 posiciones ortogonales y 1 a la izquierda o derecha)
+hacia todas las direcciones.
+. Torre: Mueve y captura hacia todas las ortogonales cualquier número de casillas.
+. Rey: Mueve y captura hacia todas las ortogonales y diagonales.
+. Reina: Mueve y captura como todas las piezas menos como el caballo.
+
+El rey de un jugador está en jaque si puede ser capturado por una pieza del 
+oponente. El objetivo del juego es dar jaque mate, que consiste en dar jaque
+al rey del oponente, de tal manera que le resulte imposible evitar el jaque.
+______
+
+Representación:
+
+Piezas negras: bolitas de color Negro
+Piezas blancas: bolitas de color Rojo
+Seleccionadas: bolitas de color de la pieza + 1 Verde
+Casillero vacío: Sin bolitas
+Pieza movida: bolitas de color de la pieza + 1 Azul y 1 Verde
+
+*/
 program {
 
+    return (1)    
+    
 }
 
-function 
+
+function peon() {return(1)}
+function alfil() {return(2)}
+function caballo() {return(3)}
+function torre() {return(4)}
+function reina() {return(5)}
+function rey() {return(6)}
