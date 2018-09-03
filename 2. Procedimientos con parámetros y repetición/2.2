@@ -1,0 +1,61 @@
+/**
+ * PRO: Dibuja un cuadrado de @param lado X lado de @param colorCuadrado
+ * PRE: Hay @param lado celdas al Noreste
+ * CABEZAL: Termina @param lado hacia el Noreste
+
+ */
+program {
+    DibujarCuadrado(Azul, 5)
+}
+
+/**
+ * PRO: Dibuja un cuadrado de @param lado X lado de @param colorCuadrado
+ * PRE: Hay @param lado celdas al Noreste
+ * CABEZAL: Termina @param lado-1 hacia el Noreste
+ * @param lado: Numero que denota el lado del cuadrado
+ * @param colorCuadrado: Color que denota el color del cuadrado
+ */
+procedure DibujarCuadrado(colorCuadrado, lado) {
+    repeat (lado-1) {
+        DibujarLinea(colorCuadrado, Este, lado)
+        PosicionarASiguienteLinea(Norte)
+    }
+    DibujarLinea(colorCuadrado, Este, lado)
+    Volver(lado-1, Sur)
+}
+/**
+ * PRO: Posiciona el cabezal a una siguiente fila o columna para dibujar una linea
+ * PRE: Hay una celda en @param dir
+ * @param dir: Direccion en la cual se posiciona el cabezal
+ */
+procedure PosicionarASiguienteLinea(dir) {
+    Mover(dir)
+}
+
+
+/**
+ * PRO: Dibuja una linea de longitud @param longitudLinea de @param colorLinea al @param dirLinea
+ * PRE: Tiene que existir @param longitudLinea-1 celdas al @param dir
+ * @param longitudLinea: Numero que denota la longitud de la linea
+ * @param colorLinea: Color de la linea
+ * @param dirLinea: Direccion en la cual se dibuja la linea
+ */
+procedure DibujarLinea(colorLinea, dirLinea, longitudLinea) {
+    repeat (longitudLinea-1) {
+        Poner(colorLinea)
+        Mover(dirLinea)
+    }
+    Poner(colorLinea)
+    Volver(longitudLinea-1, opuesto(dirLinea)) 
+}
+
+/**
+ * PRO: Desplaza el cabezal @param cantidad veces al @param dir
+ * PRE: Hay @param cantidad celdas al @param dir
+ * CABEZAL: Termina @param cantidad veces hacia @param dir
+ */
+procedure Volver(cantidad, dir) {
+    repeat (cantidad) {
+        Mover(dir)
+    }
+}
