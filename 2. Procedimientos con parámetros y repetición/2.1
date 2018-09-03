@@ -15,7 +15,6 @@ procedure ConstruirEscaleraAzulDe4Escalones() {
  * CABEZAL: Termina al Este de la actual
  * @param colorEscalon: Color del Escalon
  */
-*/
 procedure ConstruirEscalon(colorEscalon) {
     Poner(colorEscalon)
     Mover(Este)
@@ -26,7 +25,7 @@ procedure ConstruirEscalon(colorEscalon) {
  * PRO: Desplaza el cabezal a otra celda para dibujar un siguiente escalon
  * PRE: Tiene que existir una celda al @param dir
  * CABEZAL: Termina al @param dir de la actual
- * @param dir: Direccion en la cual terminará el cabezal
+ * @param dir: Direccion en la cual terminara el cabezal
  */
 procedure PosicionarAlSigEscalon(dir) {
     Mover(dir)
@@ -40,8 +39,9 @@ procedure PosicionarAlSigEscalon(dir) {
  * @param dir: Direccion hacia donde se construye la escalera
  */
 procedure ConstruirEscalera(colorEscalon, dir, numeroEscalones) {
-    repeat (numeroEscalones) {
+    repeat (numeroEscalones-1) {
         ConstruirEscalon(colorEscalon)
         PosicionarAlSigEscalon(dir)
     }
+		ConstruirEscalon(colorEscalon)
 }
