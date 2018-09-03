@@ -1,0 +1,47 @@
+program {
+    ConstruirEscalera(Azul, Norte, 3)
+}
+
+procedure ConstruirEscaleraAzulDe4Escalones() {
+    Poner(Azul) Mover (Este) Poner (Azul) Mover (Norte)
+    Poner(Azul) Mover (Este) Poner (Azul) Mover (Norte)
+    Poner(Azul) Mover (Este) Poner (Azul) Mover (Norte)
+    Poner(Azul) Mover (Este) Poner (Azul)
+}
+
+/**
+ * PRO: Construye un escalon compuesto por 2 celdas
+ * PRE: Tiene que existir una celda al Este
+ * CABEZAL: Termina al Este de la actual
+ * @param colorEscalon: Color del Escalon
+ */
+*/
+procedure ConstruirEscalon(colorEscalon) {
+    Poner(colorEscalon)
+    Mover(Este)
+    Poner(colorEscalon)
+}
+
+/**
+ * PRO: Desplaza el cabezal a otra celda para dibujar un siguiente escalon
+ * PRE: Tiene que existir una celda al @param dir
+ * CABEZAL: Termina al @param dir de la actual
+ * @param dir: Direccion en la cual terminará el cabezal
+ */
+procedure PosicionarAlSigEscalon(dir) {
+    Mover(dir)
+}
+
+/**
+ * PRO: Construye una escalera con @param n escalones de @param colorEscalon hacia @param dir
+ * PRE: Tiene que existir @param n celdas en @param dir
+ * @param numeroEscalones: Numero de escalones
+ * @param colorEscalon: Color de los escalones
+ * @param dir: Direccion hacia donde se construye la escalera
+ */
+procedure ConstruirEscalera(colorEscalon, dir, numeroEscalones) {
+    repeat (numeroEscalones) {
+        ConstruirEscalon(colorEscalon)
+        PosicionarAlSigEscalon(dir)
+    }
+}
