@@ -1,3 +1,7 @@
+program {
+  DibujarCuadrado(3, Verde)
+}
+
 procedure DibujarCuadrado(largoLado, colorCuadrado) {
 /*
     PRO: Dibuja un cuadrado 
@@ -5,16 +9,24 @@ procedure DibujarCuadrado(largoLado, colorCuadrado) {
     @param largoLado: Numero. Es el largo de los lados del cuadrado
     @param colorCuadrado: Color. Es el color del cuadrado 
 */
-  DibujarLíneaAlNorte()
-  DibujarLíneaAlEste()
-  DibujarLíneaAlSur()
-  DibujarLíneaAlOeste()
+  foreach direccion in [minDir() .. maxDir()] {
+      DibujarLinea(largoLado-1, colorCuadrado, direccion)
+      Mover(direccion)
+  }
 }
 
-procedure DibujarLinea(largoLinea, colorLinea) {
+procedure DibujarLinea(largoLinea, colorLinea, sentidoLinea) {
 /*
-    PRO: Dibuja una linea
-    PRE: El largo de la linea tiene que ser de al menos 2 sino es un punto
-    @param
+    PRO: Dibuja una linea a partir de la celda actual
+    PRE: @param largoLinea >= 2 sino es un punto y tienen que existir @param largoLinea-1 celdas
+        hacia @param sentidoLinea
+    @param largoLinea: Numero. Es el largo de la linea
+    @param colorLinea. Color. Es el color de la linea
+    @param sentidoLinea. Direccion. Es el sentido de la linea
 */
+    repeat (largoLinea-1) {
+        Poner(colorLinea)
+        Mover(sentidoLinea)
+    }
+    Poner(colorLinea)
 }
