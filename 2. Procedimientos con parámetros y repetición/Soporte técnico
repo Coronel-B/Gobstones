@@ -8,17 +8,92 @@
 
 
 program{
-    RepararEdificio()
+    RepararMaquinasDelEdificio()
 }
 
+procedure RepararMaquinasDelEdificio(){
+//Proposito: Repara todas las maquinas del edificio ... el cabezal queda en el primer 
+    -- Hall del edificio(el hall mas al Sur del edificio)
+//Precondicion: El cabezal debe estar en la hall del edificio.(Celda 0,0)
+    RepararTodosLosPisos()
+    VolverAlHallDelEdificio()
+}
 
-procedure SacarTodas(color){
-//Saca todas las bolias del color que recibe como parametro de la celda actual
-//precondicion: Ninguna
-    repeat (nroBolitas(color)) {
-        Sacar(color)
+procedure RepararTodosLosPisos() {
+/*
+    PRO: Repara todos los pisos del edificio
+    PRE: En la actual se encuentra el hall de edificio
+*/
+    repeat (nroBolitas(Azul)) {
+        IrAPiso(Norte)
+        RepararPiso()
     }
+}
+
+procedure VolverAlHallDelEdificio() {
+/*
+    PRO: Mueve el cabezal al hall del edificio
+    PRE: El cabezal se encuentra en algun piso del edificio
+*/    
+    IrAlBorde(Sur)
+}
+
+procedure IrAPiso(sentidoPiso) {
+/*
+    PRO: Lleva al tecnico a un piso
+    PRE: Tiene que existir un piso en el sentido que se va a dirigir el tecnico
+    @param sentidoPiso: Direccion. Sentido en el cual se encuentra el piso
+*/
+    Mover(sentidoPiso)
     
+}
+
+procedure RepararPiso(){
+//Proposito: Repara todas las maquinas del piso en cuestion
+//Es decir, saca todos los Virus de las maquinas del Piso.
+//AL terminar el cabezal debe quedar en la celda inicial
+//Precondicion: La celda actual es el Hall del piso.
+    RepararMaquinasDelPiso(nroBolitas(Negro))
+}
+
+-- Para no mezclar representaciones tendria que usar variables. Por ende, uso esta estrategia
+procedure RepararMaquinasDelPiso(cantMaquinas) {
+/*
+    PRO: Repara todas las maquinas de un piso 
+    PRE: La actual es el Hall del piso
+*/
+    repeat (cantMaquinas) {
+        IrAMaquina(Este)
+        RepararMaquina()
+    }
+    VolverAlHall(cantMaquinas)
+}
+
+procedure IrAMaquina(sentidoMaquina) {
+/*
+    PRO: Lleva al tecnico a una maquina
+    PRE: Tiene que existir una maquina en el sentido que se va a dirigir el tecnico
+    @param sentidoMaquina: Direccion. Sentido en el cual se encuentra la maquina
+*/
+    Mover(sentidoMaquina)
+}
+
+procedure RepararMaquina(){
+//Proposito: elimina los virus de la celda actual y deja la mara de OK
+//Precondicion: El cabezal debe estar en una maquina con Virus y sin marcas de Ok.
+    EliminarVirus()
+    PonerMarcaOk()
+}
+
+procedure VolverAlHall(cantMaquinas) {
+/*
+    PRO: Vuelve al hall 
+    PRE: No tiene que estar en el hall del piso y tiene que estar en 
+     la ultima maquina del piso
+*/
+    repeat (cantMaquinas) {
+        Mover(Oeste)
+    }
 }
 
 procedure EliminarVirus(){
@@ -34,69 +109,11 @@ procedure PonerMarcaOk(){
     Poner(Verde)
 }
 
-procedure RepararMaquina(){
-//Proposito: elimina los virus de la celda actual y deja la mara de OK
-//Precondicion: El cabezal debe estar en una maquina con Virus y sin marcas de Ok.
-    EliminarVirus()
-    PonerMarcaOk()
-}
-
-procedure RepararPiso(){
-//Proposito: Repara todas las maquinas del piso en cuestion
-//Es decir, saca todos los Virus de las maquinas del Piso.
-//AL terminar el cabezal debe quedar en la celda inicial
-//Precondicion: La celda actual es el Hall del piso.
-    RepararMaquinas(nroBolitas(Negro))
-}
-
-procedure RepararMaquinas(cantMaquinas) {
-/*
-    PRO: Repara todas las maquinas de un piso 
-    PRE: La actual es el Hall del piso
-*/
-    repeat (cantMaquinas) {
-        IrAMaquina(Este)
-        RepararMaquina()
+procedure SacarTodas(color){
+//Saca todas las bolias del color que recibe como parametro de la celda actual
+//precondicion: Ninguna
+    repeat (nroBolitas(color)) {
+        Sacar(color)
     }
-    VolverAHall(cantMaquinas)
-}
-
-procedure IrAMaquina(sentidoMaquina) {
-/*
-    PRO: Lleva al tecnico a una maquina
-    PRE: Tiene que existir una maquina en el sentido que se va a dirigir el tecnico
-    @param sentidoMaquina: Direccion. Sentido en el cual se encuentra la maquina
-*/
-    Mover(sentidoMaquina)
-}
-
-procedure VolverAHall(cantMaquinas) {
-/*
-    PRO: Vuelve al hall 
-    PRE: No tiene que estar en el hall del piso y tiene que estar en 
-     la ultima maquina del piso
-*/
-    repeat (cantMaquinas) {
-        Mover(Oeste)
-    }
-}
-
-procedure RepararEdificio(){
-//Proposito: Repara todas las maquinas del edificio ... el cabezal queda en el ultimo 
-    -- Hall del edificio(el hall mas al Norte del edificio)
-//Precondicion: El cabezal debe estar en la hall del edificio.(Celda 0,0)
-    repeat (nroBolitas(Azul)) {
-        IrAPiso(Norte)
-        RepararPiso()
-    }
-}
-
-procedure IrAPiso(sentidoPiso) {
-/*
-    PRO: Lleva al tecnico a un piso
-    PRE: Tiene que existir un piso en el sentido que se va a dirigir el tecnico
-    @param sentidoPiso: Direccion. Sentido en el cual se encuentra el piso
-*/
-    Mover(sentidoPiso)
     
 }
