@@ -55,21 +55,24 @@ procedure RepararMaquinas(cantMaquinas) {
     PRE: La actual es el Hall del piso
 */
     repeat (cantMaquinas) {
-        Mover(Este)
+        IrAMaquina(Este)
         RepararMaquina()
     }
-    Volver(cantMaquinas)
+    VolverAHall(cantMaquinas)
 }
 
-procedure IrAMaquina()
-
-procedure IrAPiso
-
-procedure VolverAHall() {}
-
-procedure Volver(cantMaquinas) {
+procedure IrAMaquina(sentidoMaquina) {
 /*
-    PRO: Vuelve al hall del piso
+    PRO: Lleva al tecnico a una maquina
+    PRE: Tiene que existir una maquina en el sentido que se va a dirigir el tecnico
+    @param sentidoMaquina: Direccion. Sentido en el cual se encuentra la maquina
+*/
+    Mover(sentidoMaquina)
+}
+
+procedure VolverAHall(cantMaquinas) {
+/*
+    PRO: Vuelve al hall 
     PRE: No tiene que estar en el hall del piso y tiene que estar en 
      la ultima maquina del piso
 */
@@ -83,7 +86,17 @@ procedure RepararEdificio(){
     -- Hall del edificio(el hall mas al Norte del edificio)
 //Precondicion: El cabezal debe estar en la hall del edificio.(Celda 0,0)
     repeat (nroBolitas(Azul)) {
-        Mover(Norte)
+        IrAPiso(Norte)
         RepararPiso()
     }
+}
+
+procedure IrAPiso(sentidoPiso) {
+/*
+    PRO: Lleva al tecnico a un piso
+    PRE: Tiene que existir un piso en el sentido que se va a dirigir el tecnico
+    @param sentidoPiso: Direccion. Sentido en el cual se encuentra el piso
+*/
+    Mover(sentidoPiso)
+    
 }
