@@ -1,0 +1,89 @@
+//Representaremos:
+//- a los virus con 1 a 6 bolitas rojas
+//- a una maquina sin virus con una bolita Verde.
+//- el Hall del edificio en la celda 0,0 con la cantidad de pisos representados 
+    -- por las bolitas Azules.
+//- el Hall del piso en la celda mas oeste de cada piso, con la cantidad de maquina 
+    -- del piso representados por las bolitas Negras 
+
+
+program{
+    RepararEdificio()
+}
+
+
+procedure SacarTodas(color){
+//Saca todas las bolias del color que recibe como parametro de la celda actual
+//precondicion: Ninguna
+    repeat (nroBolitas(color)) {
+        Sacar(color)
+    }
+    
+}
+
+procedure EliminarVirus(){
+//Precondicion: La celda actual es una maquina con virus
+//Proposito: Elimina todos los virus 
+//Saca todos los virus es decir las bolitas Rojas de la celda actual
+    SacarTodas(Rojo)
+}
+
+procedure PonerMarcaOk(){
+//Proposito:Pone una bolita Verde en la maquina actual
+//Precondicion: La maquina actual no tiene virus ni la marca de ok ( bolitas Verdes)
+    Poner(Verde)
+}
+
+procedure RepararMaquina(){
+//Proposito: elimina los virus de la celda actual y deja la mara de OK
+//Precondicion: El cabezal debe estar en una maquina con Virus y sin marcas de Ok.
+    EliminarVirus()
+    PonerMarcaOk()
+}
+
+procedure RepararPiso(){
+//Proposito: Repara todas las maquinas del piso en cuestion
+//Es decir, saca todos los Virus de las maquinas del Piso.
+//AL terminar el cabezal debe quedar en la celda inicial
+//Precondicion: La celda actual es el Hall del piso.
+    RepararMaquinas(nroBolitas(Negro))
+}
+
+procedure RepararMaquinas(cantMaquinas) {
+/*
+    PRO: Repara todas las maquinas de un piso 
+    PRE: La actual es el Hall del piso
+*/
+    repeat (cantMaquinas) {
+        Mover(Este)
+        RepararMaquina()
+    }
+    Volver(cantMaquinas)
+}
+
+procedure IrAMaquina()
+
+procedure IrAPiso
+
+procedure VolverAHall() {}
+
+procedure Volver(cantMaquinas) {
+/*
+    PRO: Vuelve al hall del piso
+    PRE: No tiene que estar en el hall del piso y tiene que estar en 
+     la ultima maquina del piso
+*/
+    repeat (cantMaquinas) {
+        Mover(Oeste)
+    }
+}
+
+procedure RepararEdificio(){
+//Proposito: Repara todas las maquinas del edificio ... el cabezal queda en el ultimo 
+    -- Hall del edificio(el hall mas al Norte del edificio)
+//Precondicion: El cabezal debe estar en la hall del edificio.(Celda 0,0)
+    repeat (nroBolitas(Azul)) {
+        Mover(Norte)
+        RepararPiso()
+    }
+}
