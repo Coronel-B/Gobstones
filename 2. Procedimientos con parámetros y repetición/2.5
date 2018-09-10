@@ -1,0 +1,65 @@
+program {
+	GuardaDe5()
+}
+
+
+procedure GuardaDe5() {
+/*
+	PRO: Crea un guarda de 5 azulejos 
+	PRE: Existen 5 celdas hacia el Este vacias
+*/
+	repeat (4) {
+		CrearAzulejo(0, 5, 9, 1)
+		IrASiguienteAzulejo(Este)
+	}
+	CrearAzulejo(0, 5, 9, 1)
+}
+
+
+procedure CrearAzulejo(nroBolitasAzul, 
+						nroBolitasNegro, 
+						nroBolitasRojo, 
+						nroBolitasVerde) {
+/*
+	PRO: Crea un azulejo
+	PRE: La actual está vacía
+	@param nroBolitasAzul: Es la cantidad de bolitas azul del azulejo
+	@param nroBolitasNegro: Es la cantidad de bolitas negro del azulejo
+	@param nroBolitasRojo: Es la cantidad de bolitas rojo del azulejo
+	@param nroBolitasVerde: Es la cantidad de bolitas verde del azulejo
+	
+*/
+	PonerBolitasDeColores(nroBolitasAzul, nroBolitasNegro, nroBolitasRojo, nroBolitasVerde)
+}
+
+procedure IrASiguienteAzulejo(dir) {
+/*
+	PRO: Desplaza el cabezal hacia una lindante de la actual 
+	PRE: Tiene que existir una celda hacia @param dir
+	@param dir: Es la direccion hacia la cual se desplaza el cabezal.
+*/
+	Mover(dir)
+}
+
+
+procedure PonerBolitasDeColores(nroBolitasAzul, 
+								nroBolitasNegro, 
+								nroBolitasRojo, 
+								nroBolitasVerde) {
+/*
+	PRO: Pone en la actual algunas bolitas de colores
+	PRE: Ninguna
+*/
+	PonerN(Azul, nroBolitasAzul)
+	PonerN(Negro, nroBolitasNegro)
+	PonerN(Rojo, nroBolitasRojo)
+	PonerN(Verde, nroBolitasVerde)
+	
+}
+
+procedure PonerN(c, n) {
+	repeat (n) {
+		Poner(c)
+	}
+}
+
