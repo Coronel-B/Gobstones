@@ -1,0 +1,115 @@
+type Indicacion is record {
+/*
+PRO: Modela el elemento de un mapa
+*/
+    field direccion --Direccion
+    field distancia --Numero
+}
+
+program {
+
+    ind1 := Indicacion(direccion <- Norte, distancia <- 3)
+    ind2 := Indicacion(direccion <- Sur, distancia <- 2)
+    ind3 := Indicacion(direccion <- Este, distancia <- 1)
+    ind4 := Indicacion(direccion <- Norte, distancia <- 2)
+    
+    mapa := [ind1, ind2, ind3, ind4]
+    
+    return (busquedaDelTesoro(mapa))
+    
+}
+
+function busquedaDelTesoro(mapa) {
+/*
+PRO: Describe si se encontró el tesoro
+PRE: 
+. El tesoro es una celda con 2 Rojas
+. El punto de partida es una celda con 1 Roja
+OBS: El mapa puede tener errores. En el sentido que siguiendo sus indicaciones
+podrá caer al agua (más allá de los límites del tablero).
+Además el tesoro puede no existir.
+NO puede encontrar al tesoro durante las indicaciones.
+RET: Booleano
+@param mapa: [Indicacion]
+*/
+    mapaTemporal := mapa
+    PosicionarEnPuntoDePartida()
+    while (not hayTesoro() && 
+           not esVacía(mapaTemporal) &&
+           not hayAguaEnIndicacion(primero(mapaTemporal))) {
+        IrAIndicacion(primero(mapaTemporal))
+        mapaTemporal := resto(mapaTemporal)
+    }
+    return (hayTesoro() && esVacía(mapaTemporal), mapaTemporal)
+}
+
+procedure IrAIndicacion(indicacion) {
+/*
+PRO: Posiciona el cabezal en una @param indicacion
+PRE: No tiene que haber agua en dicha @param indicacion
+@param indicacion: Indicacion
+*/    
+    MoverN(direccion(indicacion), distancia(indicacion))
+}
+
+procedure MoverN(d, n) {
+	repeat (n) {
+		Mover(d)	
+	}
+}
+
+function hayTesoro() {
+/*
+PRO: Describe si en la celda actual hay un tesoro
+PRE: Un tesoro son 2 Rojas
+RET: Booleano
+*/
+    return (nroBolitas(Rojo) == 2)
+}
+
+function hayAguaEnIndicacion(indicacion) {
+/*
+PRO: Describe si en una indicacion con respecto a la celda actual hay agua
+RET: Booleano
+@param indicacion: Indicacion
+*/
+    return (puedeMoverN(direccion(indicacion), distancia(indicacion)))
+}
+
+function puedeMoverN(d, n) {
+	c := n
+	while (puedeMover(d) && c > 0) {
+		Mover(d)
+		c := c - 1
+	}
+	return (c == 0)
+}
+
+procedure PosicionarEnPuntoDePartida() {
+/*
+PRO: Posiciona el cabezal en el punto de partida 
+PRE: Existe una celda con 1 Roja
+*/
+    IrAlVerticeTablero(Sur, Oeste)
+    while (not nroBolitas(Rojo) == 1 && puedeMoverSiguienteCelda(Norte, Este)) {
+        MoverSiguienteCelda(Norte, Este)
+    }
+}
+
+procedure MoverSiguienteCelda(d1,d2){
+   if(puedeMover(d1)){
+     Mover(d1)
+   }else{
+  IrAlBorde(opuesto(d1))
+  Mover(d2)
+ }
+}
+
+function puedeMoverSiguienteCelda(d1, d2) {
+	return (puedeMover(d1) || puedeMover(d2))
+}
+
+procedure IrAlVerticeTablero(d1,d2){
+  IrAlBorde(d1)
+  IrAlBorde(d2)
+}
