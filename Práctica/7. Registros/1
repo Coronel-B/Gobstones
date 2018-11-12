@@ -1,0 +1,81 @@
+type Persona is record {
+/*
+PRO: Modela a una persona
+INV. REP: Acota el tipo de dato primitivo
+*/
+    field dni
+    field domicilio -- String
+    field isMale -- Booleano
+}
+
+program {
+    
+   --braian := Persona(dni <- 39155039, domicilio <- "Capdevila", isMale <- True)
+
+	marcela := Persona(dni <- 22842685, domicilio <- "Capdevila", isMale <- False)
+                      
+   --return (convivientes(braian, marcela))
+	--return (nacimiento(marcela, False))
+	--return (registrarNacimiento(nacimiento(marcela, False), 12365488))
+   --return (cambioDomicilio(marcela, "Capital Federal"))
+	return (cambioSexo(marcela))
+}
+
+function convivientes(persona_1, persona_2) {
+/*
+PRO: Indica si 2 personas comparten domicilio
+@param persona_1: Persona
+@param persona_2: Persona
+*/    
+    return (domicilio(persona_1) == domicilio(persona_2))
+}
+
+function nacimiento(madre, sexo) {
+/*
+PRO: Crea una nueva persona que convive con la madre, sin DNI y con @param sexo
+@param madre: Persona
+@param sexo: Booleano
+*/
+	return (Persona(dni <- sinAsignar(),
+					   domicilio <- domicilio(madre),
+						isMale <- sexo))
+}
+
+function sinAsignar() {
+/*
+PRO: Denota el valor 0
+*/
+	return (0)
+}
+
+function registrarNacimiento(persona, dni) {
+/*
+PRO: Retorna una @param persona con un @param dni
+PRE: La @param persona no tiene que tener un dni asignado
+@param persona: Persona
+@param dni: Numero
+*/
+	return (Persona(dni <- dni, domicilio <- domicilio(persona), isMale <- isMale(persona)))	
+}
+
+function cambioDomicilio(persona, nuevoDomicilio) {
+/*
+PRO: Describe la @param persona con un @param nuevoDomicilio
+@param persona: Persona
+@param nuevoDomicilio: String 
+*/
+	return (Persona(dni <- dni(persona),
+					   domicilio <- nuevoDomicilio,
+						isMale <- isMale(persona)))
+}
+
+function cambioSexo(persona) {
+/*
+PRO: Describe una @param persona con el sexo cambiado
+@param persona: Persona
+*/
+	return (Persona(dni <- dni(persona),
+	                domicilio <- domicilio(persona),
+	                isMale <- choose True when (isMale(persona))
+	                                 False otherwise))
+}
