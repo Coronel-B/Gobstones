@@ -22,20 +22,19 @@ program {
 function busquedaDelTesoro(mapa) {
 /*
 PRO: Describe si se encontró el tesoro
-PRE: 
-. El tesoro es una celda con 2 Rojas
-. El punto de partida es una celda con 1 Roja
+PRE: Exista el punto de partida
+
 OBS: El mapa puede tener errores. En el sentido que siguiendo sus indicaciones
 podrá caer al agua (más allá de los límites del tablero).
-Además el tesoro puede no existir.
 NO puede encontrar al tesoro durante las indicaciones.
+. El tesoro es una celda con 2 Rojas
+. El punto de partida es una celda con 1 Roja
 RET: Booleano
 @param mapa: [Indicacion]
 */
     mapaTemporal := mapa
     PosicionarEnPuntoDePartida()
-    while (not hayTesoro() && 
-           not esVacía(mapaTemporal) &&
+    while (not esVacía(mapaTemporal) &&
            not hayAguaEnIndicacion(primero(mapaTemporal))) {
         IrAIndicacion(primero(mapaTemporal))
         mapaTemporal := resto(mapaTemporal)
@@ -45,7 +44,7 @@ RET: Booleano
 
 procedure IrAIndicacion(indicacion) {
 /*
-PRO: Posiciona el cabezal en una @param indicacion
+PRO: Posiciona el cabezal segun @param indicacion
 PRE: No tiene que haber agua en dicha @param indicacion
 @param indicacion: Indicacion
 */    
@@ -73,7 +72,9 @@ PRO: Describe si en una indicacion con respecto a la celda actual hay agua
 RET: Booleano
 @param indicacion: Indicacion
 */
-    return (puedeMoverN(direccion(indicacion), distancia(indicacion)))
+    -- Tambien puedo evaluar que la dist del campo sea menor o igual a la que hay
+    -- con respecto al borde
+    return (not puedeMoverN(direccion(indicacion), distancia(indicacion)))
 }
 
 function puedeMoverN(d, n) {
