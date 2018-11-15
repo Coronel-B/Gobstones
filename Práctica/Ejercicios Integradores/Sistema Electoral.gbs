@@ -1,0 +1,37 @@
+type Distrito is record {
+/*
+PRO: Modela el sistema electoral
+OBS: Ninguna de sus listas tiene repetidos
+*/
+    field mesas --[Número]
+    field electores --[dni]
+    field padrón --[Asignación]
+    field votaron --[Número]
+}
+
+type Asignación is record {
+    field mesa --Número
+    field elector --Número que representa el DNI de un elector
+}
+
+function votaronDeMesa(distrito, mesa) {
+/*
+PRO: Describe una lista con los número de DNI de todos los electores 
+asignados a @param mesa que ya emitieron su voto.
+PRE: Los números de lista resultante tienen que aparecer en el mismo orden que
+emitieron su voto.
+Además @param mesa existe en @param distrito
+@param distrito: Distrito
+@param mesa: Número
+*/   
+    
+}
+
+function votosPorMesa(distrito) {
+/*
+PRO: Describe una lista en la que c/elemento es una lista de todos los votantes
+de una mesa.
+PRE: No tiene
+*/
+    
+}
