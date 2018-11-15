@@ -14,6 +14,21 @@ type Asignación is record {
     field elector --Número que representa el DNI de un elector
 }
 
+function electoresConMesa(padrón, mesa) {
+/*
+PRO: Describe una lista con los electores de una determinada @mesa de un
+@param padrón
+PRE: No tiene
+OBS: Esquema de filtro
+RET: [Número] que representa el nro de dni de los electores 
+*/    
+    electores := []
+    foreach asignación in padrón {
+        electores := electores ++
+            
+    }
+}
+
 function votaronDeMesa(distrito, mesa) {
 /*
 PRO: Describe una lista con los número de DNI de todos los electores 
