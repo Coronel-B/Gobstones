@@ -1,0 +1,89 @@
+/**
+ * PRO: Escribe el dia de la Memoria
+ * PRE: La celda actual esta vacia y existen 2 celdas al Este vacias
+ * OBS: El dia esta escrito en Azul, el mes en Rojo y el anio en Verde
+ */
+program {
+    DiaDeLaMemoria()
+}
+
+/**
+ * PRO: Escribe el dia de la Memoria
+ * PRE: La celda actual esta vacia y existen 2 celdas al Este vacias
+ * OBS: El dia esta escrito en Azul, el mes en Rojo y el anio en Verde
+ */
+procedure DiaDeLaMemoria() {
+    EscribirFecha(24,3,1976)
+}
+
+/**
+ * PRO: Escribe una fecha con @param dia, @param mes y @param anio
+ * PRE: La celda actual esta vacia y existen 2 celdas al Este vacias
+ * @param dia: Numero
+ * @param mes: Numero
+ * @param anio: Numero
+ * OBS: El dia esta escrito en Azul, el mes en Rojo y el anio en Verde
+ */
+procedure EscribirFecha(dia, mes, anio) {
+    EscribirDia(dia)
+    IrASiguienteCampo()
+    EscribirMes(mes)
+    IrASiguienteCampo()
+    EscribirAnio(anio)
+    Volver()
+}
+
+/**
+ * PRO: Lleva el cabezal al campo inicial
+ * PRE: Hay 2 celdas al Oeste
+ */
+procedure Volver() {
+    repeat (2) {
+        Mover(Oeste)
+    }
+}
+
+/**
+ * PRO: Posiciona el cabezal en el sig campo
+ * PRE: Hay una celda al Este
+ */
+procedure IrASiguienteCampo() {
+    Mover(Este)
+}
+
+/**
+ * PRO: Escribir un @param anio en la actual
+ * PRE: La actual esta vacia para que no se cambie el anio
+ * @param anio: Numero
+ */
+procedure EscribirAnio(anio) {
+    PonerMuchasDeColor(anio, Verde)
+}
+
+/**
+ * PRO: Escribir un @param dia en la actual
+ * PRE: La actual esta vacia para que no se cambie el mes
+ * @param mes: Numero
+ */
+procedure EscribirMes(mes) {
+    PonerMuchasDeColor(mes, Rojo)
+}
+
+/**
+ * PRO: Escribir un @param dia en la actual
+ * PRE: La actual esta vacia para que no se cambie el dia
+ * @param dia: Numero
+ */
+procedure EscribirDia(dia) {
+    PonerMuchasDeColor(dia, Azul)
+}
+
+/**
+ * PRO: Pone @param cantidad de bolitas de @param color en la actual
+ * PRE: Ninguna
+ */
+procedure PonerMuchasDeColor(cantidad, color) {
+    repeat (cantidad) {
+        Poner(color)
+    }
+}
