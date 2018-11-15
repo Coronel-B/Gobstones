@@ -1,0 +1,107 @@
+type Distrito is record {
+/*
+PRO: Modela el sistema electoral
+OBS: Ninguna de sus listas tiene repetidos
+*/
+    field mesas --[Número]
+    field electores --[dni]
+    field padrón --[Asignación]
+    field votaron --[Número] representa a los electores que ya votaron
+}
+
+type Asignación is record {
+    field mesa --Número
+    field elector --Número que representa el DNI de un elector
+}
+
+program {
+    
+    m1 := 1; m2 := 2; m3 := 3; m4 := 4; m5 := 5
+    elector1 := 39155039
+    elector2 := 24327173
+    elector3 := 22842685
+    elector4 := 3654866
+    elector5 := 2316588
+    asignación1 := Asignación(mesa <- m1, elector <- elector1)
+    asignación2 := Asignación(mesa <- m1, elector <- elector2)
+    asignación3 := Asignación(mesa <- m4, elector <- elector3)
+    asignación4 := Asignación(mesa <- m1, elector <- elector4)
+    asignación5 := Asignación(mesa <- m5, elector <- elector5)
+    
+    mesas := [m1, m2, m3, m4, m5]
+    electores := [elector1, elector2, elector3, elector4, elector5]
+    padrón := [asignación1, asignación2, asignación3, asignación4, asignación5]
+    votaron := [elector1, elector2, elector3, elector4]
+    distrito := Distrito(mesas <- mesas, 
+                         electores <- electores,
+                         padrón <- padrón,
+                         votaron <- votaron)
+                         
+    --return (electoresConMesa(padrón, 1))
+    return (votaronDeMesa(distrito, 1))
+}
+
+function electoresConMesa(padrón, mesa) {
+/*
+PRO: Describe una lista con los electores de una determinada @mesa de un
+@param padrón
+PRE: No tiene
+OBS: Esquema de filtro
+RET: [Número] que representa el nro de dni de los electores 
+*/    
+    electores := []
+    foreach asignación in padrón {
+        electores := electores ++
+            choose [elector(asignación)] when (mesa(asignación) == mesa)
+                   [] otherwise
+    }
+    return (electores)
+}
+
+function votaronDeMesa(distrito, mesa) {
+/*
+PRO: Describe una lista con los número de DNI de todos los electores 
+asignados a @param mesa que ya emitieron su voto.
+PRE: Los números de lista resultante tienen que aparecer en el mismo orden que
+emitieron su voto.
+Además @param mesa existe en @param distrito
+@param distrito: Distrito
+@param mesa: Número
+*/   
+    electoresVotaronYAsignados := []
+    foreach electorVoto in votaron(distrito){
+        electoresVotaronYAsignados := electoresVotaronYAsignados ++
+            choose [electorVoto] when (contiene(
+                                                electorVoto, 
+                                                electoresConMesa(padrón(distrito), mesa)
+                                                )
+                                       )
+                    [] otherwise
+    }
+    return (electoresVotaronYAsignados)
+}
+
+function contiene(elemento, lista) {
+/*
+PRO: Describe si un elemento pertenece a una lista
+PRE: Ninguna
+@param lista: [e]
+@param elemento: e
+RET: Booleano
+*/
+    listaTemporal := lista
+    while (not esVacía(listaTemporal) && 
+           primero(listaTemporal) /= elemento) {
+        listaTemporal := resto(listaTemporal)
+    }
+    return(not esVacía(listaTemporal) && primero(listaTemporal)==elemento)
+}
+
+function votosPorMesa(distrito) {
+/*
+PRO: Describe una lista en la que c/elemento es una lista de todos los votantes
+de una mesa.
+PRE: No tiene
+*/
+    return (True)
+}
