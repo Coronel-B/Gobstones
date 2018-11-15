@@ -283,6 +283,22 @@ function sinElemento(e, lista) {
 	return (lsRet)
 }
 
+function contiene(elemento, lista) {
+/*
+PRO: Describe si un elemento pertenece a una lista
+PRE: Ninguna
+@param lista: [e]
+@param elemento: e
+RET: Booleano
+*/
+    listaTemporal := lista
+    while (not esVacía(lista) && 
+           primero(lista) /= elemento) {
+        listaTemporal := resto(listaTemporal)
+    }
+    return(not esVacía(lista) && primero(lista)==elemento)
+}
+
 
 
 
