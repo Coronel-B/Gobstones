@@ -292,11 +292,11 @@ PRE: Ninguna
 RET: Booleano
 */
     listaTemporal := lista
-    while (not esVacÃ­a(lista) && 
+    while (not esVacía(listaTemporal) && 
            primero(lista) /= elemento) {
         listaTemporal := resto(listaTemporal)
     }
-    return(not esVacÃ­a(lista) && primero(lista)==elemento)
+    return(not esVacía(lista) && primero(lista)==elemento)
 }
 
 
