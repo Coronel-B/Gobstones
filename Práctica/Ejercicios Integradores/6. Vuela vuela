@@ -1,0 +1,82 @@
+type Estado is variant {
+/*
+PRO: Modelar el estado del avión
+*/
+    case Saliente {} -- avión listo para despegar
+    case EnRuta {} -- avión en vuelo
+    case Aterrizado {} -- avión llegó a destino
+}
+
+type TorreDeControl is record {
+    field vuelos -- [Vuelo]
+    field planesDeVuelo --[PlanDeDestino]
+}
+
+type Vuelo is record {
+    field número -- Número
+    field origen -- Coord
+    field destino -- Coord
+    field estado -- Estado
+    field etapaEnPlanDeVuelo -- Número
+}
+
+type PlanDeDestino is record {
+    field origen -- Coord 
+    field destino -- Coord
+    field planDeVuelo -- [Dirección]
+}
+
+type Coord is record {
+-- INVARIANTE DE REP: los valores de fila y columna tienen que ser >= 0
+	field fila
+	field columna
+}
+
+program {
+    coord1 := Coord(fila <- 3, columna <- 1)
+	coord2 := Coord(fila <- 1, columna <- 3)
+	coord3 := Coord(fila <- 2, columna <- 2)
+	
+	planDeVuelo1 := [Norte, Norte, Este, Este]
+	planDeVuelo2 := [Sur, Sur, Sur, Este]
+	planDeVuelo3 := [Oeste, Oeste, Sur, Sur]
+	
+	planDeDestino1 := PlanDeDestino(origen <- coord1, destino <- coord2, planDeVuelo <- planDeVuelo1)
+	planDeDestino2 := PlanDeDestino(origen <- coord1, destino <- coord2, planDeVuelo <- planDeVuelo2)
+	planDeDestino3 := PlanDeDestino(origen <- coord1, destino <- coord2, planDeVuelo <- planDeVuelo3)
+	
+	vuelo1 := Vuelo(número <- 1, origen <- coord1, destino <- coord2, estado <- Saliente, etapaEnPlanDeVuelo <- 1)
+	vuelo2 := Vuelo(número <- 2, origen <- coord2, destino <- coord3, estado <- EnRuta, etapaEnPlanDeVuelo <- 2)
+	vuelo3 := Vuelo(número <- 3, origen <- coord1, destino <- coord3, estado <- Aterrizado, etapaEnPlanDeVuelo <- 1)
+	
+	--return (vueloEnEstado([vuelo1, vuelo1, vuelo2, vuelo3], EnRuta))
+    
+}
+
+function vueloEnEstado(vuelos, estado) {
+/*
+PRO: Describe el primero vuelo en la lista que tiene el @param estado
+RET: Vuelo
+@param vuelos: [Vuelo]
+@param estado: Estado
+*/
+    vuelosTemp := vuelos
+    while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= estado) {
+        vuelosTemp := resto(vuelosTemp)
+    }
+    return (choose primero(vuelosTemp) when (not esVacía(vuelosTemp))
+                   [] otherwise)
+}
+
+function despegarVuelo(torreDeControl) {
+/*
+PRO: Describe la torre de control que se obtiene de despegar al primer vuelo en vuelos(torreDeControl)
+que está en estado Saliente.
+PRE: Hay al menos 1 vuelo en la torre de control cuyo estado es Saliente.
+OBS: Para ello hay que cambiar el estado del vuelo a EnRuta e indicar que se encuentra en la etapa 1 del
+plan de vuelo.
+RET: TorreDeControl
+@param torreDeControl: TorreDeControl
+*/
+    
+}
