@@ -45,11 +45,14 @@ program {
 	planDeDestino2 := PlanDeDestino(origen <- coord1, destino <- coord2, planDeVuelo <- planDeVuelo2)
 	planDeDestino3 := PlanDeDestino(origen <- coord1, destino <- coord2, planDeVuelo <- planDeVuelo3)
 	
-	vuelo1 := Vuelo(número <- 1, origen <- coord1, destino <- coord2, estado <- Saliente, etapaEnPlanDeVuelo <- 1)
-	vuelo2 := Vuelo(número <- 2, origen <- coord2, destino <- coord3, estado <- EnRuta, etapaEnPlanDeVuelo <- 2)
-	vuelo3 := Vuelo(número <- 3, origen <- coord1, destino <- coord3, estado <- Aterrizado, etapaEnPlanDeVuelo <- 1)
+	vuelo1 := Vuelo(número <- 40, origen <- coord1, destino <- coord2, estado <- Saliente, etapaEnPlanDeVuelo <- 0)
+	vuelo2 := Vuelo(número <- 41, origen <- coord2, destino <- coord3, estado <- EnRuta, etapaEnPlanDeVuelo <- 1)
+	vuelo3 := Vuelo(número <- 42, origen <- coord1, destino <- coord3, estado <- Aterrizado, etapaEnPlanDeVuelo <- 2)
+	
+	torreDeControl := TorreDeControl(vuelos <- [vuelo1, vuelo2, vuelo3], planesDeVuelo <- [planDeDestino1, planDeDestino2, planDeDestino3])
 	
 	--return (vueloEnEstado([vuelo1, vuelo1, vuelo2, vuelo3], EnRuta))
+	--return (despegarVuelo(torreDeControl))
     
 }
 
@@ -78,5 +81,38 @@ plan de vuelo.
 RET: TorreDeControl
 @param torreDeControl: TorreDeControl
 */
-    
+    vuelos := vuelos(torreDeControl)
+    vuelosRet := vuelosAntesDelVueloSaliente(vuelos) ++
+                 [Vuelo(vueloEnEstado(vuelos, Saliente)|estado <- EnRuta, etapaEnPlanDeVuelo <- 1)] ++
+                 vuelosDespuesDelVueloSaliente(vuelos) 
+    return (TorreDeControl(torreDeControl|vuelos<-vuelosRet))
+}
+
+function vuelosAntesDelVueloSaliente(vuelos) {
+/*
+PRO: Describe una lista de vuelos con los vuelos que están antes del primer vuelo saliente
+@param vuelos: [Vuelo]
+*/
+    vuelosTemp := vuelos
+    vuelosRet := []
+    while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= Saliente) {
+        vuelosRet := vuelosRet ++ [primero(vuelosTemp)]
+        vuelosTemp := resto(vuelosTemp)
+    }
+    return (vuelosRet)
+}
+
+function vuelosDespuesDelVueloSaliente(vuelos) {
+/*
+PRO: Describe una lista de vuelos con los vuelos que están después del primer vuelo saliente.
+OBS: Se excluye al primer vuelo saliente
+@param vuelos: [Vuelo]
+RET: [Vuelo]
+*/
+    vuelosTemp := vuelos
+    while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= Saliente) {
+        vuelosTemp := resto(vuelosTemp)
+    }
+    return (choose resto(vuelosTemp) when (not esVacía(vuelosTemp))
+                   [] otherwise)
 }
