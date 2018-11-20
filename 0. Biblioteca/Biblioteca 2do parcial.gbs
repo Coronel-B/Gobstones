@@ -309,7 +309,7 @@ function sinDuplicados(ls) {
 	filtro := []
 
 	while(not esVacía(lista)) {
-		filtro := filtro ++ choose primero(lista) when (not contiene(head(lista, filtro)))
+		filtro := filtro ++ choose primero(lista) when (not contiene(primero(lista), filtro))
 								   [] otherwise
 		lista := resto(lista)
 	}
