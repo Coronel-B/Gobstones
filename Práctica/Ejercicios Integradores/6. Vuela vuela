@@ -139,7 +139,7 @@ PRE: Ninguna
 */
     vuelosRet := []
     foreach vuelo in vuelos(torreDeControl) {
-        vuelosRet := vuelosRet ++ choose vuelo when (longitud(planDeVuelo(torreDeControl, vuelo)) == etapaEnPlanDeVuelo(vuelo))
+        vuelosRet := vuelosRet ++ choose vuelo when (longitud(buscarPlanDeDestino(torreDeControl, vuelo)) == etapaEnPlanDeVuelo(vuelo))
                                          [] otherwise
     }
     return (vuelosRet)
@@ -157,10 +157,11 @@ function longitud(ls) {
 	return (c)
 }
 
-function planDeVuelo(torreDeControl, vuelo) {
+function buscarPlanDeDestino(torreDeControl, vuelo) {
 /*
-PRO: Describe el plan de vuelo acorde a un vuelo
+PRO: Describe el plan de destino acorde a un vuelo
 PRE: No tiene
+RET: PlanDeDestino
 @param torreDeControl: TorreDeControl
 @param vuelo: Vuelo
 */
@@ -170,7 +171,7 @@ PRE: No tiene
            destino(vuelo) /= destino(primero(planesDeVuelo))) {
         planesDeVuelo := resto(planesDeVuelo)
     }
-    return (choose planDeVuelo(primero(planesDeVuelo)) when (not esVacía(planesDeVuelo)
+    return (choose planDeVuelo(primero(planesDeVuelo)) when (not esVacía(planesDeVuelo))
                    [] otherwise)
 }
 
@@ -183,15 +184,49 @@ PRE: Se puede suponer que hay un vuelo EnRuta con el @param númeroDeVuelo y la 
 longitud del plan de vuelo.
 @param tiempo: Representa un tiempo en etapas
 */    
-    
-    
-    
-    
-    return ()
+    vuelo := buscarVuelo(torreDeControl, númeroDeVuelo)
+    planDeVuelo := planDeVuelo(buscarPlanDeDestino(torreDeControl, vuelo))
+    repeat (etapaEnPlanDeVuelo(vuelo) + tiempo) {
+        Mover(primero(planDeVuelo))
+        planDeVuelo := resto(planDeVuelo)
+    }
+    return (coordActual())
 }
 
+/*
+PRO: Prepara la coordenada en la que se encuentra el cabezal
+RET: Coord
+*/
+function coordActual() {
+	return (Coord(fila <- cantPosicionesAl(Sur),
+				  columna <- cantPosicionesAl(Oeste)))
+}
 
+/*
+PRO: Prepara el numero de posiciones que hay hacia una determinada direccion @param dir
+RET: Numero
+*/
+function cantPosicionesAl(dir) {
+	c := 0
+	while (puedeMover(dir)) {
+		Mover(dir)
+		c := c + 1
+	}
+	return (c)
+}
 
+function buscarVuelo(torreDeControl, númeroDeVuelo) {
+/*
+PRO: Describe un vuelo acorde a un número de vuelo
+RET: Vuelo
+*/
+   vuelos := vuelos(torreDeControl)
+   while(not esVacía(vuelos) &&
+         número(primero(vuelos)) /= númeroDeVuelo) { 
+        vuelos := resto(vuelos)
+   }
+    return(primero(vuelos))
+}
 
 
 function hayColisiónEnEtapa(torreDeControl, tiempo) {
@@ -200,7 +235,56 @@ PRO: Indica si hay aviones cuyo estado es EnRuta que colisionarán en tiempo eta
 OBS: Dos aviones colisionarán en una etapa si pasan por la misma coordenada en esta etapa.
 @param tiempo: Número que representa un tiempo en etapas
 */    
-    
+    coordenadasFuturas := coordenadasFuturas(torreDeControl, tiempo)
+    return (longitud(sinDuplicados(coordenadasFuturas)) == longitud(coordenadasFuturas))
+}
+
+function contiene(elemento, lista) {
+/*
+PRO: Describe si un elemento pertenece a una lista
+PRE: Ninguna
+@param lista: [e]
+@param elemento: e
+RET: Booleano
+*/
+    listaTemporal := lista
+    while (not esVacía(listaTemporal) && 
+           primero(listaTemporal) /= elemento) {
+        listaTemporal := resto(listaTemporal)
+    }
+    return(not esVacía(listaTemporal) && primero(listaTemporal)==elemento)
+}
+
+/*
+PRO: Filtra todos los elementos de una lista sin repetirlos 
+RETURN: Lista
+@param ls: lista
+*/
+function sinDuplicados(ls) {
+	lista := ls
+	filtro := []
+
+	while(not esVacía(lista)) {
+		filtro := filtro ++ choose primero(lista) when (not contiene(primero(lista), filtro))
+								   [] otherwise
+		lista := resto(lista)
+	}
+
+	return (filtro)
+}
+
+function coordenadasFuturas(torreDeControl, tiempo) {
+/*
+PRO: Describe las coordenadas futuras de todos los aviones en tiempo etapas
+@param torreDeControl: TorreDeControl
+@param tiempo: Número
+*/
+    coordenadas := []
+    vuelos := vuelos(torreDeControl)
+    foreach vuelo in vuelos {
+        coordenadas := coordenadas ++ [coordenadaFutura(torreDeControl, número(vuelo), tiempo)]
+    }
+    return (coordenadas)
 }
 
 function hayColisión(torreDeControl) {
@@ -209,5 +293,5 @@ PRO: Indica si hay aviones con estado EnRuta que colisionarán en alguna etapa f
 OBS: Tener en cuenta que basta considerar solo n etapas futuras, donde n es la máxima etapa posible
 (la longitud del plan de vuelos más largo posible)
 */   
-
+    return (True)
 }
