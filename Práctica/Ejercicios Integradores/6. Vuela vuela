@@ -82,37 +82,132 @@ RET: TorreDeControl
 @param torreDeControl: TorreDeControl
 */
     vuelos := vuelos(torreDeControl)
-    vuelosRet := vuelosAntesDelVueloSaliente(vuelos) ++
+    vuelosRet := vuelosAntesDelVueloEnEstado(vuelos, Saliente) ++
                  [Vuelo(vueloEnEstado(vuelos, Saliente)|estado <- EnRuta, etapaEnPlanDeVuelo <- 1)] ++
-                 vuelosDespuesDelVueloSaliente(vuelos) 
+                 vuelosDespuesDelVueloEnEstado(vuelos, Saliente) 
     return (TorreDeControl(torreDeControl|vuelos<-vuelosRet))
 }
 
-function vuelosAntesDelVueloSaliente(vuelos) {
+function vuelosAntesDelVueloEnEstado(vuelos, estado) {
 /*
-PRO: Describe una lista de vuelos con los vuelos que están antes del primer vuelo saliente
+PRO: Describe una lista de vuelos con los vuelos que están antes del primer vuelo en @param estado
 @param vuelos: [Vuelo]
 */
     vuelosTemp := vuelos
     vuelosRet := []
-    while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= Saliente) {
+    while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= estado) {
         vuelosRet := vuelosRet ++ [primero(vuelosTemp)]
         vuelosTemp := resto(vuelosTemp)
     }
     return (vuelosRet)
 }
 
-function vuelosDespuesDelVueloSaliente(vuelos) {
+function vuelosDespuesDelVueloEnEstado(vuelos, estado) {
 /*
-PRO: Describe una lista de vuelos con los vuelos que están después del primer vuelo saliente.
-OBS: Se excluye al primer vuelo saliente
+PRO: Describe una lista de vuelos con los vuelos que están después del primer vuelo con @param estado.
+OBS: Se excluye al primer vuelo en @param estado
 @param vuelos: [Vuelo]
 RET: [Vuelo]
 */
     vuelosTemp := vuelos
-    while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= Saliente) {
+    while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= estado) {
         vuelosTemp := resto(vuelosTemp)
     }
     return (choose resto(vuelosTemp) when (not esVacía(vuelosTemp))
                    [] otherwise)
+}
+
+function aterrizarVuelo(torreDeControl) {
+/*
+PRO: Describe la torre de control que se obtiene de aterrizar el primer vuelo en vuelos(torreDeControl)
+que está en estado EnRuta y que haya llegado a destino (la etapa coincide con la longitud del plan de vuelo)
+PRE: Hay al menos un vuelo en condiciones de aterrizar
+OBS: Notar que para ello hay que cambiar el estado del vuelo a Aterrizado
+*/
+    vuelos := vuelosQueLlegaronADestino(torreDeControl)
+    vuelosRet := vuelosAntesDelVueloEnEstado(vuelos, EnRuta) ++
+                 [Vuelo(vueloEnEstado(vuelos, EnRuta)|estado <- Aterrizado)] ++
+                 vuelosDespuesDelVueloEnEstado(vuelos, EnRuta) 
+    return (TorreDeControl(torreDeControl|vuelos<-vuelosRet))
+}
+
+function vuelosQueLlegaronADestino(torreDeControl) {
+/*
+PRO: Describe una lista de vuelos con los aviones que llegaron a destino
+PRE: Ninguna
+@param torreDeControl: TorreDeControl
+*/
+    vuelosRet := []
+    foreach vuelo in vuelos(torreDeControl) {
+        vuelosRet := vuelosRet ++ choose vuelo when (longitud(planDeVuelo(torreDeControl, vuelo)) == etapaEnPlanDeVuelo(vuelo))
+                                         [] otherwise
+    }
+    return (vuelosRet)
+}
+
+/*
+PRO: Retorna la cantidad de elementos de una lista
+TIPO: Recibe una lista de cualquier tipo
+*/
+function longitud(ls) {
+	c := 0
+	foreach i in ls {
+		c := c + 1
+	}
+	return (c)
+}
+
+function planDeVuelo(torreDeControl, vuelo) {
+/*
+PRO: Describe el plan de vuelo acorde a un vuelo
+PRE: No tiene
+@param torreDeControl: TorreDeControl
+@param vuelo: Vuelo
+*/
+    planesDeVuelo := planesDeVuelo(torreDeControl)
+    while (not esVacía(planesDeVuelo) &&
+           origen(vuelo) /= origen(primero(planesDeVuelo)) &&
+           destino(vuelo) /= destino(primero(planesDeVuelo))) {
+        planesDeVuelo := resto(planesDeVuelo)
+    }
+    return (choose planDeVuelo(primero(planesDeVuelo)) when (not esVacía(planesDeVuelo)
+                   [] otherwise)
+}
+
+
+function coordenadaFutura(torreDeControl, númeroDeVuelo, tiempo) {
+/*
+PRO: Describe la coordeanda sobre la que estará sobrevolando el vuelo correspondiente a @param número de Vuelo
+dentro de tiempo etapas, contando desde la etapa actual.
+PRE: Se puede suponer que hay un vuelo EnRuta con el @param númeroDeVuelo y la etapa actual más tiempo no supera la 
+longitud del plan de vuelo.
+@param tiempo: Representa un tiempo en etapas
+*/    
+    
+    
+    
+    
+    return ()
+}
+
+
+
+
+
+function hayColisiónEnEtapa(torreDeControl, tiempo) {
+/*
+PRO: Indica si hay aviones cuyo estado es EnRuta que colisionarán en tiempo etapas, contando desde la etapa actual.
+OBS: Dos aviones colisionarán en una etapa si pasan por la misma coordenada en esta etapa.
+@param tiempo: Número que representa un tiempo en etapas
+*/    
+    
+}
+
+function hayColisión(torreDeControl) {
+/*
+PRO: Indica si hay aviones con estado EnRuta que colisionarán en alguna etapa futura.
+OBS: Tener en cuenta que basta considerar solo n etapas futuras, donde n es la máxima etapa posible
+(la longitud del plan de vuelos más largo posible)
+*/   
+
 }
