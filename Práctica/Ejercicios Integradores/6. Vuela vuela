@@ -23,7 +23,7 @@ type Vuelo is record {
 type PlanDeDestino is record {
     field origen -- Coord 
     field destino -- Coord
-    field planDeVuelo -- [Dirección]
+    field planDeVuelo -- [Coord]
 }
 
 type Coord is record {
@@ -59,6 +59,7 @@ program {
 function vueloEnEstado(vuelos, estado) {
 /*
 PRO: Describe el primero vuelo en la lista que tiene el @param estado
+PRE: Existe al menos 1 vuelo con @param estado
 RET: Vuelo
 @param vuelos: [Vuelo]
 @param estado: Estado
@@ -67,8 +68,7 @@ RET: Vuelo
     while (not esVacía(vuelosTemp) && estado(primero(vuelosTemp)) /= estado) {
         vuelosTemp := resto(vuelosTemp)
     }
-    return (choose primero(vuelosTemp) when (not esVacía(vuelosTemp))
-                   [] otherwise)
+    return (primero(vuelosTemp))
 }
 
 function despegarVuelo(torreDeControl) {
@@ -81,11 +81,20 @@ plan de vuelo.
 RET: TorreDeControl
 @param torreDeControl: TorreDeControl
 */
-    vuelos := vuelos(torreDeControl)
-    vuelosRet := vuelosAntesDelVueloEnEstado(vuelos, Saliente) ++
-                 [Vuelo(vueloEnEstado(vuelos, Saliente)|estado <- EnRuta, etapaEnPlanDeVuelo <- 1)] ++
-                 vuelosDespuesDelVueloEnEstado(vuelos, Saliente) 
-    return (TorreDeControl(torreDeControl|vuelos<-vuelosRet))
+    return (TorreDeControl(torreDeControl|
+                    vuelos<-vuelosConVueloSalienteModificado(vuelos(torreDeControl))))
+}
+
+function vuelosConVueloSalienteModificado(vuelos) {
+/*
+PRO: Describe una lista de vuelos despegando al primer vuelo que está en estado Saliente
+PRE: Hay al menos 1 vuelo que está en estado Saliente
+RET: [Vuelo]
+@param vuelos: [Vuelo]
+*/
+    return (vuelosAntesDelVueloEnEstado(vuelos, Saliente) ++
+            [Vuelo(vueloEnEstado(vuelos, Saliente)|estado <- EnRuta, etapaEnPlanDeVuelo <- 1)] ++
+            vuelosDespuesDelVueloEnEstado(vuelos, Saliente))
 }
 
 function vuelosAntesDelVueloEnEstado(vuelos, estado) {
@@ -124,11 +133,17 @@ que está en estado EnRuta y que haya llegado a destino (la etapa coincide con l
 PRE: Hay al menos un vuelo en condiciones de aterrizar
 OBS: Notar que para ello hay que cambiar el estado del vuelo a Aterrizado
 */
-    vuelos := vuelosQueLlegaronADestino(torreDeControl)
-    vuelosRet := vuelosAntesDelVueloEnEstado(vuelos, EnRuta) ++
-                 [Vuelo(vueloEnEstado(vuelos, EnRuta)|estado <- Aterrizado)] ++
-                 vuelosDespuesDelVueloEnEstado(vuelos, EnRuta) 
-    return (TorreDeControl(torreDeControl|vuelos<-vuelosRet))
+    return (TorreDeControl(torreDeControl|vuelos<-vuelosConVueloAterrizado(torreDeControl)))
+}
+
+function vuelosConVueloAterrizado(torreDeControl) {
+/*
+PRO: Aterriza el primer vuelo que está en estado EnRuta y que haya llegado a destino
+PRE: Hay al menos un vuelo en condiciones de aterrizar
+*/
+    return (vuelosAntesDelVueloEnEstado(vuelosQueLlegaronADestino(torreDeControl), EnRuta) ++
+            [Vuelo(vueloEnEstado(vuelosQueLlegaronADestino(torreDeControl), EnRuta)|estado <- Aterrizado)] ++
+            vuelosDespuesDelVueloEnEstado(vuelosQueLlegaronADestino(torreDeControl), EnRuta))
 }
 
 function vuelosQueLlegaronADestino(torreDeControl) {
@@ -139,7 +154,7 @@ PRE: Ninguna
 */
     vuelosRet := []
     foreach vuelo in vuelos(torreDeControl) {
-        vuelosRet := vuelosRet ++ choose vuelo when (longitud(buscarPlanDeDestino(torreDeControl, vuelo)) == etapaEnPlanDeVuelo(vuelo))
+        vuelosRet := vuelosRet ++ choose [vuelo] when (longitud(buscarPlanDeDestino(torreDeControl, vuelo)) == etapaEnPlanDeVuelo(vuelo))
                                          [] otherwise
     }
     return (vuelosRet)
@@ -160,7 +175,7 @@ function longitud(ls) {
 function buscarPlanDeDestino(torreDeControl, vuelo) {
 /*
 PRO: Describe el plan de destino acorde a un vuelo
-PRE: No tiene
+PRE: Existe el plan de vuelo
 RET: PlanDeDestino
 @param torreDeControl: TorreDeControl
 @param vuelo: Vuelo
@@ -171,8 +186,7 @@ RET: PlanDeDestino
            destino(vuelo) /= destino(primero(planesDeVuelo))) {
         planesDeVuelo := resto(planesDeVuelo)
     }
-    return (choose planDeVuelo(primero(planesDeVuelo)) when (not esVacía(planesDeVuelo))
-                   [] otherwise)
+    return (planDeVuelo(primero(planesDeVuelo)))
 }
 
 
@@ -180,44 +194,23 @@ function coordenadaFutura(torreDeControl, númeroDeVuelo, tiempo) {
 /*
 PRO: Describe la coordeanda sobre la que estará sobrevolando el vuelo correspondiente a @param número de Vuelo
 dentro de tiempo etapas, contando desde la etapa actual.
-PRE: Se puede suponer que hay un vuelo EnRuta con el @param númeroDeVuelo y la etapa actual más tiempo no supera la 
-longitud del plan de vuelo.
+PRE: Hay un vuelo EnRuta con el @param númeroDeVuelo y la etapa actual más tiempo no supera la 
+longitud del plan de vuelo. El plan de vuelo tiene que existir.
 @param tiempo: Representa un tiempo en etapas
 */    
     vuelo := buscarVuelo(torreDeControl, númeroDeVuelo)
     planDeVuelo := planDeVuelo(buscarPlanDeDestino(torreDeControl, vuelo))
     repeat (etapaEnPlanDeVuelo(vuelo) + tiempo) {
-        Mover(primero(planDeVuelo))
+        coord := primero(planDeVuelo)
         planDeVuelo := resto(planDeVuelo)
     }
-    return (coordActual())
-}
-
-/*
-PRO: Prepara la coordenada en la que se encuentra el cabezal
-RET: Coord
-*/
-function coordActual() {
-	return (Coord(fila <- cantPosicionesAl(Sur),
-				  columna <- cantPosicionesAl(Oeste)))
-}
-
-/*
-PRO: Prepara el numero de posiciones que hay hacia una determinada direccion @param dir
-RET: Numero
-*/
-function cantPosicionesAl(dir) {
-	c := 0
-	while (puedeMover(dir)) {
-		Mover(dir)
-		c := c + 1
-	}
-	return (c)
+    return (coord)
 }
 
 function buscarVuelo(torreDeControl, númeroDeVuelo) {
 /*
 PRO: Describe un vuelo acorde a un número de vuelo
+PRE: El vuelo tiene que existir
 RET: Vuelo
 */
    vuelos := vuelos(torreDeControl)
@@ -293,5 +286,37 @@ PRO: Indica si hay aviones con estado EnRuta que colisionarán en alguna etapa f
 OBS: Tener en cuenta que basta considerar solo n etapas futuras, donde n es la máxima etapa posible
 (la longitud del plan de vuelos más largo posible)
 */   
-    return (True)
+    
+    hayColisiónEnEtapa(TorreDeControl(torreDeControl|
+                            vuelos<-vuelosEnEstado(vuelos(torreDeControl, EnRuta))), 
+                       1)
+                       
+    
+                       
+                       
+                       
+    
+    return (True) // WHAT ???
+    // ACÁ LA GRACIA ESTABA EN OBTENER TODAS LAS COORDENADAS FUTURAS, Y LUEGO
+    // QUITARLES LOS DUPLICADOS. SI QUEDABA IGUAL, ENTONCES NO HABÍA COLISIONES,
+    // CASO CONTRARIO HAY COLISION. Y ESO PARA CADA MOMENTO DEL TIEMPO HASTA QUE
+    // NO HAYAN AVIONES EN EL AIRE.
+
 }
+
+function vuelosEnEstado(vuelos, estado) {
+/*
+PRO: Describe los vuelos en @param estado
+PRE: Ninguna
+@param vuelos: [Vuelo]
+@param estado: Estado
+*/
+    vuelosTemp := vuelos
+    vuelosRet := []
+    while (not esVacía(vuelosTemp)) {
+        if (estado(primero(vuelosTemp)) == estado) {
+            vuelosRet := vuelosRet ++ [primero(vuelosTemp)]
+        }
+    }
+    return (vuelosRet)
+} 
