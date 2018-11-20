@@ -292,11 +292,29 @@ PRE: Ninguna
 RET: Booleano
 */
     listaTemporal := lista
-    while (not esVacía(listaTemporal) && 
+    while (not esVacï¿½a(listaTemporal) && 
            primero(listaTemporal) /= elemento) {
         listaTemporal := resto(listaTemporal)
     }
-    return(not esVacía(listaTemporal) && primero(listaTemporal)==elemento)
+    return(not esVacï¿½a(listaTemporal) && primero(listaTemporal)==elemento)
+}
+
+/*
+PRO: Filtra todos los elementos de una lista sin repetirlos 
+RETURN: Lista
+@param ls: lista
+*/
+function sinDuplicados(ls) {
+	lista := ls
+	filtro := []
+
+	while(not esVacÃ­a(lista)) {
+		filtro := filtro ++ choose primero(lista) when (not contiene(head(lista, filtro)))
+								   [] otherwise
+		lista := resto(lista)
+	}
+
+	return (filtro)
 }
 
 
