@@ -317,6 +317,50 @@ function sinDuplicados(ls) {
 	return (filtro)
 }
 
+function sinElAnchoDeEspadas(mazo) {
+/*
+PRO: Describe el mazo, pero sin el ancho de espadas
+PRE: Ninguna
+@param mazo: [Carta]
+RET: [Carta]
+*/
+	return (choose cartasAntesDelAncho(mazo) ++ resto(cartasDesdeElAncho(mazo)) when (estáElAncho(mazo))
+	        mazo otherwise)
+}
+
+function cartasDesdeElAncho(mazo) {
+//PRE: Ninguna
+	listaTemp := mazo
+	while (not esVacía(listaTemp) && not esAncho(primero(listaTemp))) {
+		listaTemp := resto(listaTemp)
+	}
+	return (listaTemp)
+}
+
+function cartasAntesDelAnchoDeEspadas(mazo) {
+/*
+PRE: Ninguna
+*/
+	listaTemp := mazo
+	listaRet := []
+	while (not esVacía(listaTemp) && not esAncho(primero(listaTemp))) {
+		listaRet := listaRet ++ [primero(listaTemp)]
+		listaTemp := resto(listaTemp)
+	}
+	return (listaRet)
+}
+
+function estáElAncho(mazo) {
+//PRE: Ninguna
+	return (not esVacía(cartasDesdeElAncho(mazo))
+}
+
+
+
+
+
+
+
 
 
 
