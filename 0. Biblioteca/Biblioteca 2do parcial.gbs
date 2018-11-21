@@ -355,6 +355,61 @@ function estáElAncho(mazo) {
 	return (not esVacía(cartasDesdeElAncho(mazo))
 }
 
+type Palo is variant {
+//PRO: modela los palos
+    case Bastos {}
+    case Copas {}
+    case Espadas {}
+    case Oro {}
+}
+
+program {
+    return (códigoDePalo(Oro))
+}
+
+function códigoDePalo(palo) {
+/*
+PRO: Describe el código del palo
+PRE: Ninguna
+*/
+    return (matching (palo) select 
+                100 on Bastos
+                200 on Copas
+                300 on Espadas
+                400 on Oro 
+                boom("¿Alteraste los palos?") otherwise)
+}
+
+function siguientePalo(palo) {
+	return (matching (palo) select 
+                Copas on Bastos
+                Espadas on Copas
+                Oros on Espadas
+                Bastos on Oros 
+                boom("¿Alteraste los palos?") otherwise)
+}
+
+procedure IndicarPaloPorColor(palo) {
+	switch(palo) {
+		Bastos -> {Poner(Rojo); Poner(Rojo)}
+		Copas -> {Poner(Azul); Poner(Rojo)}
+		Espadas -> {Poner(Negro); Poner(Rojo)}
+		Oros -> {Poner(Verde); Poner(Rojo)}
+		_ -> {BOOM("Alteraste los palos")}
+	}
+}
+_____________
+
+type Jugador is record {
+    field nombre  //String
+}
+
+program {
+    jugador := Jugador(nombre <- "Braian")
+    return (jugador)
+}
+
+
 
 
 
