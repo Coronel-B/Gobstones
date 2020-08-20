@@ -1,0 +1,58 @@
+program {
+    DrawSquare()
+}
+
+/*
+PRO: Dibujar un cuadrado Verde de lado 3 y colocar el 
+cabezal al suroeste del cuadrado.
+Es decir, coloca 9 bolitas de color Verde en 9 celdas 
+contiguas que forman un cuadrado.
+PRE: Existen 3 celdas al E. y S. de la inicial
+*/
+procedure DrawSquare() {
+    repeat (2) {
+        DrawLine()
+        Mover(Sur)
+    }
+    DrawLine()
+}
+
+/*
+PRO: Dibuja una linea al @param de color @param color con @param n bolitas
+y posiciona el cabezal en la celda actual
+PRE: Existen @param n celdas al @param dir
+*/
+procedure DrawLine()  {
+    PonerYMoverAl(Verde, Este, 3)
+    MoverAl(3, Oeste)
+}
+
+/*
+PRO: Pone una bolita @color color y se mueve al @param dir
+PRE: Exista una celda al @param dir
+*/
+procedure PonerYMover(color, dir) {
+    Poner(color)
+    Mover(dir)
+}
+
+
+/*
+PRO: Mover al @param dir @param n veces
+PRE: Existen @param n celdas al @param dir
+*/
+procedure MoverAl(n, dir) {
+    repeat (n) {
+        Mover(dir)
+    }
+}
+
+/*
+PRO: Pone una bolita @param color al @param dir @param n veces  
+PRE: Existen @param n celdas al @param dir
+*/
+procedure PonerYMoverAl(color, dir, n) {
+    repeat (n) {
+        PonerYMover(color, dir)
+    }
+}
