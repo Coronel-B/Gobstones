@@ -1,0 +1,39 @@
+program {
+    //DrawAllColors()
+    //Nothing()
+    DrawBlueToNorth()
+}
+
+
+/*
+PROPOSITO: Dibujar una bolita de cada color en la celda actual
+PRECONDICION: No tiene
+*/
+procedure DrawAllColors() {
+    foreach color in [minColor() .. maxColor()] {
+        Poner(color)
+    }
+}
+
+
+/*
+PROPOSITO: No hace nada
+PRECONDICION: Existe al menos una bolita de color azul
+*/
+procedure Nothing() {
+    Sacar(Azul);
+    Poner(Azul);
+}
+
+/*
+PROPOSITO: Dibuja una bolita de color azul al norte lindante de la actual dejando el 
+cabezal en la celda inicial
+PRECONDICION: Exista una celda al norte
+*/
+procedure DrawBlueToNorth() {
+    Mover(Norte)
+    Poner(Azul)
+    Mover(Sur)
+}
+
+// Para Mover y Sacar pueden haber precondiciones. Para Poner no
